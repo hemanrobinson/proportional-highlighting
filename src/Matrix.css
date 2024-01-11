@@ -1,0 +1,14 @@
+rect.selection {
+    fill: #bcd6fB;
+    stroke: #bcd6fB;
+    fill-opacity: 0.3;
+    stroke-opacity: 1;
+}
+canvas {
+    position: absolute;
+    border: 1px solid #939ba1;
+    background-color: #ffffff;
+}
+svg {
+    position: relative;
+}

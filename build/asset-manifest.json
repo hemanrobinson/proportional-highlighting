@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/brush/static/css/main.4544624c.css",
+    "main.js": "/brush/static/js/main.d8d6e077.js",
+    "static/media/becker.png": "/brush/static/media/becker.ed8ef60d8c697ba23fad.png",
+    "static/media/cleveland.png": "/brush/static/media/cleveland.70d2e3e7868c6f94bcd4.png",
+    "static/media/github.svg": "/brush/static/media/github.6fa18895f6e6c7772cab7049f7e05f59.svg",
+    "index.html": "/brush/index.html",
+    "main.4544624c.css.map": "/brush/static/css/main.4544624c.css.map",
+    "main.d8d6e077.js.map": "/brush/static/js/main.d8d6e077.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4544624c.css",
+    "static/js/main.d8d6e077.js"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "short_name": "Brush",
+  "name": "Brushing 1,000,000 points",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
