@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/brush/static/css/main.4544624c.css",
-    "main.js": "/brush/static/js/main.d8d6e077.js",
-    "static/media/becker.png": "/brush/static/media/becker.ed8ef60d8c697ba23fad.png",
-    "static/media/cleveland.png": "/brush/static/media/cleveland.70d2e3e7868c6f94bcd4.png",
-    "static/media/github.svg": "/brush/static/media/github.6fa18895f6e6c7772cab7049f7e05f59.svg",
-    "index.html": "/brush/index.html",
-    "main.4544624c.css.map": "/brush/static/css/main.4544624c.css.map",
-    "main.d8d6e077.js.map": "/brush/static/js/main.d8d6e077.js.map"
+    "main.css": "/proportional/static/css/main.40e8b1e0.css",
+    "main.js": "/proportional/static/js/main.2e6b5d14.js",
+    "static/media/few.jpg": "/proportional/static/media/few.ec2ad1ace48286af1ce3.jpg",
+    "static/media/github.svg": "/proportional/static/media/github.6fa18895f6e6c7772cab7049f7e05f59.svg",
+    "index.html": "/proportional/index.html",
+    "main.40e8b1e0.css.map": "/proportional/static/css/main.40e8b1e0.css.map",
+    "main.2e6b5d14.js.map": "/proportional/static/js/main.2e6b5d14.js.map"
   },
   "entrypoints": [
-    "static/css/main.4544624c.css",
-    "static/js/main.d8d6e077.js"
+    "static/css/main.40e8b1e0.css",
+    "static/js/main.2e6b5d14.js"
   ]
 }

@@ -1,7 +1,8 @@
 import React, { useRef, useEffect }  from 'react';
 import * as d3 from 'd3';
 import Data from './Data';
-import Axis from './Axis';
+import BarChart from './BarChart';
+import PieChart from './PieChart';
 import Plot from './Plot';
 import './Matrix.css';
 
@@ -36,11 +37,12 @@ const Matrix = ( props ) => {
         { nData, opacity } = props,
         width = 200,
         height = 200,
-        nColumns = Data.getColumnNames().length,
+        nColumns = 3,
+        nRows = 2,
         data = Data.getValues( nData ),
         totalWidth = nColumns * width,
-        totalHeight = nColumns * height,
-        brushNodeOffset = 4;
+        totalHeight = nRows * height,
+        brushNodeOffset = 0;
         
     /**
      * Returns a function, that, as long as it continues to be invoked, will not be triggered.
@@ -232,56 +234,63 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
     if( !ref ) {
         return;
     }
+    const nColumns = 3,
+        nRows = 2;
     let canvas = ref.current.firstChild,
-        g = canvas.getContext( "2d" ),
-        nColumns = Data.getColumnNames().length;
+        g = canvas.getContext( "2d" );
     if( !g ) {
         return;
     }
     
     // If requested, clear the drawing area and draw the grid.
     if( isDrawingAll ) {
-        g.clearRect( 0, 0, nColumns * width, nColumns * height );
+        g.clearRect( 0, 0, nColumns * width, nRows * height );
         g.strokeStyle = "#939ba1";
-        for( let i = 1; ( i < nColumns ); i++ ) {
+        for( let i = 0; ( i < nColumns ); i++ ) {
             g.moveTo( i * width + 0.5, 0 );
-            g.lineTo( i * width + 0.5, nColumns * height );
-            g.moveTo( 0, i * height + 0.5 );
-            g.lineTo( nColumns * width, i * height + 0.5 );
+            g.lineTo( i * width + 0.5, nRows * height );
+        }
+        for( let j = 0; ( j < nRows ); j++ ) {
+            g.moveTo( 0, j * height + 0.5 );
+            g.lineTo( nColumns * width, j * height + 0.5 );
         }
         g.stroke();
     }
     
-    // Draw the plots and the axes.  On first draw, store the bitmaps.
+    // Draw the plots and the charts.  On first draw, store the bitmaps.
     let isFirstDraw = !Matrix.bitmaps;
     if( isFirstDraw ) {
         Matrix.bitmaps = [];
     }        
     for( let i = 0; ( i < nColumns ); i++ ) {
-        for( let j = 0; ( j < nColumns ); j++ ) {
+        for( let j = 0; ( j < nRows ); j++ ) {
 
             // Get the position.
             let x = i * width,
                 y = j * height;
 
-            // Draw an axis...
-            if( i === j ) {
-                if( isDrawingAll ) {
-                    Axis.draw( x, y, width, height, canvas, nData, i );
-                }
-            }
-
-            // ...or a plot.
-            else {
-                if( isFirstDraw ) {
-                    if( Matrix.bitmaps[ i ] === undefined ) {
-                        Matrix.bitmaps[ i ] = [];
+            // Draw a plot or chart.
+            switch( i + 3 * j ) {
+                case 0:
+                    BarChart.draw( ref, x, y, width, height, i, j, Matrix.scaled, canvas, opacity, Data.selectedRows );
+                    break;
+                case 4:
+                    PieChart.draw( ref, x, y, width, height, canvas, undefined, undefined );
+                    break;
+                case 5:
+                    if( isFirstDraw ) {
+                        if( Matrix.bitmaps[ i ] === undefined ) {
+                            Matrix.bitmaps[ i ] = [];
+                        }
+                        Matrix.bitmaps[ i ][ j ] =
+                            Plot.draw( x, y, width, height, i, j, Matrix.scaled, canvas, opacity, Data.selectedRows );
+                    } else {
+                        Plot.draw( x, y, width, height, i, j, Matrix.scaled, canvas, opacity, Data.selectedRows, Matrix.bitmaps[ i ][ j ]);
                     }
-                    Matrix.bitmaps[ i ][ j ] =
-                        Plot.draw( x, y, width, height, i, j, Matrix.scaled, canvas, opacity, Data.selectedRows );
-                } else {
-                    Plot.draw( x, y, width, height, i, j, Matrix.scaled, canvas, opacity, Data.selectedRows, Matrix.bitmaps[ i ][ j ]);
-                }
+                    break;
+                default:
+                    break;
+                
             }
         }
     }

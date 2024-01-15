@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 
-import Axis from './Axis';
+import PieChart from './PieChart';
 
 let container = null;
 
@@ -21,10 +21,10 @@ afterEach(() => {
     container = null;
 });
 
-it( "draws an axis", () => {
+it( "draws a pie chart", () => {
     act(() => {
         render( <canvas width="200" height="200" />, container );
     });
     let canvas = container.firstChild;
-    Axis.draw( 0, 0, 200, 200, canvas, 1, 0 );
+    PieChart.draw( 0, 0, 200, 200, canvas, 1, 0 );
 });

@@ -1,16 +1,16 @@
 import Data from './Data';
 
 /**
- * Axis for scatter plot matrix in an SVG element.
+ * Pie chart in an SVG element.
  *
  * @param  {Object}  props  properties
  * @return component
  */
-const Axis = ( props ) => {
+const PieChart = ( props ) => {
 };
 
 /**
- * Draws the axis.
+ * Draws the pie chart.
  *
  * @param  {number}  x        X coordinate, in pixels
  * @param  {number}  y        Y coordinate, in pixels
@@ -20,24 +20,17 @@ const Axis = ( props ) => {
  * @param  {number}  nData    number of data values
  * @param  {number}  index    column index
  */
-Axis.draw = ( x, y, width, height, canvas, nData, index ) => {
+PieChart.draw = ( x, y, width, height, canvas, nData, index ) => {
     
     // Initialization.
-    let g = canvas.getContext( "2d" ),
-        columnNames = Data.getColumnNames();
+    const s = "Pie Chart";
+    if( !canvas || !canvas.getContext ) return;
+    let g = canvas.getContext( "2d" );
         
     // Draw the column label.
     g.fillStyle = "#000000";
     g.font = "14px Verdana";
-    let s = columnNames[ index ];
     g.fillText( s, x + width / 2 - g.measureText( s ).width / 2, y + height - height / 2 + 4 );
-    
-    // Draw the minimum and maximum.
-    g.font = "12px Verdana";
-    s = "" + Math.round( 10 * Data.getDomain( nData, index )[ 0 ]) / 10;
-    g.fillText( s, x + 4, y + height - 4 );
-    s = "" + Math.round( 10 * Data.getDomain( nData, index )[ 1 ]) / 10;
-    g.fillText( s, x + width - 3 - g.measureText( s ).width, y + 12 );
 };
 
-export default Axis;
+export default PieChart;
