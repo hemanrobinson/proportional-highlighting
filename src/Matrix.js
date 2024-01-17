@@ -65,7 +65,8 @@ const Matrix = ( props ) => {
             timeout = setTimeout( later, wait );
         };
     };
-        
+    
+    // TODO: Remove scaled coordinates.
     // Cache scaled coordinates.
     Matrix.scaled = [];
     let scale = [];
@@ -90,12 +91,15 @@ const Matrix = ( props ) => {
         svg.selectAll( "*" ).remove();
         const cell = svg.append( "g" )
             .selectAll( "g" )
-            .data( d3.cross( d3.range( nColumns ), d3.range( nColumns )))
+            .data( d3.cross( d3.range( nColumns ), d3.range( nRows )))
             .join( "g" )
             .attr( "transform", ([ i, j ]) => `translate(${ i * width },${ j * height })` );
             
         // Create the brush.
         const onStart = ( event ) => {
+        
+            console.log( "onStart", event );
+            
             if( event.sourceEvent ) {
                 const target = event.sourceEvent.target.parentNode;
                 if( Matrix.brushNode !== target ) {
@@ -128,6 +132,9 @@ const Matrix = ( props ) => {
         };
         const debouncedDraw = debounce( Matrix.draw, 1 );
         const onBrush = ( event ) => {
+        
+            console.log( "onBrush", event );
+            
             if( event.selection ) {
                 const xDown = event.selection[ 0 ][ 0 ],
                     yDown = event.selection[ 0 ][ 1 ],
@@ -231,11 +238,11 @@ Matrix.clear = () => {
 Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
     
     // Initialization.  If no context, do nothing.
+    const nColumns = 3,
+        nRows = 2;
     if( !ref ) {
         return;
     }
-    const nColumns = 3,
-        nRows = 2;
     let canvas = ref.current.firstChild,
         g = canvas.getContext( "2d" );
     if( !g ) {
@@ -246,11 +253,11 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
     if( isDrawingAll ) {
         g.clearRect( 0, 0, nColumns * width, nRows * height );
         g.strokeStyle = "#939ba1";
-        for( let i = 0; ( i < nColumns ); i++ ) {
+        for( let i = 1; ( i < nColumns ); i++ ) {
             g.moveTo( i * width + 0.5, 0 );
             g.lineTo( i * width + 0.5, nRows * height );
         }
-        for( let j = 0; ( j < nRows ); j++ ) {
+        for( let j = 1; ( j < nRows ); j++ ) {
             g.moveTo( 0, j * height + 0.5 );
             g.lineTo( nColumns * width, j * height + 0.5 );
         }
@@ -261,7 +268,7 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
     let isFirstDraw = !Matrix.bitmaps;
     if( isFirstDraw ) {
         Matrix.bitmaps = [];
-    }        
+    }
     for( let i = 0; ( i < nColumns ); i++ ) {
         for( let j = 0; ( j < nRows ); j++ ) {
 
@@ -272,10 +279,10 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
             // Draw a plot or chart.
             switch( i + 3 * j ) {
                 case 0:
-                    BarChart.draw( ref, x, y, width, height, i, j, Matrix.scaled, canvas, opacity, Data.selectedRows );
+                    BarChart.draw( ref, width, height, {}, {}, false, false, false, { bandwidth: () => {}}, {}, {}, {}, {}, {}, []);
                     break;
                 case 4:
-                    PieChart.draw( ref, x, y, width, height, canvas, undefined, undefined );
+                    PieChart.draw( x, y, width, height, canvas, undefined, undefined );
                     break;
                 case 5:
                     if( isFirstDraw ) {
@@ -290,7 +297,7 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
                     break;
                 default:
                     break;
-                
+
             }
         }
     }
