@@ -66,7 +66,6 @@ const Matrix = ( props ) => {
         };
     };
     
-    // TODO: Remove scaled coordinates.
     // Cache scaled coordinates.
     Matrix.scaled = [];
     let scale = [];
@@ -97,9 +96,6 @@ const Matrix = ( props ) => {
             
         // Create the brush.
         const onStart = ( event ) => {
-        
-            console.log( "onStart", event );
-            
             if( event.sourceEvent ) {
                 const target = event.sourceEvent.target.parentNode;
                 if( Matrix.brushNode !== target ) {
@@ -132,9 +128,6 @@ const Matrix = ( props ) => {
         };
         const debouncedDraw = debounce( Matrix.draw, 1 );
         const onBrush = ( event ) => {
-        
-            console.log( "onBrush", event );
-            
             if( event.selection ) {
                 const xDown = event.selection[ 0 ][ 0 ],
                     yDown = event.selection[ 0 ][ 1 ],
@@ -275,11 +268,23 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
             // Get the position.
             let x = i * width,
                 y = j * height;
+                
+            let k = i + 3 * j;
+            const svg = d3.select( ref.current.childNodes[ 1 ]);
+            let s = "";
+            switch( k ) {
+                case 0: s = "Bar"; break;
+                case 4: s = "Pie"; break;
+                case 5: s = "Plot"; break;
+                default: break;
+            }
+            svg.node().firstChild.childNodes[ k ].setAttribute( "id", s );
 
             // Draw a plot or chart.
-            switch( i + 3 * j ) {
+            let g = svg.node().firstChild.childNodes[ k ];
+            switch( k ) {
                 case 0:
-                    BarChart.draw( ref, width, height, {}, {}, false, false, false, { bandwidth: () => {}}, {}, {}, {}, {}, {}, []);
+                    BarChart.draw( width, height, {}, {}, false, false, false, { bandwidth: () => {}}, {}, {}, {}, {}, {}, []);
                     break;
                 case 4:
                     PieChart.draw( x, y, width, height, canvas, undefined, undefined );

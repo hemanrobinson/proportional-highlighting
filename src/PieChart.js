@@ -1,4 +1,8 @@
+import * as d3 from 'd3';
 import Data from './Data';
+import Graph from './Graph';
+import './Graph.css';
+
 
 /**
  * Pie chart in an SVG element.
@@ -21,16 +25,13 @@ const PieChart = ( props ) => {
  * @param  {number}  index    column index
  */
 PieChart.draw = ( x, y, width, height, canvas, nData, index ) => {
-    
-    // Initialization.
-    const s = "Pie Chart";
-    if( !canvas || !canvas.getContext ) return;
-    let g = canvas.getContext( "2d" );
-        
-    // Draw the column label.
-    g.fillStyle = "#000000";
-    g.font = "14px Verdana";
-    g.fillText( s, x + width / 2 - g.measureText( s ).width / 2, y + height - height / 2 + 4 );
+    d3.select( "#Pie" ).selectAll( "text" ).remove();
+    d3.select( "#Pie" )
+        .append( "text" )
+        .attr( "x", width / 2 - 30 )
+        .attr( "y", height / 2 + 5 )
+        .attr( "fill", "black" )
+        .text( "Pie Chart" );
 };
 
 export default PieChart;

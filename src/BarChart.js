@@ -9,8 +9,6 @@ import './Graph.css';
  *
  * The X domain is stored as a state.  The Y domain is calculated from the X domain.
  *
- * The X aggregate factor, which determines how the bars are aggregated, is also stored as a state.
- *
  * @param  {Object}  props  properties
  * @return component
  */
@@ -39,14 +37,11 @@ const BarChart = ( props ) => {
     // Get the X scale.
     const [ xDomain, setXDomain ] = useState([]);
     xScale = d3.scaleBand().domain( xDomain ).range([ left, width - right ]).padding( 0.2 );
-    
-    // Assign the X aggregate factor.
-    const [ xAggregate, setXAggregate ] = useState( 0 );
-    let onXAggregate = ( event, value ) => {
-        setXDomain( xScale.domain());
-        setXAggregate( value );
-    };
 
+    // Assign the X aggregate factor.
+    let onXAggregate = ( event, value ) => {
+    };
+    
     // Calculate the bars and sort them.
     bars = Array.from( d3.rollup( data, v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ]));
     bars.sort(( a, b ) => ( b[ 1 ] - a[ 1 ]));
@@ -67,13 +62,8 @@ const BarChart = ( props ) => {
     
     // Zoom in one dimension.
     let onPointerDown = ( event ) => {
-        Graph.onPointerDown( event, width, height, margin, padding, false, 0, 0, xScale, yScale, xDomain0, yDomain0 );
     },
     onPointerUp = ( event ) => {
-        if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onPointerUp( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
-            BarChart.draw( ref, width, height, margin, padding, false, true, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
-        }
     };
     
     // Show or hide the controls.
@@ -102,7 +92,6 @@ BarChart.yMargin = 0.05;
 /**
  * Draws the bar chart.
  *
- * @param  {Object}   ref          reference to DIV
  * @param  {number}   width        width, in pixels
  * @param  {number}   height       height, in pixels
  * @param  {Box}      margin       margin
@@ -118,23 +107,29 @@ BarChart.yMargin = 0.05;
  * @param  {string}   yLabel       Y axis label
  * @param  {Array}    bars         bars
  */
-BarChart.draw = ( ref, width, height, margin, padding, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
+BarChart.draw = ( width, height, margin, padding, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
     
     // Initialization.
     const top  = margin.top    + padding.top,
         right  = margin.right  + padding.right,
         bottom = margin.bottom + padding.bottom,
-        left   = margin.left   + padding.left,
-        svg = d3.select( ref.current.childNodes[ 0 ]);
-    svg.selectAll( "*" ).remove();
-    if( !bars ) return;
+        left   = margin.left   + padding.left;
+    
+    d3.select( "#Bar" ).selectAll( "text" ).remove();
+    d3.select( "#Bar" )
+        .append( "text" )
+        .attr( "x", width / 2 - 30 )
+        .attr( "y", height / 2 + 5 )
+        .attr( "fill", "black" )
+        .text( "Bar Chart" );
+    return;
 
     // Draw the bars.
     let yScale1 = yScale,
         otherLength;
     const n = bars.length,
         maxLength = d3.max( bars.slice( 0, n - 1 ), d => d[ 1 ]);
-    svg.selectAll( "rect" )
+    d3.select( "#Bar" ).selectAll( "rect" )
         .data( bars )
         .enter()
         .append( "rect" )
