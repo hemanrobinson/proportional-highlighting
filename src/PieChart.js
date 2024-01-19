@@ -15,18 +15,19 @@ const PieChart = ( props ) => {
 
 /**
  * Draws the pie chart.
- *
- * @param  {number}  x        X coordinate, in pixels
- * @param  {number}  y        Y coordinate, in pixels
- * @param  {number}  width    width, in pixels
- * @param  {number}  height   height, in pixels
- * @param  {Element} canvas   CANVAS element
- * @param  {number}  nData    number of data values
- * @param  {number}  index    column index
+ *                              
+ * @param  {Element} selection  d3 selection
+ * @param  {Element} canvas     CANVAS element
+ * @param  {number}  x          X coordinate, in pixels
+ * @param  {number}  y          Y coordinate, in pixels
+ * @param  {number}  width      width, in pixels
+ * @param  {number}  height     height, in pixels
+ * @param  {number}  nData      number of data values
+ * @param  {number}  index      column index
  */
-PieChart.draw = ( x, y, width, height, canvas, nData, index ) => {
-    d3.select( "#Pie" ).selectAll( "text" ).remove();
-    d3.select( "#Pie" )
+PieChart.draw = ( selection, canvas, x, y, width, height, nData, index ) => {
+    selection.selectAll( "text" ).remove();
+    selection
         .append( "text" )
         .attr( "x", width / 2 - 30 )
         .attr( "y", height / 2 + 5 )

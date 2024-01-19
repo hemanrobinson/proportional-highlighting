@@ -74,7 +74,7 @@ const BarChart = ( props ) => {
     
     // Set hook to draw on mounting or any state change.
     useEffect(() => {
-        BarChart.draw( ref, width, height, margin, padding, false, Graph.isXBinning.get( ref ), Graph.isYBinning.get( ref ), xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
+        BarChart.draw( undefined, undefined, 0, 0, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
     });
     
     // Return the component.
@@ -92,22 +92,23 @@ BarChart.yMargin = 0.05;
 /**
  * Draws the bar chart.
  *
- * @param  {number}   width        width, in pixels
- * @param  {number}   height       height, in pixels
- * @param  {Box}      margin       margin
- * @param  {Box}      padding      padding
- * @param  {boolean}  isZooming    true iff drawing zoom controls
- * @param  {boolean}  isXBinning   true iff drawing bin controls in X dimension
- * @param  {boolean}  isYBinning   true iff drawing bin controls in Y dimension
- * @param  {D3Scale}  xScale       X scale
- * @param  {D3Scale}  yScale       Y scale
- * @param  {Array}    xDomain0     Initial X domain
- * @param  {Array}    yDomain0     Initial Y domain
- * @param  {string}   xLabel       X axis label
- * @param  {string}   yLabel       Y axis label
- * @param  {Array}    bars         bars
+ * @param  {Element} selection  d3 selection
+ * @param  {Element} canvas     CANVAS element
+ * @param  {number}  x          X coordinate, in pixels
+ * @param  {number}  y          Y coordinate, in pixels
+ * @param  {number}  width      width, in pixels
+ * @param  {number}  height     height, in pixels
+ * @param  {Box}     margin     margin
+ * @param  {Box}     padding    padding
+ * @param  {D3Scale} xScale     X scale
+ * @param  {D3Scale} yScale     Y scale
+ * @param  {Array}   xDomain0   Initial X domain
+ * @param  {Array}   yDomain0   Initial Y domain
+ * @param  {string}  xLabel     X axis label
+ * @param  {string}  yLabel     Y axis label
+ * @param  {Array}   bars       bars
  */
-BarChart.draw = ( width, height, margin, padding, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
+BarChart.draw = ( selection, canvas, x, y, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
     
     // Initialization.
     const top  = margin.top    + padding.top,
@@ -115,8 +116,8 @@ BarChart.draw = ( width, height, margin, padding, isZooming, isXBinning, isYBinn
         bottom = margin.bottom + padding.bottom,
         left   = margin.left   + padding.left;
     
-    d3.select( "#Bar" ).selectAll( "text" ).remove();
-    d3.select( "#Bar" )
+    selection.selectAll( "text" ).remove();
+    selection
         .append( "text" )
         .attr( "x", width / 2 - 30 )
         .attr( "y", height / 2 + 5 )

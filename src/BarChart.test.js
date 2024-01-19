@@ -57,5 +57,5 @@ it( "draws the BarChart", () => {
         padding = { top: 0, right: 0, bottom: 0, left: 0 },
         xScale = d3.scaleBand().domain([ 0, 1 ]).range([ 0, 100 ]),
         yScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]);
-    BarChart.draw( ref, 400, 400, margin, padding, false, false, false, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y", []);
+    BarChart.draw( ref, canvas, 0, 0, 400, 400, margin, padding, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y", []);
 });

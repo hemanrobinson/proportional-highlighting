@@ -156,7 +156,7 @@ const Matrix = ( props ) => {
                 } else {
                     Data.selectedRows = Plot.select( x, y, width, height, i, j, Matrix.scaled, { x: x + xDown, y: y + yDown, width: xUp - xDown, height: yUp - yDown });
                     if( Matrix.bitmaps && Matrix.bitmaps[ i ]) {
-                        Plot.draw( x, y, width, height, i, j, Matrix.scaled, ref.current.firstChild, opacity, Data.selectedRows, Matrix.bitmaps[ i ][ j ]);
+                        Plot.draw( undefined, ref.current.firstChild, x, y, width, height, i, j, Matrix.scaled, opacity, Data.selectedRows, Matrix.bitmaps[ i ][ j ]);
                     }
                 }
             }
@@ -265,29 +265,21 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
     for( let i = 0; ( i < nColumns ); i++ ) {
         for( let j = 0; ( j < nRows ); j++ ) {
 
-            // Get the position.
+            // Get the position and the selection.
             let x = i * width,
                 y = j * height;
                 
             let k = i + 3 * j;
             const svg = d3.select( ref.current.childNodes[ 1 ]);
-            let s = "";
-            switch( k ) {
-                case 0: s = "Bar"; break;
-                case 4: s = "Pie"; break;
-                case 5: s = "Plot"; break;
-                default: break;
-            }
-            svg.node().firstChild.childNodes[ k ].setAttribute( "id", s );
-
+            let selection = d3.select( svg.node().firstChild.childNodes[ k ]);
+            
             // Draw a plot or chart.
-            let g = svg.node().firstChild.childNodes[ k ];
             switch( k ) {
                 case 0:
-                    BarChart.draw( width, height, {}, {}, false, false, false, { bandwidth: () => {}}, {}, {}, {}, {}, {}, []);
+                    BarChart.draw( selection, canvas, x, y, width, height, {}, {}, { bandwidth: () => {}}, {}, {}, {}, {}, {}, []);
                     break;
                 case 4:
-                    PieChart.draw( x, y, width, height, canvas, undefined, undefined );
+                    PieChart.draw( selection, canvas, x, y, width, height, undefined, undefined );
                     break;
                 case 5:
                     if( isFirstDraw ) {
@@ -295,9 +287,9 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
                             Matrix.bitmaps[ i ] = [];
                         }
                         Matrix.bitmaps[ i ][ j ] =
-                            Plot.draw( x, y, width, height, i, j, Matrix.scaled, canvas, opacity, Data.selectedRows );
+                            Plot.draw( selection, canvas, x, y, width, height, i, j, Matrix.scaled, opacity, Data.selectedRows );
                     } else {
-                        Plot.draw( x, y, width, height, i, j, Matrix.scaled, canvas, opacity, Data.selectedRows, Matrix.bitmaps[ i ][ j ]);
+                        Plot.draw( selection, canvas, x, y, width, height, i, j, Matrix.scaled, opacity, Data.selectedRows, Matrix.bitmaps[ i ][ j ]);
                     }
                     break;
                 default:

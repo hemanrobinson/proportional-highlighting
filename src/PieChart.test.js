@@ -26,5 +26,5 @@ it( "draws a pie chart", () => {
         render( <canvas width="200" height="200" />, container );
     });
     let canvas = container.firstChild;
-    PieChart.draw( 0, 0, 200, 200, canvas, 1, 0 );
+    PieChart.draw( undefined, canvas, 0, 0, 200, 200, 1, 0 );
 });

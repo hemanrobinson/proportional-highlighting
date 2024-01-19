@@ -67,6 +67,8 @@ Plot.isWithin = ( point, rect, tol ) => {
 /**
  * Draws the plot.
  *
+ * @param  {Element}              selection     d3 selection
+ * @param  {Element}              canvas        CANVAS element
  * @param  {number}               x             X coordinate, in pixels
  * @param  {number}               y             Y coordinate, in pixels
  * @param  {number}               width         width, in pixels
@@ -80,7 +82,7 @@ Plot.isWithin = ( point, rect, tol ) => {
  * @param  {ImageData|undefined}  imageData     bitmap of deselected points, or undefined if none
  * @return {ImageData}            bitmap of deselected points
  */
-Plot.draw = ( x, y, width, height, i, j, scaled, canvas, opacity, selectedRows, imageData ) => {
+Plot.draw = ( selection, canvas, x, y, width, height, i, j, scaled, opacity, selectedRows, imageData ) => {
     
     // Initialization.
     const g = canvas.getContext( "2d" ),

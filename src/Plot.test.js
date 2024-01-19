@@ -26,7 +26,7 @@ it( "draws a plot", () => {
         render( <canvas width="200" height="200" />, container );
     });
     let canvas = container.firstChild;
-    let imageData = Plot.draw( 0, 0, 200, 200, 0, 0, [[]], canvas, 1, []);
+    let imageData = Plot.draw( undefined, canvas, 0, 0, 200, 200, 0, 0, [[]], 1, []);
     expect( imageData.data.length ).toBe( 160000 );
 });
 
