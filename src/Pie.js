@@ -3,21 +3,19 @@ import Data from './Data';
 import Graph from './Graph';
 import './Graph.css';
 
-
 /**
  * Pie chart in an SVG element.
  *
  * @param  {Object}  props  properties
  * @return component
  */
-const PieChart = ( props ) => {
+const Pie = ( props ) => {
 };
 
 /**
  * Draws the pie chart.
  *                              
  * @param  {Element} selection  d3 selection
- * @param  {Element} canvas     CANVAS element
  * @param  {number}  x          X coordinate, in pixels
  * @param  {number}  y          Y coordinate, in pixels
  * @param  {number}  width      width, in pixels
@@ -25,14 +23,14 @@ const PieChart = ( props ) => {
  * @param  {number}  nData      number of data values
  * @param  {number}  index      column index
  */
-PieChart.draw = ( selection, canvas, x, y, width, height, nData, index ) => {
+Pie.draw = ( selection,  x, y, width, height, nData, index ) => {
     selection.selectAll( "text" ).remove();
     selection
         .append( "text" )
-        .attr( "x", width / 2 - 30 )
+        .attr( "x", width / 2 - 10 )
         .attr( "y", height / 2 + 5 )
         .attr( "fill", "black" )
-        .text( "Pie Chart" );
+        .text( "Pie" );
 };
 
-export default PieChart;
+export default Pie;

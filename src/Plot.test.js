@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
-
+import * as d3 from 'd3';
 import Plot from './Plot';
 
 let container = null;
@@ -22,12 +21,7 @@ afterEach(() => {
 });
 
 it( "draws a plot", () => {
-    act(() => {
-        render( <canvas width="200" height="200" />, container );
-    });
-    let canvas = container.firstChild;
-    let imageData = Plot.draw( undefined, canvas, 0, 0, 200, 200, 0, 0, [[]], 1, []);
-    expect( imageData.data.length ).toBe( 160000 );
+    Plot.draw( d3.selection(), 0, 0, 200, 200, 0, 0, [[]], 1, []);
 });
 
 it( "normalizes a rectangle", () => {

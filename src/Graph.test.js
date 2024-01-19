@@ -32,14 +32,8 @@ it( "creates a Graph element", () => {
     
     // Test structure.
     const div = container.querySelector( "div" );
-    expect( div.childNodes.length ).toBe( 3 );
+    expect( div.childNodes.length ).toBe( 1 );
     expect( div.childNodes[ 0 ].nodeName ).toBe( "svg" );
-    expect( div.childNodes[ 1 ].nodeName ).toBe( "SPAN" );
-    expect( div.childNodes[ 2 ].nodeName ).toBe( "SPAN" );
-});
-
-it( "returns mousedown location", () => {
-    expect( Graph.downLocation ).toEqual({ x: 0, y: 0, xDomain: [], yDomain: [], isX: false, isY: false, isMin: false, isMax: false });
 });
 
 it( "returns initial and current domains", () => {

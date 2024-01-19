@@ -12,7 +12,7 @@ import './Graph.css';
  * @param  {Object}  props  properties
  * @return component
  */
-const BarChart = ( props ) => {
+const Bar = ( props ) => {
     
     // Initialization.
     const width = 650,
@@ -37,10 +37,6 @@ const BarChart = ( props ) => {
     // Get the X scale.
     const [ xDomain, setXDomain ] = useState([]);
     xScale = d3.scaleBand().domain( xDomain ).range([ left, width - right ]).padding( 0.2 );
-
-    // Assign the X aggregate factor.
-    let onXAggregate = ( event, value ) => {
-    };
     
     // Calculate the bars and sort them.
     bars = Array.from( d3.rollup( data, v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ]));
@@ -51,35 +47,18 @@ const BarChart = ( props ) => {
     xScale.domain( xDomain0 );
 
     // Get the Y scale.
-    yDomain0 = [ 0, ( 1 + BarChart.yMargin ) * d3.max( bars, d => d[ 1 ])];
+    yDomain0 = [ 0, ( 1 + Bar.yMargin ) * d3.max( bars, d => d[ 1 ])];
     yScale = d3.scaleLinear()
         .domain( yDomain0 )
         .range([ height - bottom, top ]);
-        
-    // Zoom in two dimensions.
-    let onZoom2D = ( isIn ) => {
-    };
-    
-    // Zoom in one dimension.
-    let onPointerDown = ( event ) => {
-    },
-    onPointerUp = ( event ) => {
-    };
-    
-    // Show or hide the controls.
-    let onPointerOver = ( event ) => {
-    };
-    let onPointerOut = ( event ) => {
-    };
     
     // Set hook to draw on mounting or any state change.
     useEffect(() => {
-        BarChart.draw( undefined, undefined, 0, 0, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
+        Bar.draw( d3.selection(), 0, 0, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
     });
     
     // Return the component.
-    return <Graph width={width} height={height} margin={margin} padding={padding}
-        onZoom={onZoom2D} onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut}  onXAggregate={onXAggregate} ref={ref} />
+    return <Graph width={width} height={height} margin={margin} padding={padding} ref={ref} />
 };
 
 /**
@@ -87,13 +66,12 @@ const BarChart = ( props ) => {
  *
  * @const {number}
  */
-BarChart.yMargin = 0.05;
+Bar.yMargin = 0.05;
 
 /**
  * Draws the bar chart.
  *
  * @param  {Element} selection  d3 selection
- * @param  {Element} canvas     CANVAS element
  * @param  {number}  x          X coordinate, in pixels
  * @param  {number}  y          Y coordinate, in pixels
  * @param  {number}  width      width, in pixels
@@ -108,7 +86,7 @@ BarChart.yMargin = 0.05;
  * @param  {string}  yLabel     Y axis label
  * @param  {Array}   bars       bars
  */
-BarChart.draw = ( selection, canvas, x, y, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
+Bar.draw = ( selection, x, y, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
     
     // Initialization.
     const top  = margin.top    + padding.top,
@@ -119,15 +97,13 @@ BarChart.draw = ( selection, canvas, x, y, width, height, margin, padding, xScal
     selection.selectAll( "text" ).remove();
     selection
         .append( "text" )
-        .attr( "x", width / 2 - 30 )
+        .attr( "x", width / 2 - 10 )
         .attr( "y", height / 2 + 5 )
         .attr( "fill", "black" )
-        .text( "Bar Chart" );
-    return;
+        .text( "Bar" );
 
     // Draw the bars.
-    let yScale1 = yScale,
-        otherLength;
+    let yScale1 = yScale;
     const n = bars.length,
         maxLength = d3.max( bars.slice( 0, n - 1 ), d => d[ 1 ]);
     d3.select( "#Bar" ).selectAll( "rect" )
@@ -141,4 +117,4 @@ BarChart.draw = ( selection, canvas, x, y, width, height, margin, padding, xScal
         .style( "fill", "#99bbdd" );
 };
 
-export default BarChart;
+export default Bar;

@@ -28,24 +28,20 @@ it( "initializes a Matrix", () => {
 
 it( "clears data structures", () => {
     Matrix.clear();
-    expect( Matrix.bitmaps ).toBe( undefined );
     expect( Matrix.brushNode ).toBe( undefined );
 });
 
 // In brush.js, svg.width.baseVal is undefined.  SVGElement is not supported in JSDOM.
-//it( "renders a Matrix", () => {
-//    act(() => {
-//        render( <Matrix nData={100} opacity={1} />, container );
-//    });
-//    expect( container.childNodes.length ).toBe( 1 );
-//    let canvas = container.firstChild;
-//    expect( canvas.nodeName ).toBe( "CANVAS" );
-//    expect( Matrix.bitmaps.length ).toBe( 4 );
-//});
+it( "renders a Matrix", () => {
+    act(() => {
+        render( <Matrix />, container );
+    });
+    expect( container.childNodes.length ).toBe( 1 );
+});
 
 it( "draws a Matrix", () => {
     act(() => {
-        render( <div><canvas width="800" height="800" /><svg width="800" height="800" /></div>, container );
+        render( <div><canvas width="800" height="800" /><svg width="800" height="800" ><g /></svg></div>, container );
     });
     let div = container.firstChild;
     Matrix.scaled = [[], [], [], []];

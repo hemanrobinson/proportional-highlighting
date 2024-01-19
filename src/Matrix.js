@@ -1,8 +1,8 @@
 import React, { useRef, useEffect }  from 'react';
 import * as d3 from 'd3';
 import Data from './Data';
-import BarChart from './BarChart';
-import PieChart from './PieChart';
+import Bar from './Bar';
+import Pie from './Pie';
 import Plot from './Plot';
 import './Matrix.css';
 
@@ -90,9 +90,9 @@ const Matrix = ( props ) => {
         svg.selectAll( "*" ).remove();
         const cell = svg.append( "g" )
             .selectAll( "g" )
-            .data( d3.cross( d3.range( nColumns ), d3.range( nRows )))
+            .data( d3.cross( d3.range( nRows ), d3.range( nColumns )))
             .join( "g" )
-            .attr( "transform", ([ i, j ]) => `translate(${ i * width },${ j * height })` );
+            .attr( "transform", ([ i, j ]) => `translate(${ j * width },${ i * height })` );
             
         // Create the brush.
         const onStart = ( event ) => {
@@ -155,9 +155,7 @@ const Matrix = ( props ) => {
                     Data.deselectAll();
                 } else {
                     Data.selectedRows = Plot.select( x, y, width, height, i, j, Matrix.scaled, { x: x + xDown, y: y + yDown, width: xUp - xDown, height: yUp - yDown });
-                    if( Matrix.bitmaps && Matrix.bitmaps[ i ]) {
-                        Plot.draw( undefined, ref.current.firstChild, x, y, width, height, i, j, Matrix.scaled, opacity, Data.selectedRows, Matrix.bitmaps[ i ][ j ]);
-                    }
+                    Plot.draw( undefined, x, y, width, height, i, j, Matrix.scaled, opacity, Data.selectedRows );
                 }
             }
             debouncedDraw( width, height, ref, nData, opacity, false );
@@ -181,13 +179,6 @@ const Matrix = ( props ) => {
     // Return the component.
     return <div ref={ref}><canvas width={totalWidth} height={totalHeight}></canvas><svg width={totalWidth} height={totalHeight}></svg></div>;
 };
-
-/**
- * Bitmaps of deselected rows, cached for optimization, or undefined if none.
- *
- * @type {ImageData[][]|undefined}
- */
-Matrix.bitmaps = undefined;
 
 /**
  * CANVAS element, or undefined if none.
@@ -215,11 +206,10 @@ Matrix.scaled = undefined;
  */
 Matrix.clear = () => {
     Data.deselectAll();
-    Matrix.bitmaps = undefined;
 };
 
 /**
- * Draws the grid, the plots, and the axes.
+ * Draws the grid, the graphs, and the axes.
  *
  * @param  {number}  width          width in pixels
  * @param  {number}  height         height in pixels
@@ -257,13 +247,15 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
         g.stroke();
     }
     
-    // Draw the plots and the charts.  On first draw, store the bitmaps.
-    let isFirstDraw = !Matrix.bitmaps;
-    if( isFirstDraw ) {
-        Matrix.bitmaps = [];
-    }
-    for( let i = 0; ( i < nColumns ); i++ ) {
-        for( let j = 0; ( j < nRows ); j++ ) {
+    // Draw the graphs.
+    //     Rectangular 	Bar
+    //     Circular 	Pie
+    //     Irregular 	Area
+    //     Irregular    Map
+    //     Small 		Plot
+    //     Compound 	Box
+    for( let j = 0; ( j < nRows ); j++ ) {
+        for( let i = 0; ( i < nColumns ); i++ ) {
 
             // Get the position and the selection.
             let x = i * width,
@@ -276,21 +268,13 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
             // Draw a plot or chart.
             switch( k ) {
                 case 0:
-                    BarChart.draw( selection, canvas, x, y, width, height, {}, {}, { bandwidth: () => {}}, {}, {}, {}, {}, {}, []);
+                    Bar.draw( selection, x, y, width, height, {}, {}, { bandwidth: () => {}}, {}, {}, {}, {}, {}, []);
+                    break;
+                case 1:
+                    Pie.draw( selection, x, y, width, height, undefined, undefined );
                     break;
                 case 4:
-                    PieChart.draw( selection, canvas, x, y, width, height, undefined, undefined );
-                    break;
-                case 5:
-                    if( isFirstDraw ) {
-                        if( Matrix.bitmaps[ i ] === undefined ) {
-                            Matrix.bitmaps[ i ] = [];
-                        }
-                        Matrix.bitmaps[ i ][ j ] =
-                            Plot.draw( selection, canvas, x, y, width, height, i, j, Matrix.scaled, opacity, Data.selectedRows );
-                    } else {
-                        Plot.draw( selection, canvas, x, y, width, height, i, j, Matrix.scaled, opacity, Data.selectedRows, Matrix.bitmaps[ i ][ j ]);
-                    }
+                    Plot.draw( selection, x, y, width, height, i, j, Matrix.scaled, opacity, Data.selectedRows );
                     break;
                 default:
                     break;

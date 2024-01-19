@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
-
-import PieChart from './PieChart';
+import * as d3 from 'd3';
+import Pie from './Pie';
 
 let container = null;
 
@@ -22,9 +21,5 @@ afterEach(() => {
 });
 
 it( "draws a pie chart", () => {
-    act(() => {
-        render( <canvas width="200" height="200" />, container );
-    });
-    let canvas = container.firstChild;
-    PieChart.draw( undefined, canvas, 0, 0, 200, 200, 1, 0 );
+    Pie.draw( d3.selection(), 0, 0, 200, 200, 1, 0 );
 });

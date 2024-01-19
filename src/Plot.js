@@ -1,4 +1,7 @@
+import * as d3 from 'd3';
 import Data from './Data';
+import Graph from './Graph';
+import './Graph.css';
 
 /**
  * Scatter plot in an SVG element.
@@ -15,13 +18,6 @@ const Plot = ( props ) => {
  * @constant {number}
  */
 Plot.padding = 10;
-
-/**
- * Cached bitmap, or none iff undefined.
- *
- * @constant {ImageData|undefined}
- */
-Plot.imageData = undefined;
     
 /**
  * Returns normalized rectangle.
@@ -65,81 +61,6 @@ Plot.isWithin = ( point, rect, tol ) => {
 }
 
 /**
- * Draws the plot.
- *
- * @param  {Element}              selection     d3 selection
- * @param  {Element}              canvas        CANVAS element
- * @param  {number}               x             X coordinate, in pixels
- * @param  {number}               y             Y coordinate, in pixels
- * @param  {number}               width         width, in pixels
- * @param  {number}               height        height, in pixels
- * @param  {number}               i             X column index
- * @param  {number}               j             Y column index
- * @param  {number[][]}           scaled        scaled coordinates
- * @param  {Element}              canvas        CANVAS element
- * @param  {number}               opacity       alpha
- * @param  {number[]}             selectedRows  indices of selected rows
- * @param  {ImageData|undefined}  imageData     bitmap of deselected points, or undefined if none
- * @return {ImageData}            bitmap of deselected points
- */
-Plot.draw = ( selection, canvas, x, y, width, height, i, j, scaled, opacity, selectedRows, imageData ) => {
-    
-    // Initialization.
-    const g = canvas.getContext( "2d" ),
-        padding = Plot.padding,
-        scaledi = scaled[ i ],
-        scaledj = scaled[ j ],
-        nRows = scaledi.length,
-        data = Data.getValues( nRows ),
-        nBytes = width * height * 4;
-    let deselectedImageData = imageData;
-        
-    // Create the deselected bitmap if necessary.
-    // For alpha blending, see e.g. https://en.wikipedia.org/wiki/Alpha_compositing#Alpha_blending.
-    if( deselectedImageData === undefined ) {
-        deselectedImageData = g.createImageData( width, height );                           // black and transparent
-        const d = deselectedImageData.data;
-        data.forEach(( datum, row ) => {
-            let xScaled = scaledi[ row ],
-                yScaled = height - scaledj[ row ],
-                k = ( yScaled * width + xScaled ) * 4;
-            if(( 0 <= k ) && ( k + 3 < nBytes )) {
-                d[ k     ] = Math.round(             0 + d[ k     ] * ( 1 - opacity ));     // r
-                d[ k + 1 ] = Math.round(             0 + d[ k + 1 ] * ( 1 - opacity ));     // g
-                d[ k + 2 ] = Math.round(             0 + d[ k + 2 ] * ( 1 - opacity ));     // b
-                d[ k + 3 ] = Math.round( 255 * opacity + d[ k + 3 ] * ( 1 - opacity ));     // alpha
-            }
-        });
-    }
-    
-    // Copy the deselected bitmap.  Caching minimizes use of createImageData().
-    if( !Plot.imageData || ( Plot.imageData.data.length !== nBytes )) {
-        Plot.imageData = g.createImageData( width, height );                                // black and transparent
-    } else {
-        Plot.imageData.data.fill( 0, 0, nBytes );                                           // black and transparent
-    }
-    const myImageData = Plot.imageData;
-    const d = myImageData.data;
-    d.set( deselectedImageData.data );
-    
-    // Add the selected rows as specified.
-    // Selected rows use opacity, but not alpha blending, in order to keep them bright.  TODO:  Explore alternatives to this.
-    for( let m = 0; ( m < selectedRows.length ); m++ ) {
-        let row = selectedRows[ m ],
-            xScaled = scaledi[ row ],
-            yScaled = height - scaledj[ row ],
-            k = ( yScaled * width + xScaled ) * 4;
-        if(( 0 <= k ) && ( k + 3 < nBytes )) {
-            d[ k ] = Math.round( 255 + d[ k ] * ( 1 - opacity ));                           // r
-        }
-    }
-    
-    // Draw and return the bitmap.
-    g.putImageData( myImageData, x, y, padding, padding, width - 2 * padding, height - 2 * padding );
-    return deselectedImageData;
-};
-
-/**
  * Selects rows within the brush and returns them.
  *
  * @param  {number}     x       X coordinate, in pixels
@@ -173,6 +94,30 @@ Plot.select = ( x, y, width, height, i, j, scaled, brush ) => {
         }
     };
     return selectedRows;
+};
+
+/**
+ * Draws the plot.
+ *
+ * @param  {Element}    selection     d3 selection
+ * @param  {number}     x             X coordinate, in pixels
+ * @param  {number}     y             Y coordinate, in pixels
+ * @param  {number}     width         width, in pixels
+ * @param  {number}     height        height, in pixels
+ * @param  {number}     i             X column index
+ * @param  {number}     j             Y column index
+ * @param  {number[][]} scaled        scaled coordinates
+ * @param  {number}     opacity       alpha
+ * @param  {number[]}   selectedRows  indices of selected rows
+ */
+Plot.draw = ( selection, x, y, width, height, si, j, caled, opacity, selectedRows ) => {
+    selection.selectAll( "text" ).remove();
+    selection
+        .append( "text" )
+        .attr( "x", width / 2 - 15 )
+        .attr( "y", height / 2 + 5 )
+        .attr( "fill", "black" )
+        .text( "Plot" );
 };
 
 export default Plot;

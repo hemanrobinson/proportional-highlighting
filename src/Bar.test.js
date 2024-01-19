@@ -1,12 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as d3 from 'd3';
-
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
-
+import * as d3 from 'd3';
 import Graph from './Graph';
-import BarChart from './BarChart';
+import Bar from './Bar';
 
 let container = null;
 
@@ -23,11 +21,11 @@ afterEach(() => {
     container = null;
 });
 
-it( "creates a BarChart element", () => {
+it( "creates a Bar element", () => {
     
     // Test first render and componentDidMount.
     act(() => {
-        render( <BarChart width="400" height="400" />, container );
+        render( <Bar width="400" height="400" />, container );
     });
     
     // Test structure.
@@ -36,16 +34,9 @@ it( "creates a BarChart element", () => {
     expect( div.nodeName ).toBe( "DIV" );
     let svg = div.firstChild;
     expect( svg.nodeName ).toBe( "svg" );
-    
-    // Test mouse events.
-    svg.dispatchEvent( new MouseEvent( "pointerdown", { bubbles: true }));
-    Graph.downLocation.isX = true;
-    svg.dispatchEvent( new MouseEvent( "pointerup", { bubbles: true }));
-    Graph.downLocation.isX = false;
-    svg.dispatchEvent( new MouseEvent( "pointerup", { bubbles: true }));
 });
 
-it( "draws the BarChart", () => {
+it( "draws the Bar chart", () => {
     let ref = { current: { childNodes: [
             document.createElement( "svg" ),
             document.createElement( "BUTTON" ),
@@ -57,5 +48,5 @@ it( "draws the BarChart", () => {
         padding = { top: 0, right: 0, bottom: 0, left: 0 },
         xScale = d3.scaleBand().domain([ 0, 1 ]).range([ 0, 100 ]),
         yScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]);
-    BarChart.draw( ref, canvas, 0, 0, 400, 400, margin, padding, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y", []);
+    Bar.draw( d3.selection(), 0, 0, 400, 400, margin, padding, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y", []);
 });
