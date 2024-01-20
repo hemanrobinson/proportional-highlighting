@@ -36,6 +36,18 @@ it( "creates a Graph element", () => {
     expect( div.childNodes[ 0 ].nodeName ).toBe( "svg" );
 });
 
+it( "normalizes a rectangle", () => {
+    expect( Graph.normalize({ x:   0, y:   0, width:    0, height:    0 })).toEqual({ x: 0, y: 0, width:   0, height:   0 });
+    expect( Graph.normalize({ x:   0, y:   0, width:  100, height:  100 })).toEqual({ x: 0, y: 0, width: 100, height: 100 });
+    expect( Graph.normalize({ x: 100, y: 100, width: -100, height: -100 })).toEqual({ x: 0, y: 0, width: 100, height: 100 });
+});
+
+it( "returns whether within a rectangle", () => {
+    expect( Graph.isWithin({ x:   0, y:   0 }, { x:   0, y:   0, width:    0, height:    0 })).toBe( false );
+    expect( Graph.isWithin({ x:   0, y:   0 }, { x:   0, y:   0, width:  100, height:  100 })).toBe(  true );
+    expect( Graph.isWithin({ x:   0, y:   0 }, { x: 100, y: 100, width: -100, height: -100 })).toBe(  true );
+});
+
 it( "returns initial and current domains", () => {
     expect( Graph.getDomains([ 0, 1 ], [ 0, 1 ], [ 0, 1 ], [ 0, 1 ], false, false )).toEqual({
         "xD": 0, "xMax": 1, "xMax0": 1, "xMin": 0, "xMin0": 0, "yD": 0, "yMax": 1, "yMax0": 1, "yMin": 0, "yMin0": 0 });

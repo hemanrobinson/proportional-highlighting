@@ -18,47 +18,6 @@ const Plot = ( props ) => {
  * @constant {number}
  */
 Plot.padding = 10;
-    
-/**
- * Returns normalized rectangle.
- *
- * @param   {Rect}  rect   rectangle
- * @return  {Rect}  normalized rectangle
- */
-Plot.normalize = ( rect ) => {
-    let nx = rect.x,
-        ny = rect.y,
-        nw = rect.width,
-        nh = rect.height;
-    if( nw < 0 ) {
-        nx += nw;
-        nw = -nw;
-    }
-    if( nh < 0 ) {
-        ny += nh;
-        nh = -nh;
-    }
-    return { x: nx, y: ny, width: nw, height: nh };
-}
-
-/**
- * Returns whether point is within rectangle, within tolerance.
- *
- * @param  {Point}   point  point
- * @param  {Rect}    rect   rectangle
- * @param  {number}  tol    tolerance, or 0 for undefined
- */
-Plot.isWithin = ( point, rect, tol ) => {
-    let nRect = Plot.normalize( rect );
-    if( tol !== undefined ) {
-        nRect.x -= tol;
-        nRect.y -= tol;
-        nRect.width += 2 * tol;
-        nRect.height += 2 * tol;
-    }
-    return ( nRect.x <= point.x ) && ( point.x < nRect.x + nRect.width  ) &&
-           ( nRect.y <= point.y ) && ( point.y < nRect.y + nRect.height );
-}
 
 /**
  * Selects rows within the brush and returns them.
@@ -107,10 +66,9 @@ Plot.select = ( x, y, width, height, i, j, scaled, brush ) => {
  * @param  {number}     i             X column index
  * @param  {number}     j             Y column index
  * @param  {number[][]} scaled        scaled coordinates
- * @param  {number}     opacity       alpha
  * @param  {number[]}   selectedRows  indices of selected rows
  */
-Plot.draw = ( selection, x, y, width, height, si, j, caled, opacity, selectedRows ) => {
+Plot.draw = ( selection, x, y, width, height, si, j, scaled, selectedRows ) => {
     selection.selectAll( "text" ).remove();
     selection
         .append( "text" )

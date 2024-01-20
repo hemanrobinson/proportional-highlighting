@@ -45,5 +45,5 @@ it( "draws a Matrix", () => {
     });
     let div = container.firstChild;
     Matrix.scaled = [[], [], [], []];
-    Matrix.draw( 200, 200, { current: div }, 1, 1, true );
+    Matrix.draw({ current: div }, 200, 200, 1, 1, [], true );
 });

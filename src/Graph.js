@@ -1,17 +1,6 @@
 import React from 'react';
-import * as d3 from 'd3';
 import './Graph.css';
 
-/**
- * @typedef  Box  distances around an object
- *
- * @type  {object}
- * @property  {number}  top     top distance, in pixels
- * @property  {number}  right   right distance, in pixels
- * @property  {number}  bottom  bottom distance, in pixels
- * @property  {number}  left    left distance, in pixels
- */
- 
 /**
  * @typedef  Domains  initial and current domains
  *
@@ -29,20 +18,6 @@ import './Graph.css';
  */
 
 /**
- * @typedef  EventLocation  event location
- *
- * @type  {object}
- * @property  {number}   x        X coordinate, in pixels
- * @property  {number}   y        Y coordinate, in pixels
- * @property  {Array}    xDomain  current X domain
- * @property  {Array}    yDomain  current Y domain
- * @property  {boolean}  isX      true iff on X scrollbar
- * @property  {boolean}  isY      true iff on Y scrollbar
- * @property  {boolean}  isMin    true iff on minimum
- * @property  {boolean}  isMax    true iff on maximum
- */
-
-/**
  * Graph in an SVG element.
  *
  * This component contains code common to the different types of graphs.
@@ -57,18 +32,54 @@ import './Graph.css';
 const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
-    let { width, height, margin, padding } = props,
-        top    = margin.top    + padding.top,
-        right  = margin.right  + padding.right,
-        bottom = margin.bottom + padding.bottom,
-        left   = margin.left   + padding.left;
+    let { width, height } = props;
     
     // Return the component.
-    // Using "value" instead of "defaultValue" below suppresses a warning.
     return <div style={{width: width, height: height}} className="parent" ref={ref}>
         <svg width={width} height={height}/>
     </div>;
 });
+    
+/**
+ * Returns normalized rectangle.
+ *
+ * @param   {Rect}  rect   rectangle
+ * @return  {Rect}  normalized rectangle
+ */
+Graph.normalize = ( rect ) => {
+    let nx = rect.x,
+        ny = rect.y,
+        nw = rect.width,
+        nh = rect.height;
+    if( nw < 0 ) {
+        nx += nw;
+        nw = -nw;
+    }
+    if( nh < 0 ) {
+        ny += nh;
+        nh = -nh;
+    }
+    return { x: nx, y: ny, width: nw, height: nh };
+}
+
+/**
+ * Returns whether point is within rectangle, within tolerance.
+ *
+ * @param  {Point}   point  point
+ * @param  {Rect}    rect   rectangle
+ * @param  {number}  tol    tolerance, or 0 for undefined
+ */
+Graph.isWithin = ( point, rect, tol ) => {
+    let nRect = Graph.normalize( rect );
+    if( tol !== undefined ) {
+        nRect.x -= tol;
+        nRect.y -= tol;
+        nRect.width += 2 * tol;
+        nRect.height += 2 * tol;
+    }
+    return ( nRect.x <= point.x ) && ( point.x < nRect.x + nRect.width  ) &&
+           ( nRect.y <= point.y ) && ( point.y < nRect.y + nRect.height );
+}
 
 /**
  * Returns initial and current domains.

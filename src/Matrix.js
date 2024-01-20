@@ -1,6 +1,7 @@
 import React, { useRef, useEffect }  from 'react';
 import * as d3 from 'd3';
 import Data from './Data';
+import Graph from './Graph';
 import Bar from './Bar';
 import Pie from './Pie';
 import Plot from './Plot';
@@ -34,7 +35,8 @@ const Matrix = ( props ) => {
     
     // Initialization.
     const ref = useRef(),
-        { nData, opacity } = props,
+//        {} = props,
+        nData = 100,
         width = 200,
         height = 200,
         nColumns = 3,
@@ -120,7 +122,7 @@ const Matrix = ( props ) => {
                     j = Math.floor( offsetY / height ),
                     x = i * width,
                     y = j * height;
-                    if( !Plot.isWithin({ x: offsetX, y : offsetY }, { x: x + xDown, y: y + yDown, width: xUp - xDown, height: yUp - yDown })) {
+                    if( !Graph.isWithin({ x: offsetX, y : offsetY }, { x: x + xDown, y: y + yDown, width: xUp - xDown, height: yUp - yDown })) {
                         Data.deselectAll();
                     }
                 }
@@ -154,14 +156,14 @@ const Matrix = ( props ) => {
                 if( i === j ) {
                     Data.deselectAll();
                 } else {
-                    Data.selectedRows = Plot.select( x, y, width, height, i, j, Matrix.scaled, { x: x + xDown, y: y + yDown, width: xUp - xDown, height: yUp - yDown });
-                    Plot.draw( undefined, x, y, width, height, i, j, Matrix.scaled, opacity, Data.selectedRows );
+                    Data.selectedRows = Matrix.select( x, y, width, height, i, j, { x: x + xDown, y: y + yDown, width: xUp - xDown, height: yUp - yDown });
+                    Matrix.draw( ref, width, height, -1, -1, Data.selectedRows, false );
                 }
             }
-            debouncedDraw( width, height, ref, nData, opacity, false );
+            debouncedDraw( ref, width, height, -1, -1, Data.selectedRows, false );
         };
         const onEnd = ( event ) => {
-            Matrix.draw( width, height, ref, nData, opacity, true );
+            Matrix.draw( ref, width, height, -1, -1, Data.selectedRows, true );
         };
         const brush = d3.brush()
             .extent([[ 2, 2 ], [ width, height ]])
@@ -179,13 +181,6 @@ const Matrix = ( props ) => {
     // Return the component.
     return <div ref={ref}><canvas width={totalWidth} height={totalHeight}></canvas><svg width={totalWidth} height={totalHeight}></svg></div>;
 };
-
-/**
- * CANVAS element, or undefined if none.
- *
- * @type {Element|undefined}
- */
-Matrix.canvas = undefined;
  
 /**
  * Node containing a brush, or undefined if none.
@@ -202,23 +197,71 @@ Matrix.brushNode = undefined;
 Matrix.scaled = undefined;
 
 /**
- * Clears data structures.
+ * Deselects all rows.
  */
 Matrix.clear = () => {
     Data.deselectAll();
 };
 
 /**
+ * Selects rows within the brush and returns them.
+ *
+ * @param  {number}     x       X coordinate, in pixels
+ * @param  {number}     y       Y coordinate, in pixels
+ * @param  {number}     width   width, in pixels
+ * @param  {number}     height  height, in pixels
+ * @param  {number}     i       X column index
+ * @param  {number}     j       Y column index
+ * @param  {Rect}       brush   brush
+ * @return {number[]}   indices of selected rows
+ */
+Matrix.select = ( x, y, width, height, i, j, brush ) => {
+    
+    // Initialization.
+    let selectedRows = [];
+            
+    // Get the selected rows.
+    let k = i + 3 * j;
+    switch( k ) {
+        case 0:
+            // Bar
+            break;
+        case 1:
+            // Pie
+            break;
+        case 2:
+            // Area
+            break;
+        case 3:
+            // Map
+            break;
+        case 4:
+            selectedRows = Plot.select( x, y, width, height, i, j, Matrix.scaled, brush );
+            break;
+        case 5:
+            // Box
+            break;
+        default:
+            break;
+
+    }
+    
+    // Return the selected rows.
+    return selectedRows;
+};
+
+/**
  * Draws the grid, the graphs, and the axes.
  *
- * @param  {number}  width          width in pixels
- * @param  {number}  height         height in pixels
- * @param  {Object}  ref            reference to DIV
- * @param  {number}  nData          number of data values
- * @param  {number}  opacity        alpha
- * @param  {boolean} isDrawingAll   true iff clearing and redrawing grid and axes
+ * @param  {Object}     ref            reference to DIV
+ * @param  {number}     width          width in pixels
+ * @param  {number}     height         height in pixels
+ * @param  {number}     i              X column index, or <0 to draw all
+ * @param  {number}     j              Y column index, or <0 to draw all
+ * @param  {number[]}   selectedRows   indices of selected rows
+ * @param  {boolean}    isDrawingGrid  true iff clearing and redrawing the grid
  */
-Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
+Matrix.draw = ( ref, width, height, i, j, selectedRows, isDrawingGrid ) => {
     
     // Initialization.  If no context, do nothing.
     const nColumns = 3,
@@ -232,8 +275,44 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
         return;
     }
     
+    // Draws a graph.
+    let drawGraph = ( ref, width, height, i, j, selectedRows ) => {
+    
+        // Get the position and the selection.
+        let x = i * width,
+            y = j * height;
+        let k = i + 3 * j;
+        const svg = d3.select( ref.current.childNodes[ 1 ]);
+        let selection = d3.select( svg.node().firstChild.childNodes[ k ]);
+        
+        // Draw the graph.
+        switch( k ) {
+            case 0:
+                Bar.draw( selection, x, y, width, height, {}, {}, { bandwidth: () => {}}, {}, {}, {}, {}, {}, []);
+                break;
+            case 1:
+                Pie.draw( selection, x, y, width, height, undefined, undefined );
+                break;
+            case 2:
+                // Area
+                break;
+            case 3:
+                // Map
+                break;
+            case 4:
+                Plot.draw( selection, x, y, width, height, i, j, Matrix.scaled, selectedRows );
+                break;
+            case 5:
+                // Box
+                break;
+            default:
+                break;
+
+        }
+    };
+    
     // If requested, clear the drawing area and draw the grid.
-    if( isDrawingAll ) {
+    if( isDrawingGrid ) {
         g.clearRect( 0, 0, nColumns * width, nRows * height );
         g.strokeStyle = "#939ba1";
         for( let i = 1; ( i < nColumns ); i++ ) {
@@ -248,37 +327,12 @@ Matrix.draw = ( width, height, ref, nData, opacity, isDrawingAll ) => {
     }
     
     // Draw the graphs.
-    //     Rectangular 	Bar
-    //     Circular 	Pie
-    //     Irregular 	Area
-    //     Irregular    Map
-    //     Small 		Plot
-    //     Compound 	Box
-    for( let j = 0; ( j < nRows ); j++ ) {
-        for( let i = 0; ( i < nColumns ); i++ ) {
-
-            // Get the position and the selection.
-            let x = i * width,
-                y = j * height;
-                
-            let k = i + 3 * j;
-            const svg = d3.select( ref.current.childNodes[ 1 ]);
-            let selection = d3.select( svg.node().firstChild.childNodes[ k ]);
-            
-            // Draw a plot or chart.
-            switch( k ) {
-                case 0:
-                    Bar.draw( selection, x, y, width, height, {}, {}, { bandwidth: () => {}}, {}, {}, {}, {}, {}, []);
-                    break;
-                case 1:
-                    Pie.draw( selection, x, y, width, height, undefined, undefined );
-                    break;
-                case 4:
-                    Plot.draw( selection, x, y, width, height, i, j, Matrix.scaled, opacity, Data.selectedRows );
-                    break;
-                default:
-                    break;
-
+    if(( i >= 0 ) && ( j >= 0 )) {
+        drawGraph( ref, width, height, i, j, selectedRows );
+    } else {
+        for( let j = 0; ( j < nRows ); j++ ) {
+            for( let i = 0; ( i < nColumns ); i++ ) {
+                drawGraph( ref, width, height, i, j, selectedRows );
             }
         }
     }
