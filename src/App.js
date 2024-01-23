@@ -21,7 +21,7 @@ const App = () => {
                     <a href="http://www.perceptualedge.com/"><img title="Stephen Few" alt="Stephen Few" src={few}/></a>
                 </p>
                 <p>
-                Drag the brush to select some data.  Drag the edges to resize the brush.  Drag a rectangle in any graph to create a new brush.
+                To select data, click in any graph, or drag the brush.  Drag the edges to resize the brush.  Drag a rectangle in any graph to create a new brush.
                 </p>
                 <Matrix/>
                 <br />

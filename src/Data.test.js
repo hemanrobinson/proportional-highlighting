@@ -9,14 +9,16 @@ it( "initializes the Data function", () => {
 });
 
 it( "returns column names", () => {
-    expect( Data.getColumnNames()).toEqual([ "A", "B", "A * B", "sin( A / B )" ]);
+    expect( Data.getColumnNames( "Business" )).toEqual([ "Industry", "Sales ($M)", "Employees" ]);
 });
 
 it( "returns domains", () => {
-    expect( Data.getDomain( 100, 0 )).toEqual([ -1.5, 1.5 ]);
+    expect( Data.getDomain( 0 )).toEqual([ "Aerospace", "Soap" ]);
+    expect( Data.getDomain( 1 )).toEqual([ 576.9, 86656 ]);
+    expect( Data.getDomain( 2 )).toEqual([ 560, 201400 ]);
 });
 
 it( "returns values", () => {
-    expect( Data.getValues( 100 ).length ).toBe( 100 );
+    expect( Data.getValues().length ).toBe( 67 );
 });
 
