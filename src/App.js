@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Slider } from '@mui/material';
 import Matrix from './Matrix';
 import './App.css';
 import github from './github.svg';
@@ -8,6 +9,8 @@ import few from './few.jpg';
 const App = () => {
     
     // Create state.
+    const percentSelectedDefault = 0.5;
+    const [ percentSelected, setPercentSelected ] = useState( percentSelectedDefault );
     
     // Return the component.
     return (
@@ -21,17 +24,20 @@ const App = () => {
                     <a href="http://www.perceptualedge.com/"><img title="Stephen Few" alt="Stephen Few" src={few}/></a>
                 </p>
                 <p>
-                To select data, click in any graph, or drag the brush.  Drag the edges to resize the brush.  Drag a rectangle in any graph to create a new brush.
+                Use the slider to adjust the percentage of data rows selected.
                 </p>
-                <Matrix/>
+                <Matrix percentSelected={percentSelected} />
                 <br />
             </div>
             <div className="GridControls">
+                <label>Selected Rows:</label>
+                <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
+                    valueLabelDisplay="auto" valueLabelFormat={( value ) => ( Math.round( value * 100 ) + "%" )}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelected( value ); }} />
             </div>
             <div className="Description">
                 <h2>Design Notes</h2>
                 <p>
-                This implementation reuses some code from the <a href="https://observablehq.com/collection/@d3/d3-brush">d3-brush collection</a>.
                 </p>
                 <h2>Further Reading</h2>
                 <ul>

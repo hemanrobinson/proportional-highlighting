@@ -24,6 +24,24 @@ Data.deselectAll = () => {
 };
 
 /**
+ * Selects an approximate percentage of the data.
+ *
+ * @param percentage percentage between 0 and 1
+ */
+Data.selectPercentage = ( percentage ) => {
+    Data.selectedRows = [];
+    const isLessThanHalf = ( percentage < 0.5 ),
+        j = Math.round( 1 / ( isLessThanHalf ? percentage : ( 1 - percentage ))),
+        k = j - 1,
+        nRows = Data.getValues().length;
+    for( let i = 0; ( i < nRows ); i++ ) {
+        if(( isLessThanHalf && ( i % j >= k )) || ( !isLessThanHalf && ( i % j < k ))) {
+            Data.selectedRows.push( i );
+        }
+    }
+};
+
+/**
  * Returns column names.
  *
  * @return {string[]}  column names
