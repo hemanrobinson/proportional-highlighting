@@ -31,8 +31,9 @@ Data.deselectAll = () => {
 Data.selectPercentage = ( percentage ) => {
     Data.selectedRows = [];
     const isLessThanHalf = ( percentage < 0.5 ),
-        j = Math.round( 1 / ( isLessThanHalf ? percentage : ( 1 - percentage ))),
-        k = j - 1,
+        m = 3,
+        j = ( percentage <= 0 ) || ( percentage >= 1 ) ? m : Math.round( m / ( isLessThanHalf ? percentage : ( 1 - percentage ))),
+        k = ( percentage <= 0 ) || ( percentage >= 1 ) ? m : j - m,
         nRows = Data.getValues().length;
     for( let i = 0; ( i < nRows ); i++ ) {
         if(( isLessThanHalf && ( i % j >= k )) || ( !isLessThanHalf && ( i % j < k ))) {

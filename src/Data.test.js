@@ -15,14 +15,31 @@ it( "deselects all rows", () => {
 });
 
 it( "selects a random percentage of the rows", () => {
-    const nRows = Data.getValues().length;
+    const nRows = Data.getValues().length,
+        tolerance = 0.05;
     expect( Data.selectedRows.length ).toEqual( 0 );
+    Data.selectPercentage( 0 );
+    expect( Math.abs( Data.selectedRows.length / nRows - 0 )).toBeLessThan( tolerance );
+    Data.selectPercentage( 0.1 );
+    expect( Math.abs( Data.selectedRows.length / nRows - 0.1 )).toBeLessThan( tolerance );
     Data.selectPercentage( 0.2 );
-    expect( Data.selectedRows.length ).toEqual( Math.round( nRows * 0.2 ));
+    expect( Math.abs( Data.selectedRows.length / nRows - 0.2 )).toBeLessThan( tolerance );
+    Data.selectPercentage( 0.3 );
+    expect( Math.abs( Data.selectedRows.length / nRows - 0.3 )).toBeLessThan( tolerance );
+    Data.selectPercentage( 0.4 );
+    expect( Math.abs( Data.selectedRows.length / nRows - 0.4 )).toBeLessThan( tolerance );
     Data.selectPercentage( 0.5 );
-    expect( Data.selectedRows.length ).toEqual( Math.round( nRows * 0.5 ));
+    expect( Math.abs( Data.selectedRows.length / nRows - 0.5 )).toBeLessThan( tolerance );
+    Data.selectPercentage( 0.6 );
+    expect( Math.abs( Data.selectedRows.length / nRows - 0.6 )).toBeLessThan( tolerance );
+    Data.selectPercentage( 0.7 );
+    expect( Math.abs( Data.selectedRows.length / nRows - 0.7 )).toBeLessThan( tolerance );
     Data.selectPercentage( 0.8 );
-    expect( Data.selectedRows.length ).toEqual( Math.round( nRows * 0.8 ));
+    expect( Math.abs( Data.selectedRows.length / nRows - 0.8 )).toBeLessThan( tolerance );
+    Data.selectPercentage( 0.9 );
+    expect( Math.abs( Data.selectedRows.length / nRows - 0.9 )).toBeLessThan( tolerance );
+    Data.selectPercentage( 1 );
+    expect( Math.abs( Data.selectedRows.length / nRows - 1 )).toBeLessThan( tolerance );
 });
 
 it( "returns column names", () => {
