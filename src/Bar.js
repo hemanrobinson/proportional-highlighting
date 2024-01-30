@@ -80,40 +80,27 @@ Bar.yMargin = 0.05;
  * @param  {Box}     padding    padding
  * @param  {D3Scale} xScale     X scale
  * @param  {D3Scale} yScale     Y scale
- * @param  {Array}   xDomain0   Initial X domain
- * @param  {Array}   yDomain0   Initial Y domain
- * @param  {string}  xLabel     X axis label
- * @param  {string}  yLabel     Y axis label
  * @param  {Array}   bars       bars
  */
-Bar.draw = ( selection, x, y, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
+Bar.draw = ( selection, x, y, width, height, margin, padding, xScale, yScale, bars ) => {
     
     // Initialization.
     const top  = margin.top    + padding.top,
         right  = margin.right  + padding.right,
         bottom = margin.bottom + padding.bottom,
         left   = margin.left   + padding.left;
-    
-    selection.selectAll( "text" ).remove();
-    selection
-        .append( "text" )
-        .attr( "x", width / 2 - 10 )
-        .attr( "y", height / 2 + 5 )
-        .attr( "fill", "black" )
-        .text( "Bar" );
 
     // Draw the bars.
-    let yScale1 = yScale;
     const n = bars.length,
         maxLength = d3.max( bars.slice( 0, n - 1 ), d => d[ 1 ]);
-    d3.select( "#Bar" ).selectAll( "rect" )
+    selection.selectAll( "rect" )
         .data( bars )
         .enter()
         .append( "rect" )
         .attr( "x", ( d ) => xScale( d[ 0 ]))
-        .attr( "y", ( d ) => yScale1( d[ 1 ]))
+        .attr( "y", ( d ) => yScale( d[ 1 ]))
         .attr( "width", xScale.bandwidth())
-        .attr( "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0, height - yScale1( d[ 1 ])) : 0 ))
+        .attr( "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0, height - yScale( d[ 1 ])) : 0 ))
         .style( "fill", "#99bbdd" );
 };
 
