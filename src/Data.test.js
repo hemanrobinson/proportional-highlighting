@@ -47,7 +47,7 @@ it( "returns column names", () => {
 });
 
 it( "returns domains", () => {
-    expect( Data.getDomain( 0 )).toEqual([ "Aerospace", "Soap" ]);
+    expect( Data.getDomain( 0 )).toEqual([ "Pharma", "Aerospace", "Oil", "Soap" ]);
     expect( Data.getDomain( 1 )).toEqual([ 576.9, 86656 ]);
     expect( Data.getDomain( 2 )).toEqual([ 560, 201400 ]);
 });

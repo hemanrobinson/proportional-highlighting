@@ -58,7 +58,14 @@ Data.getColumnNames = () => {
  * @return {number[]}  domain of specified column
  */
 Data.getDomain = ( index ) => {
-  return [ d3.min( Data.getValues(), d => d[ index ]), d3.max( Data.getValues(), d => d[ index ])];
+    let domain = [],
+        data = Data.getValues();
+    if( index === 0 ) {
+        domain = Array.from( d3.rollup( data, v => d3.sum( v, d => 1 ), d => d[ 0 ])).map( d => d[ 0 ]);
+    } else {
+        domain = [ d3.min( data, d => d[ index ]), d3.max( data, d => d[ index ])];
+    }
+    return domain;
 };
 
 /**

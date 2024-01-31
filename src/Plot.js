@@ -28,16 +28,15 @@ Plot.padding = 10;
  * @param  {number}     height  height, in pixels
  * @param  {number}     i       X column index
  * @param  {number}     j       Y column index
- * @param  {number[][]} scaled  scaled coordinates
  * @param  {Rect}       brush   brush
  * @return {number[]}   indices of selected rows
  */
-Plot.select = ( x, y, width, height, i, j, scaled, brush ) => {
+Plot.select = ( x, y, width, height, i, j, brush ) => {
     
     // Initialization.
     let selectedRows = [];
-    const scaledi = scaled[ i ],
-        scaledj = scaled[ j ],
+    const scaledi = [],
+        scaledj = [],
         nRows = scaledi.length,
         xMin = Math.floor( Math.min( brush.x, brush.x + brush.width ) - x ),
         xMax = Math.floor( Math.max( brush.x, brush.x + brush.width ) - x ),
@@ -65,10 +64,9 @@ Plot.select = ( x, y, width, height, i, j, scaled, brush ) => {
  * @param  {number}     height        height, in pixels
  * @param  {number}     i             X column index
  * @param  {number}     j             Y column index
- * @param  {number[][]} scaled        scaled coordinates
  * @param  {number[]}   selectedRows  indices of selected rows
  */
-Plot.draw = ( selection, x, y, width, height, si, j, scaled, selectedRows ) => {
+Plot.draw = ( selection, x, y, width, height, i, j, selectedRows ) => {
     selection.selectAll( "text" ).remove();
     selection
         .append( "text" )

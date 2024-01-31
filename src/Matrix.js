@@ -35,29 +35,12 @@ const Matrix = ( props ) => {
     // Initialization.
     const ref = useRef(),
         { percentSelected } = props,
-        nData = 100,
         width = 200,
         height = 200,
         nColumns = 3,
         nRows = 2,
-        data = Data.getValues( nData ),
         totalWidth = nColumns * width,
         totalHeight = nRows * height;
-    
-    // Cache scaled coordinates.
-    Matrix.scaled = [];
-    let scale = [];
-    for( let i = 0; ( i < nColumns ); i++ ) {
-        Matrix.scaled[ i ] = new Uint16Array( nData );
-        let x = i * width;
-        scale[ i ] = d3.scaleLinear().domain( Data.getDomain( nData, i )).range([ x + Plot.padding, x + width - Plot.padding ]);
-    }
-    data.forEach(( datum, row ) => {
-        for( let i = 0; ( i < nColumns ); i++ ) {
-            let x = i * width;
-            Matrix.scaled[ i ][ row ] = Math.round( scale[ i ]( datum[ i ]) - x );
-        }
-    });
     
     // Set hook to select and draw on mounting.
     useEffect(() => {
@@ -80,13 +63,6 @@ const Matrix = ( props ) => {
     // Return the component.
     return <div ref={ref}><canvas width={totalWidth} height={totalHeight}></canvas><svg width={totalWidth} height={totalHeight}></svg></div>;
 };
- 
-/**
- * Scaled coordinates, or undefined if none.
- *
- * @type {Uint16Array[]|undefined}}
- */
-Matrix.scaled = undefined;
 
 /**
  * Deselects all rows.
@@ -110,13 +86,7 @@ Matrix.draw = ( ref, width, height, i, j, selectedRows, isDrawingGrid ) => {
     
     // Initialization.  If no context, do nothing.
     const nColumns = 3,
-        nRows = 2,
-        padding = { top: 20, right: 20, bottom: 0, left: 20 },
-        margin = { top: 0, right: 0, bottom: 120, left: 60 },
-        top    = margin.top    + padding.top,
-        right  = margin.right  + padding.right,
-        bottom = margin.bottom + padding.bottom,
-        left   = margin.left   + padding.left;
+        nRows = 2;
     if( !ref ) {
         return;
     }
@@ -128,8 +98,9 @@ Matrix.draw = ( ref, width, height, i, j, selectedRows, isDrawingGrid ) => {
     
     // Calculate the bars.
     let data = Data.getValues(),
-        bars;
-    bars = Array.from( d3.rollup( data, v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ]));
+        bars = Array.from( d3.rollup( data, v => d3.sum( v, d => 1 ), d => d[ 0 ])),
+        selectedData = data.filter(( d, index ) => selectedRows.includes( index )),
+        selectedBars = Array.from( d3.rollup( selectedData, v => d3.sum( v, d => 1 ), d => d[ 0 ]));
     
     // Draws a graph.
     let drawGraph = ( ref, width, height, i, j, selectedRows ) => {
@@ -140,31 +111,19 @@ Matrix.draw = ( ref, width, height, i, j, selectedRows, isDrawingGrid ) => {
         let k = i + 3 * j;
         const svg = d3.select( ref.current.childNodes[ 1 ]);
         let selection = d3.select( svg.node().firstChild.childNodes[ k ]);
-        let xDomain0,
-            yDomain0,
-            xScale,
+        let xScale,
             yScale;
-        const nData = Data.getValues().length;
-        
-        // Get the scales.
-        yScale = d3.scaleLinear()
-          .domain( Data.getDomain( nData, 1 ))
-          .range([ height, 0]);
     
-        // Set the X domain.
-        xDomain0 = bars.map( x => x[ 0 ]);
-        xScale = d3.scaleBand().domain( xDomain0 ).range([ left, width - right ]).padding( 0.2 );
-
-        // Get the Y scale.
-        yDomain0 = [ 0, ( 1 + Bar.yMargin ) * d3.max( bars, d => d[ 1 ])];
+        // Set the scales.
+        xScale = d3.scaleBand().domain( Data.getDomain( 0 )).range([ 0, width ]).padding( 0.2 );
         yScale = d3.scaleLinear()
-            .domain( yDomain0 )
-            .range([ height - bottom, top ]);
+            .domain([ 0, ( 1 + Bar.yMargin ) * d3.max( bars, d => d[ 1 ])])
+            .range([ height, 0 ]);
         
         // Draw the graph.
         switch( k ) {
             case 0:
-                Bar.draw( selection, x, y, width, height, margin, padding, xScale, yScale, bars );
+                Bar.draw( selection, x, y, width, height, xScale, yScale, bars, selectedBars );
                 break;
             case 1:
                 Pie.draw( selection, x, y, width, height, undefined, undefined );
@@ -176,7 +135,7 @@ Matrix.draw = ( ref, width, height, i, j, selectedRows, isDrawingGrid ) => {
                 // Map
                 break;
             case 4:
-                Plot.draw( selection, x, y, width, height, i, j, Matrix.scaled, selectedRows );
+                Plot.draw( selection, x, y, width, height, i, j, selectedRows );
                 break;
             case 5:
                 // Box

@@ -1,4 +1,7 @@
-/* Container */
-.parent {
-    position: relative;
+/* Colors */
+.all {
+    fill: #99bbdd;
+}
+.selected {
+    fill: #6688bb;
 }
