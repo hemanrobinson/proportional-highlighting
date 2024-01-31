@@ -5,25 +5,22 @@ import './Graph.css';
 
 /**
  * Pie chart in an SVG element.
- *
- * @param  {Object}  props  properties
- * @return component
  */
-const Pie = ( props ) => {
+const Pie = () => {
 };
 
 /**
  * Draws the pie chart.
  *                              
- * @param  {Element} selection  d3 selection
- * @param  {number}  x          X coordinate, in pixels
- * @param  {number}  y          Y coordinate, in pixels
- * @param  {number}  width      width, in pixels
- * @param  {number}  height     height, in pixels
- * @param  {number}  nData      number of data values
- * @param  {number}  index      column index
+ * @param  {Element} selection      d3 selection
+ * @param  {number}  x              X coordinate, in pixels
+ * @param  {number}  y              Y coordinate, in pixels
+ * @param  {number}  width          width, in pixels
+ * @param  {number}  height         height, in pixels
+ * @param  {Array}   sums           sums
+ * @param  {Array}   selectedSums   selected sums
  */
-Pie.draw = ( selection,  x, y, width, height, nData, index ) => {
+Pie.draw = ( selection,  x, y, width, height, sums, selectedSums ) => {
     selection.selectAll( "text" ).remove();
     selection
         .append( "text" )

@@ -14,13 +14,13 @@ const Data = ( props ) => {
  *
  * @type {number[]}
  */
-Data.selectedRows = [];
+Data.selectedRowIndices = [];
 
 /**
  * Deselects all rows.
  */
 Data.deselectAll = () => {
-    Data.selectedRows = [];
+    Data.selectedRowIndices = [];
 };
 
 /**
@@ -29,15 +29,15 @@ Data.deselectAll = () => {
  * @param percentage percentage between 0 and 1
  */
 Data.selectPercentage = ( percentage ) => {
-    Data.selectedRows = [];
+    Data.selectedRowIndices = [];
     const isLessThanHalf = ( percentage < 0.5 ),
         m = 3,
         j = ( percentage <= 0 ) || ( percentage >= 1 ) ? m : Math.round( m / ( isLessThanHalf ? percentage : ( 1 - percentage ))),
         k = ( percentage <= 0 ) || ( percentage >= 1 ) ? m : j - m,
-        nRows = Data.getValues().length;
+        nRows = Data.getRows().length;
     for( let i = 0; ( i < nRows ); i++ ) {
         if(( isLessThanHalf && ( i % j >= k )) || ( !isLessThanHalf && ( i % j < k ))) {
-            Data.selectedRows.push( i );
+            Data.selectedRowIndices.push( i );
         }
     }
 };
@@ -59,21 +59,21 @@ Data.getColumnNames = () => {
  */
 Data.getDomain = ( index ) => {
     let domain = [],
-        data = Data.getValues();
+        rows = Data.getRows();
     if( index === 0 ) {
-        domain = Array.from( d3.rollup( data, v => d3.sum( v, d => 1 ), d => d[ 0 ])).map( d => d[ 0 ]);
+        domain = Array.from( d3.rollup( rows, v => d3.sum( v, d => 1 ), d => d[ 0 ])).map( d => d[ 0 ]);
     } else {
-        domain = [ d3.min( data, d => d[ index ]), d3.max( data, d => d[ index ])];
+        domain = [ d3.min( rows, d => d[ index ]), d3.max( rows, d => d[ index ])];
     }
     return domain;
 };
 
 /**
- * Returns data values.
+ * Returns data rows.
  *
  * @return {Array[]}  data values by row
  */
-Data.getValues = () => {
+Data.getRows = () => {
     return [
         [ "Pharma", 9844, 83100 ],
         [ "Pharma", 9422, 54100 ],

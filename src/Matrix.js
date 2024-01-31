@@ -57,7 +57,7 @@ const Matrix = ( props ) => {
             
         // Select the data and draw the graphs.
         Data.selectPercentage( percentSelected );
-        Matrix.draw( ref, width, height, -1, -1, Data.selectedRows, true );
+        Matrix.draw( ref, width, height, -1, -1, Data.selectedRowIndices, true );
     });
     
     // Return the component.
@@ -74,15 +74,15 @@ Matrix.clear = () => {
 /**
  * Draws the grid, the graphs, and the axes.
  *
- * @param  {Object}     ref            reference to DIV
- * @param  {number}     width          width in pixels
- * @param  {number}     height         height in pixels
- * @param  {number}     i              X column index, or <0 to draw all
- * @param  {number}     j              Y column index, or <0 to draw all
- * @param  {number[]}   selectedRows   indices of selected rows
- * @param  {boolean}    isDrawingGrid  true iff clearing and redrawing the grid
+ * @param  {Object}     ref                 reference to DIV
+ * @param  {number}     width               width in pixels
+ * @param  {number}     height              height in pixels
+ * @param  {number}     i                   X column index, or <0 to draw all
+ * @param  {number}     j                   Y column index, or <0 to draw all
+ * @param  {number[]}   selectedRowIndices  indices of selected rows
+ * @param  {boolean}    isDrawingGrid       true iff clearing and redrawing the grid
  */
-Matrix.draw = ( ref, width, height, i, j, selectedRows, isDrawingGrid ) => {
+Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) => {
     
     // Initialization.  If no context, do nothing.
     const nColumns = 3,
@@ -96,14 +96,14 @@ Matrix.draw = ( ref, width, height, i, j, selectedRows, isDrawingGrid ) => {
         return;
     }
     
-    // Calculate the bars.
-    let data = Data.getValues(),
-        bars = Array.from( d3.rollup( data, v => d3.sum( v, d => 1 ), d => d[ 0 ])),
-        selectedData = data.filter(( d, index ) => selectedRows.includes( index )),
-        selectedBars = Array.from( d3.rollup( selectedData, v => d3.sum( v, d => 1 ), d => d[ 0 ]));
+    // Calculate the sums.
+    let rows = Data.getRows(),
+        sums = Array.from( d3.rollup( rows, v => d3.sum( v, d => 1 ), d => d[ 0 ])),
+        selectedRows = rows.filter(( d, index ) => selectedRowIndices.includes( index )),
+        selectedSums = Array.from( d3.rollup( selectedRows, v => d3.sum( v, d => 1 ), d => d[ 0 ]));
     
     // Draws a graph.
-    let drawGraph = ( ref, width, height, i, j, selectedRows ) => {
+    let drawGraph = ( ref, width, height, i, j, selectedRowIndices ) => {
     
         // Get the position and the selection.
         let x = i * width,
@@ -111,22 +111,14 @@ Matrix.draw = ( ref, width, height, i, j, selectedRows, isDrawingGrid ) => {
         let k = i + 3 * j;
         const svg = d3.select( ref.current.childNodes[ 1 ]);
         let selection = d3.select( svg.node().firstChild.childNodes[ k ]);
-        let xScale,
-            yScale;
-    
-        // Set the scales.
-        xScale = d3.scaleBand().domain( Data.getDomain( 0 )).range([ 0, width ]).padding( 0.2 );
-        yScale = d3.scaleLinear()
-            .domain([ 0, ( 1 + Bar.yMargin ) * d3.max( bars, d => d[ 1 ])])
-            .range([ height, 0 ]);
         
         // Draw the graph.
         switch( k ) {
             case 0:
-                Bar.draw( selection, x, y, width, height, xScale, yScale, bars, selectedBars );
+                Bar.draw( selection, x, y, width, height, sums, selectedSums );
                 break;
             case 1:
-                Pie.draw( selection, x, y, width, height, undefined, undefined );
+                Pie.draw( selection, x, y, width, height, sums, selectedSums );
                 break;
             case 2:
                 // Area
@@ -135,7 +127,7 @@ Matrix.draw = ( ref, width, height, i, j, selectedRows, isDrawingGrid ) => {
                 // Map
                 break;
             case 4:
-                Plot.draw( selection, x, y, width, height, i, j, selectedRows );
+                Plot.draw( selection, x, y, width, height, rows, selectedRows );
                 break;
             case 5:
                 // Box
@@ -163,11 +155,11 @@ Matrix.draw = ( ref, width, height, i, j, selectedRows, isDrawingGrid ) => {
     
     // Draw the graphs.
     if(( i >= 0 ) && ( j >= 0 )) {
-        drawGraph( ref, width, height, i, j, selectedRows );
+        drawGraph( ref, width, height, i, j, selectedRowIndices );
     } else {
         for( let j = 0; ( j < nRows ); j++ ) {
             for( let i = 0; ( i < nColumns ); i++ ) {
-                drawGraph( ref, width, height, i, j, selectedRows );
+                drawGraph( ref, width, height, i, j, selectedRowIndices );
             }
         }
     }

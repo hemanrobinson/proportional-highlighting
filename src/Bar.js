@@ -4,20 +4,9 @@ import './Graph.css';
 
 /**
  * Bar chart in an SVG element.
- *
- * The X domain is stored as a state.  The Y domain is calculated from the X domain.
- *
- * @return component
  */
 const Bar = () => {
 };
-
-/**
- * Y axis margin, as a percentage between 0 and 1.
- *
- * @const {number}
- */
-Bar.yMargin = 0.05;
 
 /**
  * Draws the bar chart.
@@ -27,16 +16,23 @@ Bar.yMargin = 0.05;
  * @param  {number}  y              Y coordinate, in pixels
  * @param  {number}  width          width, in pixels
  * @param  {number}  height         height, in pixels
- * @param  {D3Scale} xScale         X scale
- * @param  {D3Scale} yScale         Y scale
- * @param  {Array}   bars           bars
- * @param  {Array}   selectedBars   selected bars
+ * @param  {Array}   sums           sums
+ * @param  {Array}   selectedSums   selected sums
  */
-Bar.draw = ( selection, x, y, width, height, xScale, yScale, bars, selectedBars ) => {
-
+Bar.draw = ( selection, x, y, width, height, sums, selectedSums ) => {
+    
+    // Get the scales.
+    const xScale = d3.scaleBand()
+        .domain( sums.map( d => d[ 0 ]))
+        .range([ 0, width ])
+        .padding( 0.2 );
+    const yScale = d3.scaleLinear()
+        .domain([ 0, 1.05 * d3.max( sums, d => d[ 1 ])])
+        .range([ height, 0 ]);
+            
     // Draw the bars.
     selection.selectAll( ".all" )
-        .data( bars )
+        .data( sums )
         .enter()
         .append( "rect" )
         .classed('all', true )
@@ -45,7 +41,7 @@ Bar.draw = ( selection, x, y, width, height, xScale, yScale, bars, selectedBars 
         .attr( "width", xScale.bandwidth())
         .attr( "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0, height - yScale( d[ 1 ])) : 0 ));
     selection.selectAll( ".selected" )
-        .data( selectedBars )
+        .data( selectedSums )
         .enter()
         .append( "rect" )
         .classed('selected', true )

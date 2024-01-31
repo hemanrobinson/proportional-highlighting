@@ -5,9 +5,6 @@ import './Graph.css';
 
 /**
  * Scatter plot in an SVG element.
- *
- * @param  {Object}  props  properties
- * @return component
  */
 const Plot = ( props ) => {
 };
@@ -20,41 +17,6 @@ const Plot = ( props ) => {
 Plot.padding = 10;
 
 /**
- * Selects rows within the brush and returns them.
- *
- * @param  {number}     x       X coordinate, in pixels
- * @param  {number}     y       Y coordinate, in pixels
- * @param  {number}     width   width, in pixels
- * @param  {number}     height  height, in pixels
- * @param  {number}     i       X column index
- * @param  {number}     j       Y column index
- * @param  {Rect}       brush   brush
- * @return {number[]}   indices of selected rows
- */
-Plot.select = ( x, y, width, height, i, j, brush ) => {
-    
-    // Initialization.
-    let selectedRows = [];
-    const scaledi = [],
-        scaledj = [],
-        nRows = scaledi.length,
-        xMin = Math.floor( Math.min( brush.x, brush.x + brush.width ) - x ),
-        xMax = Math.floor( Math.max( brush.x, brush.x + brush.width ) - x ),
-        yMin = height - Math.floor( Math.max( brush.y, brush.y + brush.height ) - y ),
-        yMax = height - Math.floor( Math.min( brush.y, brush.y + brush.height ) - y );
-    
-    // Collect the selected row indices and return them.
-    for( let row = 0; ( row < nRows ); row++ ) {
-        let xScaled = scaledi[ row ],
-            yScaled = scaledj[ row ];
-        if(( xMin <= xScaled ) && ( xScaled < xMax ) && ( yMin < yScaled ) && ( yScaled <= yMax )) {
-            selectedRows.push( row );
-        }
-    };
-    return selectedRows;
-};
-
-/**
  * Draws the plot.
  *
  * @param  {Element}    selection     d3 selection
@@ -62,11 +24,10 @@ Plot.select = ( x, y, width, height, i, j, brush ) => {
  * @param  {number}     y             Y coordinate, in pixels
  * @param  {number}     width         width, in pixels
  * @param  {number}     height        height, in pixels
- * @param  {number}     i             X column index
- * @param  {number}     j             Y column index
- * @param  {number[]}   selectedRows  indices of selected rows
+ * @param  {Array[]}    data          data
+ * @param  {Array[]}    selectedData  selected data
  */
-Plot.draw = ( selection, x, y, width, height, i, j, selectedRows ) => {
+Plot.draw = ( selection, x, y, width, height, data, selectedData ) => {
     selection.selectAll( "text" ).remove();
     selection
         .append( "text" )
