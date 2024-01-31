@@ -1,4 +1,7 @@
 /* Colors */
+.grid {
+    stroke: #939ba1;
+}
 .all {
     fill: #99bbdd;
 }
