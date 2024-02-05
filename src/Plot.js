@@ -28,7 +28,10 @@ Plot.padding = 10;
  * @param  {Array[]}    selectedData  selected data
  */
 Plot.draw = ( selection, x, y, width, height, data, selectedData ) => {
-    selection.selectAll( "text" ).remove();
+    
+    // Initialization.
+    selection.selectAll( "*" ).remove();
+    
     selection
         .append( "text" )
         .attr( "x", width / 2 - 15 )

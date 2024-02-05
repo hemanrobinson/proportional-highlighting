@@ -36,7 +36,7 @@ const App = () => {
                     onChange={( event, value ) => { Matrix.clear(); setPercentSelected( value ); }} />
             </div>
             <div className="Description">
-                <h2>Design Notes</h2>
+                <h2>Usability</h2>
                 <p>
                 </p>
                 <h2>Further Reading</h2>

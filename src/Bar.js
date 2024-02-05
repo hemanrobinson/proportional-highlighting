@@ -21,7 +21,7 @@ const Bar = () => {
  */
 Bar.draw = ( selection, x, y, width, height, sums, selectedSums ) => {
     
-    // Get the scales.
+    // Initialization.
     const margin = 0.05,
         xScale = d3.scaleBand()
             .domain( sums.map( d => d[ 0 ]))
@@ -30,6 +30,7 @@ Bar.draw = ( selection, x, y, width, height, sums, selectedSums ) => {
         yScale = d3.scaleLinear()
             .domain([( 1 + margin ) * d3.min( sums, d => d[ 1 ]), ( 1 + margin ) * d3.max( sums, d => d[ 1 ])])
             .range([ height, 0 ]);
+    selection.selectAll( "*" ).remove();
     
     // Draw the bars.
     selection.selectAll( ".all" )

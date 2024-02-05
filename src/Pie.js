@@ -21,7 +21,10 @@ const Pie = () => {
  * @param  {Array}   selectedSums   selected sums
  */
 Pie.draw = ( selection,  x, y, width, height, sums, selectedSums ) => {
-    selection.selectAll( "text" ).remove();
+    
+    // Initialization.
+    selection.selectAll( "*" ).remove();
+    
     selection
         .append( "text" )
         .attr( "x", width / 2 - 10 )
