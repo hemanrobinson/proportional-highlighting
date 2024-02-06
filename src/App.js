@@ -39,6 +39,10 @@ const App = () => {
                 <h2>Usability</h2>
                 <p>
                 </p>
+                <h2>Implementation</h2>
+                <p>
+                This project uses <a href="https://react.dev">React</a>, <a href="https://github.com/mui-org/material-ui">Material-UI</a>, and <a href="https://github.com/d3/d3">d3</a>.
+                </p>
                 <h2>Further Reading</h2>
                 <ul>
                     <li>Few, S. (2010). "Coordinated Highlighting in Context". Perceptual Edge. <a href=" https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf</a></li><br/>

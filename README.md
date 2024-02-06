@@ -6,5 +6,4 @@ Proportional highlighting is a technique of exploratory data analysis, an implem
 
 [![Proportional](src/proportional.png "Brush")](https://hemanrobinson.github.io/proportional/)
 
-This project uses [d3](https://github.com/d3/d3) and [Material-UI](https://github.com/mui-org/material-ui), and was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+This project uses [React](https://react.dev), [Material-UI](https://github.com/mui-org/material-ui), and [d3](https://github.com/d3/d3).

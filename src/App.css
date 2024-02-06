@@ -31,4 +31,5 @@ p.center {
     align-items: center;
     justify-items: right;
     justify-content: center;
+    padding: 5px 0;
 }
