@@ -16,7 +16,7 @@ const App = () => {
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Proportional Highlighting&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/proportional/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
+                <h1>Proportional Highlighting&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/proportional-highlighting/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
                 <p>
                 Proportional highlighting is a technique of exploratory data analysis, an implementation of brushing and linking for aggregate graphs. Proportional highlighting is described in detal by <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">Stephen Few</a>.
                 </p>
