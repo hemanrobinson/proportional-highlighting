@@ -1,8 +1,8 @@
 {
-  "name": "proportional",
+  "name": "proportional-highlighting",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://hemanrobinson.github.io/proportional",
+  "homepage": "https://hemanrobinson.github.io/proportional-highlighting",
   "dependencies": {
     "@babel/core": "^7.20.12",
     "@emotion/react": "^11.10.5",
