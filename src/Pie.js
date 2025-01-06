@@ -23,14 +23,34 @@ const Pie = () => {
 Pie.draw = ( selection,  x, y, width, height, sums, selectedSums ) => {
     
     // Initialization.
+    const radius = Math.min( width, height ) / 2 - 20;
     selection.selectAll( "*" ).remove();
-    
-    selection
-        .append( "text" )
-        .attr( "x", width / 2 - 10 )
-        .attr( "y", height / 2 + 5 )
-        .attr( "fill", "black" )
-        .text( "Pie" );
+
+    // Compute the position of each slice of the pie.
+    const data = d3.pie()( d3.map( sums, ( x ) => Math.abs( x[ 1 ])));
+    data.forEach(( d, i ) => { d.selectedValue = Math.abs( selectedSums[ i ][ 1 ]); });
+
+    // Draw the pie slices.
+    selection.selectAll( ".all" )
+        .data( data )
+        .enter()
+        .append( 'path' )
+        .attr( "transform", "translate( " + width / 2 + "," + height / 2 + " )")
+        .classed( 'all', true )
+        .attr( 'd', d3.arc()
+            .innerRadius( 0 )
+            .outerRadius( radius )
+        )
+    selection.selectAll( ".selected" )
+        .data( data )
+        .enter()
+        .append( 'path' )
+        .attr( "transform", "translate( " + width / 2 + "," + height / 2 + " )")
+        .classed( 'selected', true )
+        .attr( 'd', d3.arc()
+            .innerRadius( 0 )
+            .outerRadius(( d ) => ( radius * Math.sqrt( d.selectedValue / d.value )))
+        )
 };
 
 export default Pie;
