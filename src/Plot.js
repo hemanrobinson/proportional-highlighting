@@ -1,5 +1,4 @@
 import * as d3 from 'd3';
-import Data from './Data';
 import Graph from './Graph';
 import './Graph.css';
 

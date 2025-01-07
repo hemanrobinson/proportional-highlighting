@@ -38,7 +38,7 @@ const Matrix = ( props ) => {
         width = 200,
         height = 200,
         nColumns = 3,
-        nRows = 2,
+        nRows = 3,
         totalWidth = nColumns * width,
         totalHeight = nRows * height;
     
@@ -77,8 +77,8 @@ Matrix.clear = () => {
  * @param  {Object}     ref                 reference to DIV
  * @param  {number}     width               width in pixels
  * @param  {number}     height              height in pixels
- * @param  {number}     i                   X column index, or <0 to draw all
- * @param  {number}     j                   Y column index, or <0 to draw all
+ * @param  {number}     i                   column index, or <0 to draw all
+ * @param  {number}     j                   row index, or <0 to draw all
  * @param  {number[]}   selectedRowIndices  indices of selected rows
  * @param  {boolean}    isDrawingGrid       true iff clearing and redrawing the grid
  */
@@ -86,7 +86,7 @@ Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) =>
     
     // Initialization.  If no context, do nothing.
     const nColumns = 3,
-        nRows = 2;
+        nRows = 3;
     if( !ref ) {
         return;
     }
@@ -109,7 +109,7 @@ Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) =>
         // Get the position and the selection.
         let x = i * width,
             y = j * height;
-        let k = i + 3 * j;
+        let k = i + nColumns * j;
         const svg = d3.select( ref.current.childNodes[ 1 ]);
         let selection = d3.select( svg.node().firstChild.childNodes[ k ]);
         
@@ -119,19 +119,28 @@ Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) =>
                 Bar.draw( selection, x, y, width, height, sums, selectedSums );
                 break;
             case 1:
-                Pie.draw( selection, x, y, width, height, sums, selectedSums );
+                // Horizontal Bar
                 break;
             case 2:
                 // Area
                 break;
             case 3:
-                // Map
+                // Line
                 break;
             case 4:
-                Plot.draw( selection, x, y, width, height, rows, selectedRows );
+                Plot.draw( selection, x, y, width, height, sums, selectedSums );
                 break;
             case 5:
                 // Box
+                break;
+            case 6:
+                // Map
+                break;
+            case 7:
+                Pie.draw( selection, x, y, width, height, sums, selectedSums, 0 );
+                break;
+            case 8:
+                Pie.draw( selection, x, y, width, height, sums, selectedSums, 0.5 );
                 break;
             default:
                 break;

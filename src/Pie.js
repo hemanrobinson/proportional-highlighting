@@ -1,5 +1,4 @@
 import * as d3 from 'd3';
-import Data from './Data';
 import Graph from './Graph';
 import './Graph.css';
 
@@ -19,17 +18,22 @@ const Pie = () => {
  * @param  {number}  height         height, in pixels
  * @param  {Array}   sums           sums
  * @param  {Array}   selectedSums   selected sums
+ * @param  {number}  radiusStart    a percentage between 0 and 1, 0 for pie charts, >0 for doughnut charts
  */
-Pie.draw = ( selection,  x, y, width, height, sums, selectedSums ) => {
+Pie.draw = ( selection, x, y, width, height, sums, selectedSums, radiusStart ) => {
     
     // Initialization.
-    const radius = Math.min( width, height ) / 2 - 20;
+    const outerRadius = Math.min( width, height ) / 2 - 20,
+        innerRadius = radiusStart * outerRadius;
     selection.selectAll( "*" ).remove();
 
     // Compute the position of each slice of the pie.
-    const data = d3.pie()( d3.map( sums, ( x ) => Math.abs( x[ 1 ])));
-    data.forEach(( d, i ) => { d.selectedValue = Math.abs( selectedSums[ i ][ 1 ]); });
-
+    let data = d3.pie()( d3.map( sums, ( x ) => x[ 1 ]));
+    data.forEach(( d, i ) => { d.selectedValue = selectedSums[ i ][ 1 ]; });
+    data = data.filter(( d ) => ( d.value >= 0 ));
+    
+    console.log( innerRadius, outerRadius );
+    
     // Draw the pie slices.
     selection.selectAll( ".all" )
         .data( data )
@@ -38,8 +42,8 @@ Pie.draw = ( selection,  x, y, width, height, sums, selectedSums ) => {
         .attr( "transform", "translate( " + width / 2 + "," + height / 2 + " )")
         .classed( 'all', true )
         .attr( 'd', d3.arc()
-            .innerRadius( 0 )
-            .outerRadius( radius )
+            .innerRadius( innerRadius )
+            .outerRadius( outerRadius )
         )
     selection.selectAll( ".selected" )
         .data( data )
@@ -48,8 +52,8 @@ Pie.draw = ( selection,  x, y, width, height, sums, selectedSums ) => {
         .attr( "transform", "translate( " + width / 2 + "," + height / 2 + " )")
         .classed( 'selected', true )
         .attr( 'd', d3.arc()
-            .innerRadius( 0 )
-            .outerRadius(( d ) => ( radius * Math.sqrt( d.selectedValue / d.value )))
+            .innerRadius( innerRadius )
+            .outerRadius(( d ) => ( innerRadius + ( outerRadius - innerRadius ) * Math.sqrt( d.selectedValue / d.value )))
         )
 };
 
