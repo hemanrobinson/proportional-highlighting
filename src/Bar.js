@@ -17,9 +17,9 @@ const Bar = () => {
  * @param  {number}  width          width, in pixels
  * @param  {number}  height         height, in pixels
  * @param  {Array}   sums           sums
- * @param  {Array}   selectedSums   selected sums
+ * @param  {Array}   sumsSelected   selected sums
  */
-Bar.draw = ( selection, x, y, width, height, sums, selectedSums ) => {
+Bar.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
     
     // Initialization.
     const margin = 0.05,
@@ -44,7 +44,7 @@ Bar.draw = ( selection, x, y, width, height, sums, selectedSums ) => {
         .attr( "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0,
              ( d[ 1 ] >= 0 ) ? ( yScale( 0 ) - yScale( d[ 1 ])) : ( yScale( d[ 1 ]) - yScale( 0 ))) : 0 ));
     selection.selectAll( ".selected" )
-        .data( selectedSums )
+        .data( sumsSelected )
         .enter()
         .append( "rect" )
         .classed( 'selected', true )

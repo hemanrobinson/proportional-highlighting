@@ -98,10 +98,10 @@ Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) =>
     
     // Calculate the sums.
     let rows = Data.getRows(),
+        rowsSelected = rows.filter(( d, index ) => selectedRowIndices.includes( index )),
         sums = Array.from( d3.rollup( rows, v => d3.sum( v, d => d[ 2 ]), d => d[ 0 ])),
-        selectedRows = rows.filter(( d, index ) => selectedRowIndices.includes( index )),
         zeroes = sums.map(( x ) => [ x[ 0 ], 0, 0 ]),
-        selectedSums = Array.from( d3.rollup( selectedRows.concat( zeroes), v => d3.sum( v, d => d[ 2 ]), d => d[ 0 ]));
+        sumsSelected = Array.from( d3.rollup( rowsSelected.concat( zeroes), v => d3.sum( v, d => d[ 2 ]), d => d[ 0 ]));
     
     // Draws a graph.
     let drawGraph = ( ref, width, height, i, j, selectedRowIndices ) => {
@@ -116,7 +116,7 @@ Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) =>
         // Draw the graph.
         switch( k ) {
             case 0:
-                Bar.draw( selection, x, y, width, height, sums, selectedSums );
+                Bar.draw( selection, x, y, width, height, sums, sumsSelected );
                 break;
             case 1:
                 // Horizontal Bar
@@ -128,7 +128,7 @@ Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) =>
                 // Line
                 break;
             case 4:
-                Plot.draw( selection, x, y, width, height, sums, selectedSums );
+                Plot.draw( selection, x, y, width, height, sums, sumsSelected );
                 break;
             case 5:
                 // Box
@@ -137,10 +137,10 @@ Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) =>
                 // Map
                 break;
             case 7:
-                Pie.draw( selection, x, y, width, height, sums, selectedSums, 0 );
+                Pie.draw( selection, x, y, width, height, sums, sumsSelected, 0 );
                 break;
             case 8:
-                Pie.draw( selection, x, y, width, height, sums, selectedSums, 0.5 );
+                Pie.draw( selection, x, y, width, height, sums, sumsSelected, 0.5 );
                 break;
             default:
                 break;

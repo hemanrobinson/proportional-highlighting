@@ -18,15 +18,15 @@ Plot.padding = 10;
 /**
  * Draws the plot.
  *
- * @param  {Element}    selection     d3 selection
- * @param  {number}     x             X coordinate, in pixels
- * @param  {number}     y             Y coordinate, in pixels
- * @param  {number}     width         width, in pixels
- * @param  {number}     height        height, in pixels
- * @param  {Array[]}    data          data
- * @param  {Array[]}    selectedData  selected data
+ * @param  {Element} selection      d3 selection
+ * @param  {number}  x              X coordinate, in pixels
+ * @param  {number}  y              Y coordinate, in pixels
+ * @param  {number}  width          width, in pixels
+ * @param  {number}  height         height, in pixels
+ * @param  {Array}   sums           sums
+ * @param  {Array}   sumsSelected   selected sums
  */
-Plot.draw = ( selection, x, y, width, height, data, selectedData ) => {
+Plot.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
     
     // Initialization.
     selection.selectAll( "*" ).remove();

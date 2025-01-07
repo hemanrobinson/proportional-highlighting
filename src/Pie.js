@@ -17,10 +17,10 @@ const Pie = () => {
  * @param  {number}  width          width, in pixels
  * @param  {number}  height         height, in pixels
  * @param  {Array}   sums           sums
- * @param  {Array}   selectedSums   selected sums
+ * @param  {Array}   sumsSelected   selected sums
  * @param  {number}  radiusStart    a percentage between 0 and 1, 0 for pie charts, >0 for doughnut charts
  */
-Pie.draw = ( selection, x, y, width, height, sums, selectedSums, radiusStart ) => {
+Pie.draw = ( selection, x, y, width, height, sums, sumsSelected, radiusStart ) => {
     
     // Initialization.
     const outerRadius = Math.min( width, height ) / 2 - 20,
@@ -29,10 +29,8 @@ Pie.draw = ( selection, x, y, width, height, sums, selectedSums, radiusStart ) =
 
     // Compute the position of each slice of the pie.
     let data = d3.pie()( d3.map( sums, ( x ) => x[ 1 ]));
-    data.forEach(( d, i ) => { d.selectedValue = selectedSums[ i ][ 1 ]; });
+    data.forEach(( d, i ) => { d.selectedValue = sumsSelected[ i ][ 1 ]; });
     data = data.filter(( d ) => ( d.value >= 0 ));
-    
-    console.log( innerRadius, outerRadius );
     
     // Draw the pie slices.
     selection.selectAll( ".all" )
