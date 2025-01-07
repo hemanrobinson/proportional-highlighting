@@ -24,20 +24,27 @@ Data.deselectAll = () => {
 };
 
 /**
- * Selects an approximate percentage of the data.
+ * Selects an approximate percentage of the rows in each group.
  *
  * @param percentage percentage between 0 and 1
  */
 Data.selectPercentage = ( percentage ) => {
+    
+    // Get the first index of each group.
+    let firstIndices = [],
+        rows = Data.getRows(),
+        sums = Array.from( d3.rollup( rows, v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ]));
+    for( let i = 0; ( i < sums.length ); i++ ) {
+        firstIndices.push( rows.findIndex( element => ( element[ 0 ] === sums[ i ][ 0 ])));
+    }
+    firstIndices.push( rows.length );
+    
+    // Select the approximate percentage of rows in each group.
     Data.selectedRowIndices = [];
-    const isLessThanHalf = ( percentage < 0.5 ),
-        m = 3,
-        j = ( percentage <= 0 ) || ( percentage >= 1 ) ? m : Math.round( m / ( isLessThanHalf ? percentage : ( 1 - percentage ))),
-        k = ( percentage <= 0 ) || ( percentage >= 1 ) ? m : j - m,
-        nRows = Data.getRows().length;
-    for( let i = 0; ( i < nRows ); i++ ) {
-        if(( isLessThanHalf && ( i % j >= k )) || ( !isLessThanHalf && ( i % j < k ))) {
-            Data.selectedRowIndices.push( i );
+    for( let i = 0; ( i < firstIndices.length ); i++ ) {
+        let n = firstIndices[ i + 1 ] - firstIndices[ i ];
+        for( let j = 0; ( j < Math.floor( n * percentage )); j++ ) {
+            Data.selectedRowIndices.push( firstIndices[ i ] + j );
         }
     }
 };

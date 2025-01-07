@@ -99,9 +99,9 @@ Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) =>
     // Calculate the sums.
     let rows = Data.getRows(),
         rowsSelected = rows.filter(( d, index ) => selectedRowIndices.includes( index )),
-        sums = Array.from( d3.rollup( rows, v => d3.sum( v, d => d[ 2 ]), d => d[ 0 ])),
+        sums = Array.from( d3.rollup( rows, v => d3.sum( v, d => d[ 2 ] > 0 ? 1 : d[ 2 ] < 0 ? -1 : 0 ), d => d[ 0 ])),
         zeroes = sums.map(( x ) => [ x[ 0 ], 0, 0 ]),
-        sumsSelected = Array.from( d3.rollup( rowsSelected.concat( zeroes), v => d3.sum( v, d => d[ 2 ]), d => d[ 0 ]));
+        sumsSelected = Array.from( d3.rollup( rowsSelected.concat( zeroes), v => d3.sum( v, d => d[ 2 ] > 0 ? 1 : d[ 2 ] < 0 ? -1 : 0 ), d => d[ 0 ]));
     
     // Draws a graph.
     let drawGraph = ( ref, width, height, i, j, selectedRowIndices ) => {
