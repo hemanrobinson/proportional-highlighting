@@ -18,19 +18,22 @@ const Bar = () => {
  * @param  {number}  height         height, in pixels
  * @param  {Array}   sums           sums
  * @param  {Array}   sumsSelected   selected sums
+ * @param  {boolean} isHorz         true iff bars are horizontal, otherwise vertical
  */
-Bar.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
+Bar.draw = ( selection, x, y, width, height, sums, sumsSelected, isHorz ) => {
+    
+    if( isHorz ) return;
     
     // Initialization.
-    const margin = 0.05,
+    Graph.draw( selection, x, y, width, height );
+    const margin = Graph.margin,
         xScale = d3.scaleBand()
             .domain( sums.map( d => d[ 0 ]))
-            .range([ 0, width ])
-            .padding( 0.2 ),
+            .range([ width * margin, width * ( 1 - margin )])
+            .padding( 0.1 ),
         yScale = d3.scaleLinear()
-            .domain([( 1 + margin ) * d3.min( sums, d => d[ 1 ]), ( 1 + margin ) * d3.max( sums, d => d[ 1 ])])
+            .domain([( 1 + 2 * margin ) * d3.min( sums, d => d[ 1 ]), ( 1 + 2 * margin ) * d3.max( sums, d => d[ 1 ])])
             .range([ height, 0 ]);
-    selection.selectAll( "*" ).remove();
     
     // Draw the bars.
     selection.selectAll( ".all" )
@@ -60,9 +63,9 @@ Bar.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
         .enter()
         .append( "line" )
         .classed( 'grid', true )
-        .attr( "x1", width * margin / 2 )
+        .attr( "x1", width * margin )
         .attr( "y1", yScale( 0 ))
-        .attr( "x2", width * ( 1 - margin / 2 ))
+        .attr( "x2", width * ( 1 - margin ))
         .attr( "y2", yScale( 0 ))
 };
 

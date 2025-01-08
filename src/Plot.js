@@ -27,16 +27,6 @@ Plot.padding = 10;
  * @param  {Array}   sumsSelected   selected sums
  */
 Plot.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
-    
-    // Initialization.
-    selection.selectAll( "*" ).remove();
-    
-    selection
-        .append( "text" )
-        .attr( "x", width / 2 - 15 )
-        .attr( "y", height / 2 + 5 )
-        .attr( "fill", "black" )
-        .text( "Plot" );
-};
+}
 
 export default Plot;

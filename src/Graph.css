@@ -11,3 +11,7 @@
     stroke-width: 1px;
     fill: #6688bb;
 }
+.label {
+    fill: black;
+    font-size: 14px;
+}

@@ -23,9 +23,10 @@ const Pie = () => {
 Pie.draw = ( selection, x, y, width, height, sums, sumsSelected, radiusStart ) => {
     
     // Initialization.
-    const outerRadius = Math.min( width, height ) / 2 - 20,
+    Graph.draw( selection, x, y, width, height );
+    const margin = Graph.margin,
+        outerRadius = Math.min( width, height ) * ( 1 - 2 * margin ) / 2,
         innerRadius = radiusStart * outerRadius;
-    selection.selectAll( "*" ).remove();
 
     // Compute the position of each slice of the pie.
     let data = d3.pie()( d3.map( sums, ( x ) => x[ 1 ]));
@@ -33,11 +34,13 @@ Pie.draw = ( selection, x, y, width, height, sums, sumsSelected, radiusStart ) =
     data = data.filter(( d ) => ( d.value >= 0 ));
     
     // Draw the pie slices.
+    const x0 = Math.floor( width / 2 ) + 0.5,
+        y0 = Math.floor( height / 2 ) + 0.5;
     selection.selectAll( ".all" )
         .data( data )
         .enter()
         .append( 'path' )
-        .attr( "transform", "translate( " + width / 2 + "," + height / 2 + " )")
+        .attr( "transform", "translate( " + x0 + "," + y0 + " )")
         .classed( 'all', true )
         .attr( 'd', d3.arc()
             .innerRadius( innerRadius )
@@ -47,7 +50,7 @@ Pie.draw = ( selection, x, y, width, height, sums, sumsSelected, radiusStart ) =
         .data( data )
         .enter()
         .append( 'path' )
-        .attr( "transform", "translate( " + width / 2 + "," + height / 2 + " )")
+        .attr( "transform", "translate( " + x0 + "," + y0 + " )")
         .classed( 'selected', true )
         .attr( 'd', d3.arc()
             .innerRadius( innerRadius )

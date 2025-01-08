@@ -123,4 +123,30 @@ Graph.getDomains = ( xDomain0, yDomain0, xDomain, yDomain, isXOrdinal, isYOrdina
     return domains;
 }
 
+/**
+ * Draws the graph.
+ *
+ * @param  {Element} selection      d3 selection
+ * @param  {number}  x              X coordinate, in pixels
+ * @param  {number}  y              Y coordinate, in pixels
+ * @param  {number}  width          width, in pixels
+ * @param  {number}  height         height, in pixels
+ */
+Graph.draw = ( selection, x, y, width, height ) => {
+    
+    // Initialization.
+    selection.selectAll( "*" ).remove();
+    
+    // Draw the label.
+    selection
+        .append( "text" )
+        .attr( "x", 5 )
+        .attr( "y", 16 )
+        .classed( "label", "true" )
+        .text( Math.round( 1 + x / width + 3 * y / height ));
+};
+
+// Margin, a percentage between 0 and 1.
+Graph.margin = 0.1;
+
 export default Graph;

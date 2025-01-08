@@ -116,10 +116,10 @@ Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) =>
         // Draw the graph.
         switch( k ) {
             case 0:
-                Bar.draw( selection, x, y, width, height, sums, sumsSelected );
+                Bar.draw( selection, x, y, width, height, sums, sumsSelected, false );
                 break;
             case 1:
-                // Horizontal Bar
+                Bar.draw( selection, x, y, width, height, sums, sumsSelected, true );
                 break;
             case 2:
                 // Area
