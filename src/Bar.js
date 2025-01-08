@@ -22,8 +22,6 @@ const Bar = () => {
  */
 Bar.draw = ( selection, x, y, width, height, sums, sumsSelected, isHorz ) => {
     
-    if( isHorz ) return;
-    
     // Initialization.
     Graph.draw( selection, x, y, width, height );
     const margin = Graph.margin,
@@ -33,7 +31,7 @@ Bar.draw = ( selection, x, y, width, height, sums, sumsSelected, isHorz ) => {
             .padding( 0.1 ),
         yScale = d3.scaleLinear()
             .domain([ d3.min( sums, d => d[ 1 ]), d3.max( sums, d => d[ 1 ])])
-            .range([ height * ( 1 - margin ), height * margin ]);
+            .range( isHorz ? [ height * margin, height * ( 1 - margin )] : [ height * ( 1 - margin ), height * margin ]);
     
     // Draw the bars.
     selection.selectAll( ".all" )
@@ -41,21 +39,21 @@ Bar.draw = ( selection, x, y, width, height, sums, sumsSelected, isHorz ) => {
         .enter()
         .append( "rect" )
         .classed( 'all', true )
-        .attr( "x", ( d ) => xScale( d[ 0 ]))
-        .attr( "y", ( d ) => ( d[ 1 ] >= 0 ) ? yScale( d[ 1 ]) : yScale( 0 ))
-        .attr( "width", xScale.bandwidth())
-        .attr( "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0,
-             ( d[ 1 ] >= 0 ) ? ( yScale( 0 ) - yScale( d[ 1 ])) : ( yScale( d[ 1 ]) - yScale( 0 ))) : 0 ));
+        .attr( isHorz ? "y" : "x", ( d ) => xScale( d[ 0 ]))
+        .attr( isHorz ? "x" : "y", ( d ) => ( isHorz ? ( d[ 1 ] <= 0 ) : ( d[ 1 ] >= 0 )) ? yScale( d[ 1 ]) : yScale( 0 ))
+        .attr( isHorz ? "height" : "width", xScale.bandwidth())
+        .attr( isHorz ? "width" : "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0,
+             ( isHorz ? ( d[ 1 ] <= 0 ) : ( d[ 1 ] >= 0 )) ? ( yScale( 0 ) - yScale( d[ 1 ])) : ( yScale( d[ 1 ]) - yScale( 0 ))) : 0 ));
     selection.selectAll( ".selected" )
         .data( sumsSelected )
         .enter()
         .append( "rect" )
         .classed( 'selected', true )
-        .attr( "x", ( d ) => xScale( d[ 0 ]))
-        .attr( "y", ( d ) => ( d[ 1 ] >= 0 ) ? yScale( d[ 1 ]) : yScale( 0 ))
-        .attr( "width", xScale.bandwidth())
-        .attr( "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0,
-             ( d[ 1 ] >= 0 ) ? ( yScale( 0 ) - yScale( d[ 1 ])) : ( yScale( d[ 1 ]) - yScale( 0 ))) : 0 ));
+        .attr( isHorz ? "y" : "x", ( d ) => xScale( d[ 0 ]))
+        .attr( isHorz ? "x" : "y", ( d ) => ( isHorz ? ( d[ 1 ] <= 0 ) : ( d[ 1 ] >= 0 )) ? yScale( d[ 1 ]) : yScale( 0 ))
+        .attr( isHorz ? "height" : "width", xScale.bandwidth())
+        .attr( isHorz ? "width" : "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0,
+             ( isHorz ? ( d[ 1 ] <= 0 ) : ( d[ 1 ] >= 0 )) ? ( yScale( 0 ) - yScale( d[ 1 ])) : ( yScale( d[ 1 ]) - yScale( 0 ))) : 0 ));
              
     // Draw the axis.
     selection.selectAll( "line" )
@@ -63,10 +61,10 @@ Bar.draw = ( selection, x, y, width, height, sums, sumsSelected, isHorz ) => {
         .enter()
         .append( "line" )
         .classed( 'grid', true )
-        .attr( "x1", width * margin )
-        .attr( "y1", yScale( 0 ))
-        .attr( "x2", width * ( 1 - margin ))
-        .attr( "y2", yScale( 0 ))
+        .attr( isHorz ? "y1" : "x1", width * margin )
+        .attr( isHorz ? "x1" : "y1", yScale( 0 ))
+        .attr( isHorz ? "y2" : "x2", width * ( 1 - margin ))
+        .attr( isHorz ? "x2" : "y2", yScale( 0 ))
 };
 
 export default Bar;
