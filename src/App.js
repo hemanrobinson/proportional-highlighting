@@ -18,7 +18,7 @@ const App = () => {
             <div className="Description">
                 <h1>Proportional Highlighting&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/proportional-highlighting/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
                 <p>
-                Proportional highlighting is a technique for visualizing linked data in aggregate graphs. Use the slider to adjust the percentage of data rows selected.
+                Proportional highlighting displays linked data in aggregate graphs. Use the slider to adjust the percentage of data rows selected.
                 </p>
                 <Matrix percentSelected={percentSelected} />
                 <br />
