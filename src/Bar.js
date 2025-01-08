@@ -32,8 +32,8 @@ Bar.draw = ( selection, x, y, width, height, sums, sumsSelected, isHorz ) => {
             .range([ width * margin, width * ( 1 - margin )])
             .padding( 0.1 ),
         yScale = d3.scaleLinear()
-            .domain([( 1 + 2 * margin ) * d3.min( sums, d => d[ 1 ]), ( 1 + 2 * margin ) * d3.max( sums, d => d[ 1 ])])
-            .range([ height, 0 ]);
+            .domain([ d3.min( sums, d => d[ 1 ]), d3.max( sums, d => d[ 1 ])])
+            .range([ height * ( 1 - margin ), height * margin ]);
     
     // Draw the bars.
     selection.selectAll( ".all" )
