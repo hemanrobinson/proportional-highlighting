@@ -32,7 +32,13 @@ const App = () => {
             <div className="Description">
                 <h2>User Interface</h2>
                 <p>
-                Proportional highlighting is described in detail by <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">Stephen Few</a>.
+                <strong><em>Aggregate graphs</em></strong> display data that is aggregated using simple functions such as count, sum, and average. For simplicity, the graphs above display the count of rows in each category.
+                </p>
+                <p>
+                The earliest graphs of linked data plotted individual points, with each point representing one row of data, and each selected point highlighted. In aggregate graphs, each element of the graph displays multiple rows. So to display selected data, a part of the element is highlighted, corresponding to the proportion of selected rows.
+                </p>
+                <p>
+                <strong><em>Proportional highlighting</em></strong> is described in detail by <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">Stephen Few</a>.
                 </p>
                 <p className="center">
                     <a href="http://www.perceptualedge.com/"><img title="Stephen Few" alt="Stephen Few" src={few}/></a>

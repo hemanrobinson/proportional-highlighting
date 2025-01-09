@@ -1,6 +1,7 @@
 import React, { useRef, useEffect }  from 'react';
 import * as d3 from 'd3';
 import Data from './Data';
+import Area from './Area';
 import Bar from './Bar';
 import Pie from './Pie';
 import Plot from './Plot';
@@ -57,7 +58,7 @@ const Matrix = ( props ) => {
             
         // Select the data and draw the graphs.
         Data.selectPercentage( percentSelected );
-        Matrix.draw( ref, width, height, -1, -1, Data.selectedRowIndices, true );
+        Matrix.draw( ref, nColumns, nRows, -1, -1, width, height, Data.selectedRowIndices, true );
     });
     
     // Return the component.
@@ -75,18 +76,18 @@ Matrix.clear = () => {
  * Draws the grid, the graphs, and the axes.
  *
  * @param  {Object}     ref                 reference to DIV
- * @param  {number}     width               width in pixels
- * @param  {number}     height              height in pixels
+ * @param  {number}     nColumns            number of columns
+ * @param  {number}     nRows               number of rows
  * @param  {number}     i                   column index, or <0 to draw all
  * @param  {number}     j                   row index, or <0 to draw all
+ * @param  {number}     width               width in pixels
+ * @param  {number}     height              height in pixels
  * @param  {number[]}   selectedRowIndices  indices of selected rows
  * @param  {boolean}    isDrawingGrid       true iff clearing and redrawing the grid
  */
-Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) => {
+Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, isDrawingGrid ) => {
     
     // Initialization.  If no context, do nothing.
-    const nColumns = 3,
-        nRows = 3;
     if( !ref ) {
         return;
     }
@@ -122,19 +123,19 @@ Matrix.draw = ( ref, width, height, i, j, selectedRowIndices, isDrawingGrid ) =>
                 Bar.draw( selection, x, y, width, height, sums, sumsSelected, true );
                 break;
             case 2:
-                // Area
+                // Treemap
                 break;
             case 3:
-                // Line
+                Area.draw( selection, x, y, width, height, sums, sumsSelected );
                 break;
             case 4:
-                Plot.draw( selection, x, y, width, height, sums, sumsSelected );
+                // Line
                 break;
             case 5:
-                // Box
+                Plot.draw( selection, x, y, width, height, sums, sumsSelected );
                 break;
             case 6:
-                // Map
+                // Box, Map
                 break;
             case 7:
                 Pie.draw( selection, x, y, width, height, sums, sumsSelected, 0 );

@@ -7,13 +7,6 @@ import './Graph.css';
  */
 const Plot = ( props ) => {
 };
- 
-/**
- * Padding, in pixels.
- *
- * @constant {number}
- */
-Plot.padding = 10;
 
 /**
  * Draws the plot.

@@ -61,9 +61,9 @@ Bar.draw = ( selection, x, y, width, height, sums, sumsSelected, isHorz ) => {
         .enter()
         .append( "line" )
         .classed( 'grid', true )
-        .attr( isHorz ? "y1" : "x1", width * margin )
+        .attr( isHorz ? "y1" : "x1", width * margin / 1.2 )
         .attr( isHorz ? "x1" : "y1", yScale( 0 ))
-        .attr( isHorz ? "y2" : "x2", width * ( 1 - margin ))
+        .attr( isHorz ? "y2" : "x2", width * ( 1 - margin / 1.2 ))
         .attr( isHorz ? "x2" : "y2", yScale( 0 ))
 };
 
