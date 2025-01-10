@@ -1,6 +1,10 @@
 .grid {
     stroke: #939ba1;
 }
+.label {
+    fill: black;
+    font-size: 14px;
+}
 .all {
     stroke: #6688bb;
     stroke-width: 1px;
@@ -11,7 +15,13 @@
     stroke-width: 1px;
     fill: #6688bb;
 }
-.label {
-    fill: black;
-    font-size: 14px;
+.strokeAll {
+    stroke: #99bbdd;
+    stroke-width: 1px;
+    fill: none;
+}
+.strokeSelected {
+    stroke: #6688bb;
+    stroke-width: 1px;
+    fill: none;
 }

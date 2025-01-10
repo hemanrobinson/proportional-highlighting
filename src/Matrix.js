@@ -3,8 +3,9 @@ import * as d3 from 'd3';
 import Data from './Data';
 import Area from './Area';
 import Bar from './Bar';
+import Line from './Line';
 import Pie from './Pie';
-import Plot from './Plot';
+import Scatter from './Scatter';
 import './Matrix.css';
 
 /**
@@ -129,10 +130,10 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
                 Area.draw( selection, x, y, width, height, sums, sumsSelected );
                 break;
             case 4:
-                // Line
+                Line.draw( selection, x, y, width, height, sums, sumsSelected );
                 break;
             case 5:
-                Plot.draw( selection, x, y, width, height, sums, sumsSelected );
+                Scatter.draw( selection, x, y, width, height, sums, sumsSelected );
                 break;
             case 6:
                 // Box, Map

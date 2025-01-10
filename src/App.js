@@ -30,18 +30,20 @@ const App = () => {
                     onChange={( event, value ) => { Matrix.clear(); setPercentSelected( value ); }} />
             </div>
             <div className="Description">
-                <h2>User Interface</h2>
                 <p>
                 <strong><em>Aggregate graphs</em></strong> display data that is aggregated using simple functions such as count, sum, and average. For simplicity, the graphs above display the count of rows in each category.
                 </p>
                 <p>
-                The earliest graphs of linked data plotted individual points, with each point representing one row of data, and each selected point highlighted. In aggregate graphs, each element of the graph displays multiple rows. So to display selected data, a part of the element is highlighted, corresponding to the proportion of selected rows.
-                </p>
-                <p>
-                <strong><em>Proportional highlighting</em></strong> is described in detail by <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">Stephen Few</a>.
+                In graphs where each element represent one row of data, displaying selected rows is simple: the element is either highlighted or not. In aggregate graphs, each element displays multiple rows, so <strong><em>proportional highlighting</em></strong> is used to display the proportion of selected rows.
                 </p>
                 <p className="center">
                     <a href="http://www.perceptualedge.com/"><img title="Stephen Few" alt="Stephen Few" src={few}/></a>
+                </p>
+                <p>
+                <a href="http://www.perceptualedge.com/">Stephen Few</a> has written one of the best explanations of proportional highlighting <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">("Highlighting Methods", p. 12-23)</a>. Few describes proportional highlighting in line plots and box plots as <a href="https://www.perceptualedge.com/blog/?p=2258">research projects</a>, which this study attempts to address.
+                </p>
+                <h2>User Interface</h2>
+                <p>
                 </p>
                 <h2>Implementation</h2>
                 <p>
@@ -49,7 +51,7 @@ const App = () => {
                 </p>
                 <h2>Further Reading</h2>
                 <ul>
-                    <li>Few, S. (2010). "Coordinated Highlighting in Context". Perceptual Edge. <a href=" https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf</a></li><br/>
+                    <li>Few, S. (2010). "Coordinated Highlighting in Context". Perceptual Edge. <a href=" https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf</a>, "Highlighting Methods", 12-23.</li><br/>
                 </ul>
             </div>
         </div>
