@@ -3,9 +3,9 @@ import * as d3 from 'd3';
 import Data from './Data';
 import Area from './Area';
 import Bar from './Bar';
+import Circle from './Circle';
 import Line from './Line';
-import Pie from './Pie';
-import Scatter from './Scatter';
+import Points from './Points';
 import './Matrix.css';
 
 /**
@@ -133,16 +133,16 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
                 Line.draw( selection, x, y, width, height, sums, sumsSelected );
                 break;
             case 5:
-                Scatter.draw( selection, x, y, width, height, sums, sumsSelected );
+                Points.draw( selection, x, y, width, height, sums, sumsSelected );
                 break;
             case 6:
                 // Box, Map
                 break;
             case 7:
-                Pie.draw( selection, x, y, width, height, sums, sumsSelected, 0 );
+                Circle.draw( selection, x, y, width, height, sums, sumsSelected, 0 );
                 break;
             case 8:
-                Pie.draw( selection, x, y, width, height, sums, sumsSelected, 0.5 );
+                Circle.draw( selection, x, y, width, height, sums, sumsSelected, 0.5 );
                 break;
             default:
                 break;

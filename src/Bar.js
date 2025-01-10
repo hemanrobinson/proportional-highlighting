@@ -3,13 +3,13 @@ import Graph from './Graph';
 import './Graph.css';
 
 /**
- * Bar chart in an SVG element.
+ * Bars in an SVG element.
  */
 const Bar = () => {
 };
 
 /**
- * Draws the bar chart.
+ * Draws the graph.
  *
  * @param  {Element} selection      d3 selection
  * @param  {number}  x              X coordinate, in pixels

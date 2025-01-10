@@ -3,13 +3,13 @@ import Graph from './Graph';
 import './Graph.css';
 
 /**
- * Area plot in an SVG element.
+ * Area in an SVG element.
  */
 const Area = ( props ) => {
 };
 
 /**
- * Draws the plot.
+ * Draws the graph.
  *
  * @param  {Element} selection      d3 selection
  * @param  {number}  x              X coordinate, in pixels

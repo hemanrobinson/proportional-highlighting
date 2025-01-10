@@ -3,13 +3,13 @@ import Graph from './Graph';
 import './Graph.css';
 
 /**
- * Pie chart in an SVG element.
+ * Circle in an SVG element.
  */
-const Pie = () => {
+const Circle = () => {
 };
 
 /**
- * Draws the pie chart.
+ * Draws the graph.
  *                              
  * @param  {Element} selection      d3 selection
  * @param  {number}  x              X coordinate, in pixels
@@ -20,7 +20,7 @@ const Pie = () => {
  * @param  {Array}   sumsSelected   selected sums
  * @param  {number}  radiusStart    a percentage between 0 and 1, 0 for pie charts, >0 for doughnut charts
  */
-Pie.draw = ( selection, x, y, width, height, sums, sumsSelected, radiusStart ) => {
+Circle.draw = ( selection, x, y, width, height, sums, sumsSelected, radiusStart ) => {
     
     // Initialization.
     Graph.draw( selection, x, y, width, height );
@@ -28,12 +28,12 @@ Pie.draw = ( selection, x, y, width, height, sums, sumsSelected, radiusStart ) =
         outerRadius = Math.min( width, height ) * ( 1 - 2 * margin ) / 2,
         innerRadius = radiusStart * outerRadius;
 
-    // Compute the position of each slice of the pie.
+    // Compute the position of each slice.
     let data = d3.pie()( d3.map( sums, ( x ) => x[ 1 ]));
     data.forEach(( d, i ) => { d.selectedValue = sumsSelected[ i ][ 1 ]; });
     data = data.filter(( d ) => ( d.value >= 0 ));
     
-    // Draw the pie slices.
+    // Draw the slices.
     const x0 = Math.floor( width / 2 ) + 0.5,
         y0 = Math.floor( height / 2 ) + 0.5;
     selection.selectAll( ".all" )
@@ -58,4 +58,4 @@ Pie.draw = ( selection, x, y, width, height, sums, sumsSelected, radiusStart ) =
         )
 };
 
-export default Pie;
+export default Circle;

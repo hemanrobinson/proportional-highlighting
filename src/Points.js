@@ -3,9 +3,9 @@ import Graph from './Graph';
 import './Graph.css';
 
 /**
- * Line in an SVG element.
+ * Points in an SVG element.
  */
-const Line = ( props ) => {
+const Points = ( props ) => {
 };
 
 /**
@@ -19,7 +19,7 @@ const Line = ( props ) => {
  * @param  {Array}   sums           sums
  * @param  {Array}   sumsSelected   selected sums
  */
-Line.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
+Points.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
     
     // Initialization.
     Graph.draw( selection, x, y, width, height );
@@ -32,22 +32,22 @@ Line.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
             .domain([ d3.min( sums, d => d[ 1 ]), d3.max( sums, d => d[ 1 ])])
             .range([ height * ( 1 - margin ), height * margin ]);
     
-    // Draw the line.
-    selection
-        .append( "path" )
-        .datum( sums )
-        .attr( "d", d3.line()
-            .x(( d ) => xScale( d[ 0 ]))
-            .y(( d ) => yScale( d[ 1 ]))
-        )
+    // Draw the points.
+    selection.selectAll( ".strokeAll" )
+        .data( sums )
+        .enter()
+        .append( "circle" )
+        .attr( "cx", ( d ) => xScale( d[ 0 ]))
+        .attr( "cy", ( d ) => yScale( d[ 1 ]))
+        .attr( "r", 1.5 )
         .classed( 'strokeAll', true )
-    selection
-        .append( "path" )
-        .datum( sumsSelected )
-        .attr( "d", d3.line()
-            .x(( d ) => xScale( d[ 0 ]))
-            .y(( d ) => yScale( d[ 1 ]))
-        )
+    selection.selectAll( ".strokeSelected" )
+        .data( sumsSelected )
+        .enter()
+        .append( "circle" )
+        .attr( "cx", ( d ) => xScale( d[ 0 ]))
+        .attr( "cy", ( d ) => yScale( d[ 1 ]))
+        .attr( "r", 1.5 )
         .classed( 'strokeSelected', true )
         
     // Draw the axis.
@@ -62,4 +62,4 @@ Line.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
         .attr( "y2", yScale( 0 ))
 }
 
-export default Line;
+export default Points;
