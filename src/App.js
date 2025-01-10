@@ -40,7 +40,7 @@ const App = () => {
                     <a href="http://www.perceptualedge.com/"><img title="Stephen Few" alt="Stephen Few" src={few}/></a>
                 </p>
                 <p>
-                <a href="http://www.perceptualedge.com/">Stephen Few</a> has written one of the best explanations of proportional highlighting <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">("Highlighting Methods", p. 12-23)</a>. Few describes proportional highlighting in line plots and box plots as <a href="https://www.perceptualedge.com/blog/?p=2258">research projects</a>, which this study attempts to address.
+                This study is inspired by the work of <a href="http://www.perceptualedge.com/">Stephen Few</a>, who wrote one of the best explanations of proportional highlighting <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">("Highlighting Methods", p. 12-23)</a>. Few describes several outstanding problems as <a href="https://www.perceptualedge.com/blog/?p=2258">research projects</a>, which this study attempts to address.
                 </p>
                 <h2>User Interface</h2>
                 <p>
@@ -51,7 +51,9 @@ const App = () => {
                 </p>
                 <h2>Further Reading</h2>
                 <ul>
-                    <li>Few, S. (2010). "Coordinated Highlighting in Context". Perceptual Edge. <a href=" https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf</a>, "Highlighting Methods", 12-23.</li><br/>
+                    <li>Few, S. (2010). "Coordinated Highlighting in Context". Perceptual Edge, 12-23. <a href=" https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf</a>.</li><br/>
+                    <li>Rios-Berrios, M., Sharma, P., Lee, T. Y., Schwartz, R., and Shneiderman, B. (2011).                    "TreeCovery: Coordinated dual treemap visualization for exploring the Recovery Act",
+                        Government Information Quarterly 29, 212–222. <a href="https://www.cs.umd.edu/~ben/papers/Rios-Berrios2012TreeCovery.pdf">https://www.cs.umd.edu/~ben/papers/Rios-Berrios2012TreeCovery.pdf</a>.</li><br/>
                 </ul>
             </div>
         </div>

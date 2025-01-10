@@ -103,7 +103,7 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
         rowsSelected = rows.filter(( d, index ) => selectedRowIndices.includes( index )),
         sums = Array.from( d3.rollup( rows, v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ])),
         zeroes = sums.map(( x ) => [ x[ 0 ], 0, 0 ]),
-        sumsSelected = Array.from( d3.rollup( rowsSelected.concat( zeroes), v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ]));
+        sumsSelected = Array.from( d3.rollup( rowsSelected.concat( zeroes ).sort(), v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ]));
     
     // Draws a graph.
     let drawGraph = ( ref, width, height, i, j, selectedRowIndices ) => {

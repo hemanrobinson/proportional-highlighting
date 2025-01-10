@@ -33,22 +33,23 @@ Points.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
             .range([ height * ( 1 - margin ), height * margin ]);
     
     // Draw the points.
-    selection.selectAll( ".strokeAll" )
+    const radius = 3;
+    selection.selectAll( ".fillAll" )
         .data( sums )
         .enter()
         .append( "circle" )
         .attr( "cx", ( d ) => xScale( d[ 0 ]))
         .attr( "cy", ( d ) => yScale( d[ 1 ]))
-        .attr( "r", 1.5 )
-        .classed( 'strokeAll', true )
-    selection.selectAll( ".strokeSelected" )
+        .attr( "r", radius )
+        .classed( 'fillAll', true )
+    selection.selectAll( ".fillSelected" )
         .data( sumsSelected )
         .enter()
         .append( "circle" )
         .attr( "cx", ( d ) => xScale( d[ 0 ]))
         .attr( "cy", ( d ) => yScale( d[ 1 ]))
-        .attr( "r", 1.5 )
-        .classed( 'strokeSelected', true )
+        .attr( "r", radius )
+        .classed( 'fillSelected', true )
         
     // Draw the axis.
     selection.selectAll( "line" )

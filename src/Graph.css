@@ -7,21 +7,25 @@
 }
 .all {
     stroke: #6688bb;
-    stroke-width: 1px;
     fill: #99bbdd;
 }
 .selected {
     stroke: #99bbdd;
-    stroke-width: 1px;
     fill: #6688bb;
 }
 .strokeAll {
     stroke: #99bbdd;
-    stroke-width: 1px;
     fill: none;
 }
 .strokeSelected {
     stroke: #6688bb;
-    stroke-width: 1px;
     fill: none;
+}
+.fillAll {
+    stroke: #99bbdd;
+    fill: #99bbdd;
+}
+.fillSelected {
+    stroke: #6688bb;
+    fill: #6688bb;
 }
