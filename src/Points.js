@@ -16,51 +16,54 @@ const Points = ( props ) => {
  * @param  {number}  y              Y coordinate, in pixels
  * @param  {number}  width          width, in pixels
  * @param  {number}  height         height, in pixels
- * @param  {Array}   sums           sums
- * @param  {Array}   sumsSelected   selected sums
+ * @param  {Array}   values         all values
+ * @param  {Array}   valuesSelected selected values
+ * @param  {boolean} isColocated    true if all and selected values occupy the same position; otherwise separate positions
  */
-Points.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
+Points.draw = ( selection, x, y, width, height, values, valuesSelected, isColocated ) => {
     
     // Initialization.
-    Graph.draw( selection, x, y, width, height );
     const margin = Graph.margin,
-        offset = ( 1 - 2 * margin ) / sums.length / 2,
+        offset = ( 1 - 2 * margin ) / values.length / 2,
         xScale = d3.scaleBand()
-            .domain( sums.map( d => d[ 0 ]))
+            .domain( values.map( d => d[ 0 ]))
             .range([ width * ( margin + offset ), width * ( 1 - margin + offset )]),
         yScale = d3.scaleLinear()
-            .domain([ d3.min( sums, d => d[ 1 ]), d3.max( sums, d => d[ 1 ])])
+            .domain([ d3.min( values, d => d[ 1 ]), d3.max( values, d => d[ 1 ])])
             .range([ height * ( 1 - margin ), height * margin ]);
+    Graph.draw( selection, x, y, width, height, yScale, false );
     
     // Draw the points.
-    const radius = 3;
+    let radius = 3;
     selection.selectAll( ".fillAll" )
-        .data( sums )
+        .data( values )
         .enter()
         .append( "circle" )
         .attr( "cx", ( d ) => xScale( d[ 0 ]))
         .attr( "cy", ( d ) => yScale( d[ 1 ]))
         .attr( "r", radius )
-        .classed( 'fillAll', true )
+        .classed( 'fillAll', true );
+    
+    // Draw the selected points.
+    let selected = valuesSelected;
+    if( isColocated ) {
+        radius = 4;
+        selected = [];
+        valuesSelected.forEach(( d, i ) => {
+            const a = values[ i ];
+            if( a[ 1 ] && ( d[ 1 ] / a[ 1 ] >= 0.5 )) {
+                selected.push( a );
+            }
+        });
+    }
     selection.selectAll( ".fillSelected" )
-        .data( sumsSelected )
+        .data( selected )
         .enter()
         .append( "circle" )
         .attr( "cx", ( d ) => xScale( d[ 0 ]))
         .attr( "cy", ( d ) => yScale( d[ 1 ]))
         .attr( "r", radius )
-        .classed( 'fillSelected', true )
-        
-    // Draw the axis.
-    selection.selectAll( "line" )
-        .data( sums )
-        .enter()
-        .append( "line" )
-        .classed( 'grid', true )
-        .attr( "x1", width * margin / 1.2 )
-        .attr( "y1", yScale( 0 ))
-        .attr( "x2", width * ( 1 - margin / 1.2 ))
-        .attr( "y2", yScale( 0 ))
+        .classed( 'fillSelected', true );
 }
 
 export default Points;

@@ -16,26 +16,26 @@ const Area = ( props ) => {
  * @param  {number}  y              Y coordinate, in pixels
  * @param  {number}  width          width, in pixels
  * @param  {number}  height         height, in pixels
- * @param  {Array}   sums           sums
- * @param  {Array}   sumsSelected   selected sums
+ * @param  {Array}   values         all values
+ * @param  {Array}   valuesSelected selected values
  */
-Area.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
+Area.draw = ( selection, x, y, width, height, values, valuesSelected ) => {
     
     // Initialization.
-    Graph.draw( selection, x, y, width, height );
     const margin = Graph.margin,
-        offset = ( 1 - 2 * margin ) / sums.length / 2,
+        offset = ( 1 - 2 * margin ) / values.length / 2,
         xScale = d3.scaleBand()
-            .domain( sums.map( d => d[ 0 ]))
+            .domain( values.map( d => d[ 0 ]))
             .range([ width * ( margin + offset ), width * ( 1 - margin + offset )]),
         yScale = d3.scaleLinear()
-            .domain([ d3.min( sums, d => d[ 1 ]), d3.max( sums, d => d[ 1 ])])
+            .domain([ d3.min( values, d => d[ 1 ]), d3.max( values, d => d[ 1 ])])
             .range([ height * ( 1 - margin ), height * margin ]);
+    Graph.draw( selection, x, y, width, height, yScale, false );
     
     // Draw the area.
     selection
         .append( "path" )
-        .datum( sums )
+        .datum( values )
         .attr( "d", d3.area()
             .x(( d ) => xScale( d[ 0 ]))
             .y0(( d ) => yScale( 0 ))
@@ -44,24 +44,13 @@ Area.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
         .classed( 'all', true )
     selection
         .append( "path" )
-        .datum( sumsSelected )
+        .datum( valuesSelected )
         .attr( "d", d3.area()
             .x(( d ) => xScale( d[ 0 ]))
             .y0(( d ) => yScale( 0 ))
             .y1(( d ) => yScale( d[ 1 ]))
         )
         .classed( 'selected', true )
-        
-    // Draw the axis.
-    selection.selectAll( "line" )
-        .data( sums )
-        .enter()
-        .append( "line" )
-        .classed( 'grid', true )
-        .attr( "x1", width * margin / 1.2 )
-        .attr( "y1", yScale( 0 ))
-        .attr( "x2", width * ( 1 - margin / 1.2 ))
-        .attr( "y2", yScale( 0 ))
 }
 
 export default Area;

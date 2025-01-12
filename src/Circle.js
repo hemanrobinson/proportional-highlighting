@@ -16,21 +16,21 @@ const Circle = () => {
  * @param  {number}  y              Y coordinate, in pixels
  * @param  {number}  width          width, in pixels
  * @param  {number}  height         height, in pixels
- * @param  {Array}   sums           sums
- * @param  {Array}   sumsSelected   selected sums
+ * @param  {Array}   values         all values
+ * @param  {Array}   valuesSelected selected values
  * @param  {number}  radiusStart    a percentage between 0 and 1, 0 for pie charts, >0 for doughnut charts
  */
-Circle.draw = ( selection, x, y, width, height, sums, sumsSelected, radiusStart ) => {
+Circle.draw = ( selection, x, y, width, height, values, valuesSelected, radiusStart ) => {
     
     // Initialization.
-    Graph.draw( selection, x, y, width, height );
     const margin = Graph.margin,
         outerRadius = Math.min( width, height ) * ( 1 - 2 * margin ) / 2,
         innerRadius = radiusStart * outerRadius;
+    Graph.draw( selection, x, y, width, height, undefined, false );
 
     // Compute the position of each slice.
-    let data = d3.pie()( d3.map( sums, ( x ) => x[ 1 ]));
-    data.forEach(( d, i ) => { d.selectedValue = sumsSelected[ i ][ 1 ]; });
+    let data = d3.pie()( d3.map( values, ( x ) => x[ 1 ]));
+    data.forEach(( d, i ) => { d.selectedValue = valuesSelected[ i ][ 1 ]; });
     data = data.filter(( d ) => ( d.value >= 0 ));
     
     // Draw the slices.

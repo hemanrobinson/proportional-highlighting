@@ -1,11 +1,11 @@
 import * as d3 from 'd3';
 import Graph from './Graph';
-import Scatter from './Scatter';
+import Points from './Points';
 
-it( "creates a Scatter element", () => {
-    expect( Scatter()).toBe( undefined );
+it( "creates a Points element", () => {
+    expect( Points()).toBe( undefined );
 });
 
-it( "draws a scatter plot", () => {
-    Scatter.draw( d3.selection(), 0, 0, 200, 200, [[]], [[]]);
+it( "draws points", () => {
+    Points.draw( d3.selection(), 0, 0, 200, 200, [[]], [[]], false );
 });

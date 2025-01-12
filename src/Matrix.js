@@ -39,7 +39,7 @@ const Matrix = ( props ) => {
         { percentSelected } = props,
         width = 200,
         height = 200,
-        nColumns = 3,
+        nColumns = 4,
         nRows = 3,
         totalWidth = nColumns * width,
         totalHeight = nRows * height;
@@ -92,21 +92,21 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
     if( !ref ) {
         return;
     }
-    let canvas = ref.current.firstChild,
+    const canvas = ref.current.firstChild,
         g = canvas.getContext( "2d" );
     if( !g ) {
         return;
     }
     
     // Calculate the sums.
-    let rows = Data.getRows(),
+    const rows = Data.getRows(),
         rowsSelected = rows.filter(( d, index ) => selectedRowIndices.includes( index )),
-        sums = Array.from( d3.rollup( rows, v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ])),
-        zeroes = sums.map(( x ) => [ x[ 0 ], 0, 0 ]),
-        sumsSelected = Array.from( d3.rollup( rowsSelected.concat( zeroes ).sort(), v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ]));
+        values = Array.from( d3.rollup( rows, v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ])),
+        zeroes = values.map(( x ) => [ x[ 0 ], 0, 0 ]),
+        valuesSelected = Array.from( d3.rollup( rowsSelected.concat( zeroes ).sort(), v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ]));
     
     // Draws a graph.
-    let drawGraph = ( ref, width, height, i, j, selectedRowIndices ) => {
+    const drawGraph = ( ref, width, height, i, j, selectedRowIndices ) => {
     
         // Get the position and the selection.
         let x = i * width,
@@ -118,31 +118,40 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
         // Draw the graph.
         switch( k ) {
             case 0:
-                Bar.draw( selection, x, y, width, height, sums, sumsSelected, false );
+                Bar.draw( selection, x, y, width, height, values, valuesSelected, false );
                 break;
             case 1:
-                Bar.draw( selection, x, y, width, height, sums, sumsSelected, true );
+                Bar.draw( selection, x, y, width, height, values, valuesSelected, true );
                 break;
             case 2:
                 // Treemap
                 break;
             case 3:
-                Area.draw( selection, x, y, width, height, sums, sumsSelected );
+                // Box
                 break;
             case 4:
-                Line.draw( selection, x, y, width, height, sums, sumsSelected );
+                Area.draw( selection, x, y, width, height, values, valuesSelected );
                 break;
             case 5:
-                Points.draw( selection, x, y, width, height, sums, sumsSelected );
+                Line.draw( selection, x, y, width, height, values, valuesSelected, false );
                 break;
             case 6:
-                // Box, Map
+                Points.draw( selection, x, y, width, height, values, valuesSelected, false );
                 break;
             case 7:
-                Circle.draw( selection, x, y, width, height, sums, sumsSelected, 0 );
+                Circle.draw( selection, x, y, width, height, values, valuesSelected, 0 );
                 break;
             case 8:
-                Circle.draw( selection, x, y, width, height, sums, sumsSelected, 0.5 );
+                // Map
+                break;
+            case 9:
+                Line.draw( selection, x, y, width, height, values, valuesSelected, true );
+                break;
+            case 10:
+                Points.draw( selection, x, y, width, height, values, valuesSelected, true );
+                break;
+            case 11:
+                Circle.draw( selection, x, y, width, height, values, valuesSelected, 0.5 );
                 break;
             default:
                 break;

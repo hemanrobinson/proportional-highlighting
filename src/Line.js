@@ -16,50 +16,67 @@ const Line = ( props ) => {
  * @param  {number}  y              Y coordinate, in pixels
  * @param  {number}  width          width, in pixels
  * @param  {number}  height         height, in pixels
- * @param  {Array}   sums           sums
- * @param  {Array}   sumsSelected   selected sums
+ * @param  {Array}   values         all values
+ * @param  {Array}   valuesSelected selected values
+ * @param  {boolean} isColocated    true if all and selected values occupy the same position; otherwise separate positions
  */
-Line.draw = ( selection, x, y, width, height, sums, sumsSelected ) => {
+Line.draw = ( selection, x, y, width, height, values, valuesSelected, isColocated ) => {
     
     // Initialization.
-    Graph.draw( selection, x, y, width, height );
     const margin = Graph.margin,
-        offset = ( 1 - 2 * margin ) / sums.length / 2,
+        offset = ( 1 - 2 * margin ) / values.length / 2,
         xScale = d3.scaleBand()
-            .domain( sums.map( d => d[ 0 ]))
+            .domain( values.map( d => d[ 0 ]))
             .range([ width * ( margin + offset ), width * ( 1 - margin + offset )]),
         yScale = d3.scaleLinear()
-            .domain([ d3.min( sums, d => d[ 1 ]), d3.max( sums, d => d[ 1 ])])
+            .domain([ d3.min( values, d => d[ 1 ]), d3.max( values, d => d[ 1 ])])
             .range([ height * ( 1 - margin ), height * margin ]);
+    Graph.draw( selection, x, y, width, height, yScale, false );
     
     // Draw the line.
     selection
         .append( "path" )
-        .datum( sums )
+        .datum( values )
         .attr( "d", d3.line()
             .x(( d ) => xScale( d[ 0 ]))
             .y(( d ) => yScale( d[ 1 ]))
         )
-        .classed( 'strokeAll', true )
-    selection
-        .append( "path" )
-        .datum( sumsSelected )
-        .attr( "d", d3.line()
-            .x(( d ) => xScale( d[ 0 ]))
-            .y(( d ) => yScale( d[ 1 ]))
-        )
-        .classed( 'strokeSelected', true )
-        
-    // Draw the axis.
-    selection.selectAll( "line" )
-        .data( sums )
-        .enter()
-        .append( "line" )
-        .classed( 'grid', true )
-        .attr( "x1", width * margin / 1.2 )
-        .attr( "y1", yScale( 0 ))
-        .attr( "x2", width * ( 1 - margin / 1.2 ))
-        .attr( "y2", yScale( 0 ))
+        .classed( 'strokeAll', true );
+    
+    // Draw the selected line.
+    let selected = [ valuesSelected ];
+    if( isColocated ) {
+        selected = [];
+        let line = [], first = -1, last = -1;
+        valuesSelected.forEach(( d, i ) => {
+            const a = values[ i ];
+            if( a[ 1 ] && ( d[ 1 ] / a[ 1 ] >= 0.5 )) {
+                if( first < 0 ) {
+                    first = i;
+                }
+                last = i;
+                line.push( a );
+            } else if( first <= last ) {
+                selected.push( line );
+                line = [];
+                first = -1;
+                last = -1;
+            }
+        });
+        if( first <= last ) {
+            selected.push( line );
+        }
+    }
+    selected.forEach(( d ) => {
+        selection
+            .append( "path" )
+            .datum( d )
+            .attr( "d", d3.line()
+                .x(( d ) => xScale( d[ 0 ]))
+                .y(( d ) => yScale( d[ 1 ]))
+            )
+            .classed( isColocated ? 'strokeSelectedThick' : 'strokeSelected', true );
+    });
 }
 
 export default Line;

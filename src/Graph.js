@@ -131,11 +131,25 @@ Graph.getDomains = ( xDomain0, yDomain0, xDomain, yDomain, isXOrdinal, isYOrdina
  * @param  {number}  y              Y coordinate, in pixels
  * @param  {number}  width          width, in pixels
  * @param  {number}  height         height, in pixels
+ * @param  {Scale}   yScale         scale of Y axis, or undefined if none
+ * @param  {boolean} isHorz         true iff graph is horizontal, otherwise vertical
  */
-Graph.draw = ( selection, x, y, width, height ) => {
+Graph.draw = ( selection, x, y, width, height, yScale, isHorz ) => {
     
     // Initialization.
+    const nColumns = 4;
     selection.selectAll( "*" ).remove();
+             
+    // Draw the axis, if any.
+    if( yScale ) {
+        selection
+            .append( "line" )
+            .classed( 'grid', true )
+            .attr( isHorz ? "y1" : "x1", width * Graph.margin / 1.2 )
+            .attr( isHorz ? "x1" : "y1", yScale( 0 ))
+            .attr( isHorz ? "y2" : "x2", width * ( 1 - Graph.margin / 1.2 ))
+            .attr( isHorz ? "x2" : "y2", yScale( 0 ))
+    }
     
     // Draw the label.
     selection
@@ -143,7 +157,7 @@ Graph.draw = ( selection, x, y, width, height ) => {
         .attr( "x", 5 )
         .attr( "y", 16 )
         .classed( "label", "true" )
-        .text( Math.round( 1 + x / width + 3 * y / height ));
+        .text( Math.round( 1 + x / width + nColumns * y / height ));
 };
 
 // Margin, a percentage between 0 and 1.
