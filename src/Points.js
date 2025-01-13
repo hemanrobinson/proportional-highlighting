@@ -47,11 +47,11 @@ Points.draw = ( selection, x, y, width, height, values, valuesSelected, isColoca
     // Draw the selected points.
     let selected = valuesSelected;
     if( isColocated ) {
-        radius = 4;
+        radius = 3.5;
         selected = [];
         valuesSelected.forEach(( d, i ) => {
             const a = values[ i ];
-            if( a[ 1 ] && ( d[ 1 ] / a[ 1 ] >= 0.5 )) {
+            if( a[ 1 ] && ( d[ 1 ] / a[ 1 ] > 0 )) {
                 selected.push( a );
             }
         });

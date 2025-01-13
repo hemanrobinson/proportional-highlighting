@@ -46,26 +46,45 @@ Line.draw = ( selection, x, y, width, height, values, valuesSelected, isColocate
     // Draw the selected line.
     let selected = [ valuesSelected ];
     if( isColocated ) {
-        selected = [];
-        let line = [], first = -1, last = -1;
-        valuesSelected.forEach(( d, i ) => {
-            const a = values[ i ];
-            if( a[ 1 ] && ( d[ 1 ] / a[ 1 ] >= 0.5 )) {
-                if( first < 0 ) {
-                    first = i;
-                }
-                last = i;
-                line.push( a );
-            } else if( first <= last ) {
-                selected.push( line );
-                line = [];
-                first = -1;
-                last = -1;
+
+        // Create a new Array that includes intermediate values.
+        let newValues = [];
+        values.forEach(( d, i ) => {
+            newValues.push([ 2 * i, d[ 1 ]]);
+            if( i < values.length - 1 ) {
+                newValues.push([ 2 * i + 1, ( d[ 1 ] + values[ i + 1 ][ 1 ]) / 2 ]);
             }
         });
-        if( first <= last ) {
-            selected.push( line );
-        }
+
+        // Add intermediate values to the X scale. (Why does it need one more?)
+        xScale.domain( newValues.map( d => d[ 0 ]).concat([ newValues.length ]));
+
+        // Identify the selected line segments.
+        let selectedIndices = [];
+        valuesSelected.forEach(( d, i ) => {
+            const a = values[ i ];
+            if( a[ 1 ] && ( d[ 1 ] / a[ 1 ] > 0 )) {
+                selectedIndices.push( i );
+            }
+        });
+
+        // Accumulate the selected line segments.
+        selected = [];
+        let line = [];
+        selectedIndices.forEach(( d, i ) => {
+            const j = selectedIndices[ i ];
+            if(( j > 0 ) && ( line.length === 0 )) {
+                line.push( newValues[ 2 * j - 1 ]);
+            }
+            line.push( newValues[ 2 * j ]);
+            if( j < values.length - 1 ) {
+                line.push( newValues[ 2 * j + 1 ]);
+            }
+            if(( i === selectedIndices.length - 1 ) || ( selectedIndices[ i + 1 ] > selectedIndices[ i ] + 1 )) {
+                selected.push( line );
+                line = [];
+            }
+        });
     }
     selected.forEach(( d ) => {
         selection
