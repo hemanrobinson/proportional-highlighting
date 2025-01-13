@@ -43,16 +43,15 @@ it( "selects a random percentage of the rows", () => {
 });
 
 it( "returns column names", () => {
-    expect( Data.getColumnNames( "Business" )).toEqual([ "Industry", "Sales ($M)", "Employees" ]);
+    expect( Data.getColumnNames( "Business" )).toEqual([ "Industry", "Count" ]);
 });
 
 it( "returns domains", () => {
-    expect( Data.getDomain( 0 )).toEqual([ "Pharma", "Aerospace", "Oil", "Soap" ]);
-    expect( Data.getDomain( 1 )).toEqual([ 576.9, 86656 ]);
-    expect( Data.getDomain( 2 )).toEqual([ 560, 201400 ]);
+    expect( Data.getDomain( 0 )).toEqual([ "Aerospace", "Auto", "Computer", "Food", "Oil", "Pharma", "Soap" ]);
+    expect( Data.getDomain( 1 )).toEqual([ -1, 1 ]);
 });
 
 it( "returns values", () => {
-    expect( Data.getRows().length ).toBe( 67 );
+    expect( Data.getRows().length ).toBe( 95 );
 });
 
