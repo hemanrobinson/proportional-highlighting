@@ -127,6 +127,7 @@ Graph.getDomains = ( xDomain0, yDomain0, xDomain, yDomain, isXOrdinal, isYOrdina
  * Draws the graph.
  *
  * @param  {Element} selection      d3 selection
+ * @param  {string}  label          label, or none if undefined
  * @param  {number}  x              X coordinate, in pixels
  * @param  {number}  y              Y coordinate, in pixels
  * @param  {number}  width          width, in pixels
@@ -134,11 +135,20 @@ Graph.getDomains = ( xDomain0, yDomain0, xDomain, yDomain, isXOrdinal, isYOrdina
  * @param  {Scale}   yScale         scale of Y axis, or undefined if none
  * @param  {boolean} isHorz         true iff graph is horizontal, otherwise vertical
  */
-Graph.draw = ( selection, x, y, width, height, yScale, isHorz ) => {
+Graph.draw = ( selection, label, x, y, width, height, yScale, isHorz ) => {
     
     // Initialization.
-    const nColumns = 4;
     selection.selectAll( "*" ).remove();
+    
+    // Draw the label, if any.
+    if( label ) {
+        selection
+            .append( "text" )
+            .attr( "x", 5 )
+            .attr( "y", 16 )
+            .classed( "label", "true" )
+            .text( label );
+    }
              
     // Draw the axis, if any.
     if( yScale ) {
@@ -150,14 +160,6 @@ Graph.draw = ( selection, x, y, width, height, yScale, isHorz ) => {
             .attr( isHorz ? "y2" : "x2", width * ( 1 - Graph.margin / 1.2 ))
             .attr( isHorz ? "x2" : "y2", yScale( 0 ))
     }
-    
-    // Draw the label.
-    selection
-        .append( "text" )
-        .attr( "x", 5 )
-        .attr( "y", 16 )
-        .classed( "label", "true" )
-        .text( Math.round( 1 + x / width + nColumns * y / height ));
 };
 
 // Margin, a percentage between 0 and 1.

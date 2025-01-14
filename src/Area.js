@@ -12,6 +12,7 @@ const Area = ( props ) => {
  * Draws the graph.
  *
  * @param  {Element} selection      d3 selection
+ * @param  {string}  label          label, or none if undefined
  * @param  {number}  x              X coordinate, in pixels
  * @param  {number}  y              Y coordinate, in pixels
  * @param  {number}  width          width, in pixels
@@ -19,7 +20,7 @@ const Area = ( props ) => {
  * @param  {Array}   values         all values
  * @param  {Array}   valuesSelected selected values
  */
-Area.draw = ( selection, x, y, width, height, values, valuesSelected ) => {
+Area.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => {
     
     // Initialization.
     const margin = Graph.margin,
@@ -30,7 +31,7 @@ Area.draw = ( selection, x, y, width, height, values, valuesSelected ) => {
         yScale = d3.scaleLinear()
             .domain([ d3.min( values, d => d[ 1 ]), d3.max( values, d => d[ 1 ])])
             .range([ height * ( 1 - margin ), height * margin ]);
-    Graph.draw( selection, x, y, width, height, yScale, false );
+    Graph.draw( selection, label, x, y, width, height, yScale, false );
     
     // Draw the area.
     selection

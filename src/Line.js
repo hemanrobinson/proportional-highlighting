@@ -12,6 +12,7 @@ const Line = ( props ) => {
  * Draws the graph.
  *
  * @param  {Element} selection      d3 selection
+ * @param  {string}  label          label, or none if undefined
  * @param  {number}  x              X coordinate, in pixels
  * @param  {number}  y              Y coordinate, in pixels
  * @param  {number}  width          width, in pixels
@@ -20,7 +21,7 @@ const Line = ( props ) => {
  * @param  {Array}   valuesSelected selected values
  * @param  {boolean} isColocated    true if all and selected values occupy the same position; otherwise separate positions
  */
-Line.draw = ( selection, x, y, width, height, values, valuesSelected, isColocated ) => {
+Line.draw = ( selection, label, x, y, width, height, values, valuesSelected, isColocated ) => {
     
     // Initialization.
     const margin = Graph.margin,
@@ -31,7 +32,7 @@ Line.draw = ( selection, x, y, width, height, values, valuesSelected, isColocate
         yScale = d3.scaleLinear()
             .domain([ d3.min( values, d => d[ 1 ]), d3.max( values, d => d[ 1 ])])
             .range([ height * ( 1 - margin ), height * margin ]);
-    Graph.draw( selection, x, y, width, height, yScale, false );
+    Graph.draw( selection, label, x, y, width, height, yScale, false );
     
     // Draw the line.
     selection

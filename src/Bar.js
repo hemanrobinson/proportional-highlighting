@@ -12,6 +12,7 @@ const Bar = () => {
  * Draws the graph.
  *
  * @param  {Element} selection      d3 selection
+ * @param  {string}  label          label, or none if undefined
  * @param  {number}  x              X coordinate, in pixels
  * @param  {number}  y              Y coordinate, in pixels
  * @param  {number}  width          width, in pixels
@@ -20,7 +21,7 @@ const Bar = () => {
  * @param  {Array}   valuesSelected selected values
  * @param  {boolean} isHorz         true iff graph is horizontal, otherwise vertical
  */
-Bar.draw = ( selection, x, y, width, height, values, valuesSelected, isHorz ) => {
+Bar.draw = ( selection, label, x, y, width, height, values, valuesSelected, isHorz ) => {
     
     // Initialization.
     const margin = Graph.margin,
@@ -31,7 +32,7 @@ Bar.draw = ( selection, x, y, width, height, values, valuesSelected, isHorz ) =>
         yScale = d3.scaleLinear()
             .domain([ d3.min( values, d => d[ 1 ]), d3.max( values, d => d[ 1 ])])
             .range( isHorz ? [ height * margin, height * ( 1 - margin )] : [ height * ( 1 - margin ), height * margin ]);
-    Graph.draw( selection, x, y, width, height, yScale, isHorz );
+    Graph.draw( selection, label, x, y, width, height, yScale, isHorz );
     
     // Draw the bars.
     selection.selectAll( ".all" )

@@ -7,5 +7,5 @@ it( "creates an Area element", () => {
 });
 
 it( "draws an area plot", () => {
-    Area.draw( d3.selection(), 0, 0, 200, 200, [[]], [[]]);
+    Area.draw( d3.selection(), "", 0, 0, 200, 200, [[]], [[]]);
 });

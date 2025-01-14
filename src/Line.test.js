@@ -7,5 +7,5 @@ it( "creates a Line element", () => {
 });
 
 it( "draws a line", () => {
-    Line.draw( d3.selection(), 0, 0, 200, 200, [[]], [[]], false);
+    Line.draw( d3.selection(), "", 0, 0, 200, 200, [[]], [[]], false);
 });

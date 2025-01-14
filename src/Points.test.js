@@ -7,5 +7,5 @@ it( "creates a Points element", () => {
 });
 
 it( "draws points", () => {
-    Points.draw( d3.selection(), 0, 0, 200, 200, [[]], [[]], false );
+    Points.draw( d3.selection(), "", 0, 0, 200, 200, [[]], [[]], false );
 });

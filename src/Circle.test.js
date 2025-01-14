@@ -7,5 +7,5 @@ it( "creates a Circle element", () => {
 });
 
 it( "draws a circle", () => {
-    Circle.draw( d3.selection(), 0, 0, 200, 200, [], []);
+    Circle.draw( d3.selection(), "", 0, 0, 200, 200, [], []);
 });
