@@ -144,15 +144,16 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
                 break;
             case 9:
                 // Map
+                // Box
                 break;
             case 10:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, false );
+                Line.draw( selection, label, x, y, width, height, values, valuesSelected, Line.style.SEPARATE );
                 break;
             case 11:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, true );
+                Line.draw( selection, label, x, y, width, height, values, valuesSelected, Line.style.DISCRETE );
                 break;
             case 12:
-                // Box
+                Line.draw( selection, label, x, y, width, height, values, valuesSelected, Line.style.CONTINUOUS );
                 break;
             default:
                 break;
