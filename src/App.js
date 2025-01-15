@@ -40,7 +40,7 @@ const App = () => {
                     <a href="http://www.perceptualedge.com/"><img title="Stephen Few" alt="Stephen Few" src={few}/></a>
                 </p>
                 <p>
-                Few describes several outstanding problems with proportional highlighting, which this study attempts to address.
+                Few describes several <a href="https://www.perceptualedge.com/blog/?p=2258">outstanding problems</a> with proportional highlighting, which this study attempts to address.
                 </p>
                 <h2>User Interface</h2>
                 <p>
@@ -52,6 +52,7 @@ const App = () => {
                 <h2>Further Reading</h2>
                 <ul>
                     <li>Few, S. (2010). "Coordinated Highlighting in Context". Perceptual Edge, 12-23. <a href=" https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf</a>.</li><br/>
+                    <li>Few, S. (2016), “Information Visualization Research Projects That Would Benefit Practitioners”. <a href=" https://www.perceptualedge.com/blog/?p=2258">https://www.perceptualedge.com/blog/?p=2258</a>.</li><br/>
                 </ul>
             </div>
         </div>
