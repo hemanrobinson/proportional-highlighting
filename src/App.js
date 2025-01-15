@@ -52,8 +52,6 @@ const App = () => {
                 <h2>Further Reading</h2>
                 <ul>
                     <li>Few, S. (2010). "Coordinated Highlighting in Context". Perceptual Edge, 12-23. <a href=" https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf</a>.</li><br/>
-                    <li>Rios-Berrios, M., Sharma, P., Lee, T. Y., Schwartz, R., and Shneiderman, B. (2011).                    "TreeCovery: Coordinated dual treemap visualization for exploring the Recovery Act",
-                        Government Information Quarterly 29, 212–222. <a href="https://www.cs.umd.edu/~ben/papers/Rios-Berrios2012TreeCovery.pdf">https://www.cs.umd.edu/~ben/papers/Rios-Berrios2012TreeCovery.pdf</a>.</li><br/>
                 </ul>
             </div>
         </div>
