@@ -26,8 +26,12 @@ TreeMap.draw = ( selection, label, x, y, width, height, values, valuesSelected )
     const margin = Graph.margin;
     Graph.draw( selection, label, x, y, width, height, undefined, false );
     
+    // Merge the values and selected values.
+    let valuesMerged = values.concat();
+    valuesMerged.forEach(( item, i ) => { item[ 2 ] = valuesSelected[ i ][ 1 ]; });
+    
     // Add a root to the data, and filter only the positive values.
-    const data = { name: "root", children: values.filter(( d ) => ( d[ 1 ] >= 0 ))};
+    const data = { name: "root", children: valuesMerged.filter(( d ) => ( d[ 1 ] >= 0 ))};
     
     // Create a treemap layout.
     const treemap = d3.treemap().size([ width * ( 1 - 2 * margin ), height * ( 1 - 2 * margin )]);
@@ -37,12 +41,13 @@ TreeMap.draw = ( selection, label, x, y, width, height, values, valuesSelected )
     treemap( root );
     
     // Add elements for each node.
+    const offset = 1;
     selection.selectAll( ".all" )
         .data( root.descendants())
         .enter()
         .append( "rect" )
-        .attr( "x", d => width * margin + d.x0 )
-        .attr( "y", d => height * margin + d.y0 )
+        .attr( "x", d => width * margin + offset + d.x0 )
+        .attr( "y", d => height * margin + offset + d.y0 )
         .attr( "width", d => d.x1 - d.x0 )
         .attr( "height", d => d.y1 - d.y0 )
         .classed( 'all', true );
@@ -52,10 +57,10 @@ TreeMap.draw = ( selection, label, x, y, width, height, values, valuesSelected )
         .data( root.descendants())
         .enter()
         .append( "rect" )
-        .attr( "x", d => width * margin + d.x0 )
-        .attr( "y", d => height * margin + d.y0 )
+        .attr( "x", d => width * margin + offset + d.x0 )
+        .attr( "y", d => height * margin + offset + d.y0 + ( d.y1 - d.y0 ) * ( d.data[ 1 ] ? 1 - ( d.data[ 2 ] / d.data[ 1 ]) : 0 ))
         .attr( "width", d => d.x1 - d.x0 )
-        .attr( "height", d => d.y1 - d.y0 )
+        .attr( "height", d => ( d.y1 - d.y0 ) * ( d.data[ 1 ] ? ( d.data[ 2 ] / d.data[ 1 ]) : 0 ))
         .classed( 'selected', true );
 };
 
