@@ -6,6 +6,7 @@ import Bar from './Bar';
 import Circle from './Circle';
 import Line from './Line';
 import Points from './Points';
+import TreeMap from './TreeMap';
 import './Matrix.css';
 
 /**
@@ -125,7 +126,7 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
                 Bar.draw( selection, label, x, y, width, height, values, valuesSelected, true );
                 break;
             case 3:
-                // Treemap
+                TreeMap.draw( selection, label, x, y, width, height, values, valuesSelected );
                 break;
             case 4:
                 Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0 );
