@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import Data from './Data';
 import Area from './Area';
 import Bar from './Bar';
+import Box from './Box';
 import Circle from './Circle';
 import Line from './Line';
 import Points from './Points';
@@ -135,26 +136,25 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
                 Area.draw( selection, label, x, y, width, height, values, valuesSelected );
                 break;
             case 6:
-                Points.draw( selection, label, x, y, width, height, values, valuesSelected, false );
+                Line.draw( selection, label, x, y, width, height, values, valuesSelected, false );
                 break;
             case 7:
-                Points.draw( selection, label, x, y, width, height, values, valuesSelected, true );
+                Line.draw( selection, label, x, y, width, height, values, valuesSelected, true );
                 break;
             case 8:
                 Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0.5 );
                 break;
             case 9:
                 // Map
-                // Box
                 break;
             case 10:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, Line.style.SEPARATE );
+                Points.draw( selection, label, x, y, width, height, values, valuesSelected, false );
                 break;
             case 11:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, Line.style.DISCRETE );
+                Points.draw( selection, label, x, y, width, height, values, valuesSelected, true );
                 break;
             case 12:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, Line.style.CONTINUOUS );
+                Box.draw( selection, label, x, y, width, height, values, valuesSelected );
                 break;
             default:
                 break;
