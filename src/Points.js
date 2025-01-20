@@ -35,20 +35,18 @@ Points.draw = ( selection, label, x, y, width, height, values, valuesSelected, i
     Graph.draw( selection, label, x, y, width, height, yScale, false );
     
     // Draw the points.
-    let radius = 3;
     selection.selectAll( ".fillAll" )
         .data( values )
         .enter()
         .append( "circle" )
         .attr( "cx", ( d ) => xScale( d[ 0 ]))
         .attr( "cy", ( d ) => yScale( d[ 1 ]))
-        .attr( "r", radius )
+        .attr( "r", Graph.pointRadius )
         .classed( 'fillAll', true );
     
     // Draw the selected points.
     let selected = valuesSelected;
     if( isColocated ) {
-        radius = 3.5;
         selected = [];
         valuesSelected.forEach(( d, i ) => {
             const a = values[ i ];
@@ -63,7 +61,7 @@ Points.draw = ( selection, label, x, y, width, height, values, valuesSelected, i
         .append( "circle" )
         .attr( "cx", ( d ) => xScale( d[ 0 ]))
         .attr( "cy", ( d ) => yScale( d[ 1 ]))
-        .attr( "r", radius )
+        .attr( "r", Graph.pointRadius )
         .classed( 'fillSelected', true );
 }
 

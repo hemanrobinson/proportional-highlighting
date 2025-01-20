@@ -48,10 +48,24 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
          interQuantileRange = q3 - q1,
          min = Math.max( q1 - 1.5 * interQuantileRange, Box.data[ 0 ]),
          max = Math.min( q1 + 1.5 * interQuantileRange, Box.data[ Box.data.length - 1 ]);
-            
+    
+    // Get the percentage of data selected.
+    const pct = d3.sum( valuesSelected, ( d ) => d[ 1 ]) / d3.sum( values, ( d ) => d[ 1 ]);
+    
+    // TODO: Generate a vector of boolean selected states, based on the percentage of data selected.
+    
+    // Get the outliers.
+    let outliers = [];
+    Box.data.forEach(( d ) => {
+        if(( d < min ) || ( max < d )) {
+            outliers.push( d );
+        }
+    });
+    
     // Draw the box plot.
     const center = width / 2,
-        boxWidth = width / 4;
+        boxWidth = width / 4,
+        serifWidth = width / 8;
     selection
         .append( "line" )   // whiskers
             .attr( "x1", center )
@@ -68,8 +82,8 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
             .classed( 'all', true );
     selection
         .append( "line" )   // min
-            .attr( "x1", center - boxWidth / 4 )
-            .attr( "x2", center + boxWidth / 4 )
+            .attr( "x1", center - serifWidth / 2 )
+            .attr( "x2", center + serifWidth / 2 )
             .attr( "y1", yScale( min ))
             .attr( "y2", yScale( min ))
             .classed( 'all', true );
@@ -82,28 +96,36 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
             .classed( 'all', true );
     selection
         .append( "line" )   // max
-            .attr( "x1", center - boxWidth / 4 )
-            .attr( "x2", center + boxWidth / 4 )
+            .attr( "x1", center - serifWidth / 2 )
+            .attr( "x2", center + serifWidth / 2 )
             .attr( "y1", yScale( max ))
             .attr( "y2", yScale( max ))
             .classed( 'all', true );
-    // TODO: Draw the outliers.
-    
-    // Get the percentage of data selected.
-    const pct = d3.sum( valuesSelected, ( d ) => d[ 1 ]) / d3.sum( values, ( d ) => d[ 1 ]);
+    selection.selectAll( ".fillAll" )
+        .data( outliers )
+        .enter()
+        .append( "circle" )
+        .attr( "cx", center )
+        .attr( "cy", ( d ) => yScale( d ))
+        .attr( "r", Graph.pointRadius )
+        .classed( 'fillAll', true );
             
-    // TODO: Draw the selected rows.
-
-//    selection.selectAll( ".selected" )
-//        .data( valuesSelected )
-//        .enter()
-//        .append( "rect" )
-//        .classed( 'selected', true )
-//        .attr( "x", ( d ) => xScale( d[ 0 ]))
-//        .attr( "y", ( d ) => ( d[ 1 ] >= 0 ) ? yScale( d[ 1 ]) : yScale( 0 ))
-//        .attr( "width", xScale.bandwidth())
-//        .attr( "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0,
-//             ( d[ 1 ] >= 0 ) ? ( yScale( 0 ) - yScale( d[ 1 ])) : ( yScale( d[ 1 ]) - yScale( 0 ))) : 0 ));
+    // Draw the selected box plot.
+    const whiskerWidth = 3;
+    let dataSelected = [[ center - whiskerWidth / 2, q1, whiskerWidth, q1 - pct * ( q1 - min )],
+        [ center - boxWidth / 2, median, boxWidth, median - pct * ( median - q1 )],
+        [ center - boxWidth / 2, median + pct * ( q3 - median ), boxWidth, median ],
+        [ center - whiskerWidth / 2, q3 + pct * ( max - q3 ), whiskerWidth, q3 ]
+    ];
+    selection.selectAll( ".selected" )
+        .data( dataSelected )
+        .enter()
+        .append( "rect" )
+        .classed( 'selected', true )
+        .attr( "x", ( d ) => d[ 0 ])
+        .attr( "y", ( d ) => yScale( d[ 1 ]))
+        .attr( "width", ( d ) => d[ 2 ])
+        .attr( "height", ( d ) => yScale( d[ 3 ]) - yScale( d[ 1 ]));
 };
 
 export default Box;

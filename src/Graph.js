@@ -39,6 +39,11 @@ const Graph = React.forwardRef(( props, ref ) => {
         <svg width={width} height={height}/>
     </div>;
 });
+
+/**
+ * Point radius, in pixels.
+ */
+Graph.pointRadius = 3;
     
 /**
  * Returns normalized rectangle.
