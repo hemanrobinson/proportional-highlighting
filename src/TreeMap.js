@@ -27,8 +27,10 @@ TreeMap.draw = ( selection, label, x, y, width, height, values, valuesSelected )
     Graph.draw( selection, label, x, y, width, height, undefined, false );
     
     // Merge the values and selected values.
-    let valuesMerged = values.concat();
-    valuesMerged.forEach(( item, i ) => { item[ 2 ] = valuesSelected[ i ][ 1 ]; });
+    let valuesMerged = [];
+    values.forEach(( item, i ) => {
+        valuesMerged.push([ values[ i ][ 0 ], values[ i ][ 1 ], valuesSelected[ i ][ 1 ]]);
+    });
     
     // Add a root to the data, and filter only the positive values.
     const data = { name: "root", children: valuesMerged.filter(( d ) => ( d[ 1 ] >= 0 ))};

@@ -9,6 +9,11 @@ const Box = () => {
 };
 
 /**
+ * Normally distributed data, sorted in ascending order.
+ */
+Box.data = [];
+
+/**
  * Draws the graph.
  *
  * @param  {Element} selection      d3 selection
@@ -24,27 +29,25 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     
     // Initialization.
     const margin = Graph.margin,
-        xScale = d3.scaleBand()
-            .domain( values.map( d => d[ 0 ]))
-            .range([ width * margin, width * ( 1 - margin )])
-            .padding( 0.1 ),
+        yMin = d3.min( values, d => d[ 1 ]),
+        yMax = d3.max( values, d => d[ 1 ]),
         yScale = d3.scaleLinear()
-            .domain([ d3.min( values, d => d[ 1 ]), d3.max( values, d => d[ 1 ])])
+            .domain([ yMin, yMax ])
             .range([ height * ( 1 - margin ), height * margin ]);
     Graph.draw( selection, label, x, y, width, height, yScale, false );
     
-    // Get the data.
-    let data = [];
-    values.forEach(( value ) => { data.push( value[ 1 ]); });
+    // Generate normally distributed data to match the specified range.
+    if( Box.data.length <= 0 ) {
+        Box.data = Array.from({ length: 100 }, d3.randomNormal( ( yMin + yMax ) / 2, 5 )).sort( d3.ascending );
+    }
 
     // Compute summary statistics.
-    const data_sorted = data.sort( d3.ascending ),
-         q1 = d3.quantile( data_sorted, .25 ),
-         median = d3.quantile( data_sorted, .5 ),
-         q3 = d3.quantile( data_sorted, .75 ),
+    const q1 = d3.quantile( Box.data, .25 ),
+         median = d3.quantile( Box.data, .5 ),
+         q3 = d3.quantile( Box.data, .75 ),
          interQuantileRange = q3 - q1,
-         min = Math.max( q1 - 1.5 * interQuantileRange, data_sorted[ 0 ]),
-         max = Math.min( q1 + 1.5 * interQuantileRange, data_sorted[ data_sorted.length - 1 ]);
+         min = Math.max( q1 - 1.5 * interQuantileRange, Box.data[ 0 ]),
+         max = Math.min( q1 + 1.5 * interQuantileRange, Box.data[ Box.data.length - 1 ]);
             
     // Draw the box plot.
     const center = width / 2,
@@ -84,7 +87,12 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
             .attr( "y1", yScale( max ))
             .attr( "y2", yScale( max ))
             .classed( 'all', true );
-
+    // TODO: Draw the outliers.
+    
+    // Get the percentage of data selected.
+    const pct = d3.sum( valuesSelected, ( d ) => d[ 1 ]) / d3.sum( values, ( d ) => d[ 1 ]);
+            
+    // TODO: Draw the selected rows.
 
 //    selection.selectAll( ".selected" )
 //        .data( valuesSelected )
