@@ -38,7 +38,7 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     
     // Generate normally distributed data to match the specified range.
     if( Box.data.length <= 0 ) {
-        Box.data = Array.from({ length: 100 }, d3.randomNormal( ( yMin + yMax ) / 2, 5 )).sort( d3.ascending );
+        Box.data = Array.from({ length: 100 }, d3.randomNormal( ( yMin + yMax ) / 2, 6 )).sort( d3.ascending );
     }
 
     // Compute summary statistics.
@@ -68,8 +68,8 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
             .classed( 'all', true );
     selection
         .append( "line" )   // min
-            .attr( "x1", center - boxWidth / 2 )
-            .attr( "x2", center + boxWidth / 2 )
+            .attr( "x1", center - boxWidth / 4 )
+            .attr( "x2", center + boxWidth / 4 )
             .attr( "y1", yScale( min ))
             .attr( "y2", yScale( min ))
             .classed( 'all', true );
@@ -82,8 +82,8 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
             .classed( 'all', true );
     selection
         .append( "line" )   // max
-            .attr( "x1", center - boxWidth / 2 )
-            .attr( "x2", center + boxWidth / 2 )
+            .attr( "x1", center - boxWidth / 4 )
+            .attr( "x2", center + boxWidth / 4 )
             .attr( "y1", yScale( max ))
             .attr( "y2", yScale( max ))
             .classed( 'all', true );
