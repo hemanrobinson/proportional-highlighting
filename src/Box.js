@@ -37,8 +37,9 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     Graph.draw( selection, label, x, y, width, height, yScale, false );
     
     // Generate normally distributed data to match the specified range.
+    const n = 100;
     if( Box.data.length <= 0 ) {
-        Box.data = Array.from({ length: 100 }, d3.randomNormal( ( yMin + yMax ) / 2, 6 )).sort( d3.ascending );
+        Box.data = Array.from({ length: n }, d3.randomNormal( ( yMin + yMax ) / 2, 6 )).sort( d3.ascending );
     }
 
     // Compute summary statistics.
@@ -49,18 +50,26 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
          min = Math.max( q1 - 1.5 * interQuantileRange, Box.data[ 0 ]),
          max = Math.min( q1 + 1.5 * interQuantileRange, Box.data[ Box.data.length - 1 ]);
     
-    // Get the percentage of data selected.
-    const pct = d3.sum( valuesSelected, ( d ) => d[ 1 ]) / d3.sum( values, ( d ) => d[ 1 ]);
+    // TODO: Adjust min and max; they don't look correct.
     
-    // TODO: Generate a vector of boolean selected states, based on the percentage of data selected.
+    // Generate selected states to match the specified percentage selected.
+    const pct = d3.sum( valuesSelected, ( d ) => d[ 1 ]) / d3.sum( values, ( d ) => d[ 1 ]),
+        f = Math.round( 1 / (( 0 < pct ) && ( pct < 0.5 ) ? pct : ( 1 - pct )));
+    let selected = [];
+    for( let i = 0; ( i < n ); i++ ) {
+        selected[ i ] = ( 0 < pct ) && ( pct < 0.5 ) ? ( i % f === 0 ) : ( pct < 1 ) ? ( i % f !== 0 ) : true;
+    };
     
-    // Get the outliers.
+    // TODO: Calculate percentages selected in each box and whisker, based on selected state.
+    
+    // Get the outliers and the selected outliers.
     let outliers = [];
-    Box.data.forEach(( d ) => {
+    Box.data.forEach(( d, i ) => {
         if(( d < min ) || ( max < d )) {
-            outliers.push( d );
+            outliers.push([ d, selected[ i ]]);
         }
     });
+    let outliersSelected = outliers.filter(( d ) => d[ 1 ]);
     
     // Draw the box plot.
     const center = width / 2,
@@ -106,7 +115,7 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
         .enter()
         .append( "circle" )
         .attr( "cx", center )
-        .attr( "cy", ( d ) => yScale( d ))
+        .attr( "cy", ( d ) => yScale( d[ 0 ]))
         .attr( "r", Graph.pointRadius )
         .classed( 'fillAll', true );
             
@@ -126,6 +135,14 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
         .attr( "y", ( d ) => yScale( d[ 1 ]))
         .attr( "width", ( d ) => d[ 2 ])
         .attr( "height", ( d ) => yScale( d[ 3 ]) - yScale( d[ 1 ]));
+    selection.selectAll( ".fillSelected" )
+        .data( outliersSelected )
+        .enter()
+        .append( "circle" )
+        .attr( "cx", center )
+        .attr( "cy", ( d ) => yScale( d[ 0 ]))
+        .attr( "r", Graph.pointRadius )
+        .classed( 'fillSelected', true );
 };
 
 export default Box;
