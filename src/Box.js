@@ -46,11 +46,19 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     const q1 = d3.quantile( Box.data, .25 ),
          median = d3.quantile( Box.data, .5 ),
          q3 = d3.quantile( Box.data, .75 ),
-         interQuantileRange = q3 - q1,
-         min = Math.max( q1 - 1.5 * interQuantileRange, Box.data[ 0 ]),
-         max = Math.min( q1 + 1.5 * interQuantileRange, Box.data[ Box.data.length - 1 ]);
-    
-    // TODO: Adjust min and max; they don't look correct.
+         interQuantileRange = q3 - q1;
+    let min = q1 - 1.5 * interQuantileRange,
+        max = q3 + 1.5 * interQuantileRange;
+    let i = 0;
+    if( min > Box.data[ 0 ]) {
+        i = Box.data.findIndex(( item ) => ( min < item )) + 1;
+    }
+    min = Box.data[ i ];
+    i = n - 1;
+    if( max < Box.data[ n - 1 ]) {
+        i = Box.data.findLastIndex(( item ) => ( max > item )) - 1;
+    }
+    max = Box.data[ i ];
     
     // Generate selected states to match the specified percentage selected.
     const pct = d3.sum( valuesSelected, ( d ) => d[ 1 ]) / d3.sum( values, ( d ) => d[ 1 ]),
@@ -60,7 +68,24 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
         selected[ i ] = ( 0 < pct ) && ( pct < 0.5 ) ? ( i % f === 0 ) : ( pct < 1 ) ? ( i % f !== 0 ) : true;
     };
     
-    // TODO: Calculate percentages selected in each box and whisker, based on selected state.
+    // Calculate percentages selected in each box and whisker, based on selected state.
+    // TODO: For accuracy in degenerate cases, check for repeated exactly matching quantile values, and put half on each side.
+    let pctCalculation = (( i, n, stopValue ) => {
+        let i0 = i, i1 = i, k = 0;
+        while(( i1 < n ) && ( Box.data[ i1 ] < stopValue )) {
+            if( selected[ i1 ]) {
+                k++;
+            }
+            i1++;
+        }
+        return [ i1, k / ( i1 - i0 )];
+    });
+    let p0, p1, p2, p3;
+    [ i, p0 ] = pctCalculation( 0, n, min );
+    [ i, p0 ] = pctCalculation( i, n, q1 );
+    [ i, p1 ] = pctCalculation( i, n, median );
+    [ i, p2 ] = pctCalculation( i, n, q3 );
+    [ i, p3 ] = pctCalculation( i, n, max );
     
     // Get the outliers and the selected outliers.
     let outliers = [];
@@ -121,10 +146,10 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
             
     // Draw the selected box plot.
     const whiskerWidth = 3;
-    let dataSelected = [[ center - whiskerWidth / 2, q1, whiskerWidth, q1 - pct * ( q1 - min )],
-        [ center - boxWidth / 2, median, boxWidth, median - pct * ( median - q1 )],
-        [ center - boxWidth / 2, median + pct * ( q3 - median ), boxWidth, median ],
-        [ center - whiskerWidth / 2, q3 + pct * ( max - q3 ), whiskerWidth, q3 ]
+    let dataSelected = [[ center - whiskerWidth / 2, q1, whiskerWidth, q1 - p0 * ( q1 - min )],
+        [ center - boxWidth / 2, median, boxWidth, median - p1 * ( median - q1 )],
+        [ center - boxWidth / 2, median + p2 * ( q3 - median ), boxWidth, median ],
+        [ center - whiskerWidth / 2, q3 + p3 * ( max - q3 ), whiskerWidth, q3 ]
     ];
     selection.selectAll( ".selected" )
         .data( dataSelected )
