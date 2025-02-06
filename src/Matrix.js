@@ -6,6 +6,7 @@ import Bar from './Bar';
 import Box from './Box';
 import Circle from './Circle';
 import Line from './Line';
+import Map from './Map';
 import Points from './Points';
 import TreeMap from './TreeMap';
 import './Matrix.css';
@@ -145,7 +146,7 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
                 Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0.5 );
                 break;
             case 9:
-                // Map
+                Map.draw( selection, label, x, y, width, height, values, valuesSelected );
                 break;
             case 10:
                 Points.draw( selection, label, x, y, width, height, values, valuesSelected, false );
