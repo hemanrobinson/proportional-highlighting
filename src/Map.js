@@ -81,6 +81,13 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     });
     
     // Get the proportional USA latitude.
+    let sum = 0, sumSelected = 0;
+    const n = values.length;
+    for( let i = 0; ( i < n ); i++ ) {
+        sum += Math.abs( values[ i ][ 1 ]);
+        sumSelected += Math.abs( valuesSelected[ i ][ 1 ]);
+    }
+    const latProp = latMin + ( latMax - latMin ) * ( sumSelected / sum );
     
     // Create the proportional USA map.
 
