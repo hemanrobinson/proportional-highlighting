@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/proportional-highlighting/static/css/main.c10cd0f8.css",
-    "main.js": "/proportional-highlighting/static/js/main.9e06138c.js",
+    "main.js": "/proportional-highlighting/static/js/main.e8d38b8e.js",
     "static/media/few.jpg": "/proportional-highlighting/static/media/few.ec2ad1ace48286af1ce3.jpg",
     "index.html": "/proportional-highlighting/index.html",
     "static/media/github.svg": "/proportional-highlighting/static/media/github.6fa18895f6e6c7772cab7049f7e05f59.svg",
     "main.c10cd0f8.css.map": "/proportional-highlighting/static/css/main.c10cd0f8.css.map",
-    "main.9e06138c.js.map": "/proportional-highlighting/static/js/main.9e06138c.js.map"
+    "main.e8d38b8e.js.map": "/proportional-highlighting/static/js/main.e8d38b8e.js.map"
   },
   "entrypoints": [
     "static/css/main.c10cd0f8.css",
-    "static/js/main.9e06138c.js"
+    "static/js/main.e8d38b8e.js"
   ]
 }
