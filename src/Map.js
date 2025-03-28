@@ -47,7 +47,7 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
         {"type":"Feature","properties":{"name":"Puerto Rico"},"geometry":{"type":"Polygon","coordinates":[[[-66.282434,18.514762],[-65.771303,18.426679],[-65.591004,18.228035],[-65.847164,17.975906],[-66.599934,17.981823],[-67.184162,17.946553],[-67.242428,18.37446],[-67.100679,18.520601],[-66.282434,18.514762]]]},"id":"PRI"},
         {"type":"Feature","properties":{"name":"El Salvador"},"geometry":{"type":"Polygon","coordinates":[[[-87.793111,13.38448],[-87.904112,13.149017],[-88.483302,13.163951],[-88.843228,13.259734],[-89.256743,13.458533],[-89.812394,13.520622],[-90.095555,13.735338],[-90.064678,13.88197],[-89.721934,14.134228],[-89.534219,14.244816],[-89.587343,14.362586],[-89.353326,14.424133],[-89.058512,14.340029],[-88.843073,14.140507],[-88.541231,13.980155],[-88.503998,13.845486],[-88.065343,13.964626],[-87.859515,13.893312],[-87.723503,13.78505],[-87.793111,13.38448]]]},"id":"SLV"},
         {"type":"Feature","properties":{"name":"Trinidad and Tobago"},"geometry":{"type":"Polygon","coordinates":[[[-61.68,10.76],[-61.105,10.89],[-60.895,10.855],[-60.935,10.11],[-61.77,10],[-61.95,10.09],[-61.66,10.365],[-61.68,10.76]]]},"id":"TTO"},
-        dataUSA.features
+        dataUSA.features[ 0 ]
     ]};
     
     // Define the projection.
@@ -66,36 +66,50 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
                 .projection( projection )
             )
     
-    // Get the minimum and maximum USA latitudes.
-    let latMin = 90, latMax = -90;
+    // Get the minimum and maximum latitudes for each polygon.
     const coordinates = dataUSA.features[ 0 ].geometry.coordinates;
-    coordinates.forEach( array => {
+    let latMin = [], latMax = [];
+    coordinates.forEach(( array, i ) => {
+        latMin[ i ] = 90;
+        latMax[ i ] = -90;
         array[ 0 ].forEach( item => {
-            if( latMin > item[ 1 ]) {
-                latMin = item[ 1 ];
+            if( latMin[ i ] > item[ 1 ]) {
+                latMin[ i ] = item[ 1 ];
             }
-            if( latMax < item[ 1 ]) {
-                latMax = item[ 1 ];
+            if( latMax[ i ] < item[ 1 ]) {
+                latMax[ i ] = item[ 1 ];
             }
         });
     });
     
-    // Get the proportional USA latitude.
+    // Get the minimum and maximum latitudes for the USA.
+    const latMinUSA = Math.min( ...latMin ), latMaxUSA = Math.max( ...latMax );
+    
+    // Get the proportional latitude for the USA.
     let sum = 0, sumSelected = 0;
-    const n = values.length;
-    for( let i = 0; ( i < n ); i++ ) {
-        sum += Math.abs( values[ i ][ 1 ]);
+    values.forEach(( item, i ) => {
+        sum += Math.abs( item[ 1 ]);
         sumSelected += Math.abs( valuesSelected[ i ][ 1 ]);
-    }
-    const latProp = latMin + ( latMax - latMin ) * ( sumSelected / sum );
+    });
+    const latPropUSA = latMinUSA + ( latMaxUSA - latMinUSA ) * ( sumSelected / sum );
     
     // Create the proportional USA map.
+    let coordinatesSelected = [];
+    coordinates.forEach(( array, i ) => {
+        if( latMin[ i ] <= latPropUSA ) {
+            coordinatesSelected.push( coordinates[ i ]);
+        } else if( latMax[ i ] < latPropUSA ) {
+            // TODO
+        }
+    });
+    let dataUSASelected = { "type":"FeatureCollection", "features": [
+        { "type":"Feature", "properties": { "name": "USA" }, "geometry": { "type":"MultiPolygon", "coordinates": coordinatesSelected }}]};
 
     // Draw the selected map.
 //    selection.selectAll( ".selected" )
     selection.append( "g" )
         .selectAll( "path" )
-        .data( dataUSA.features )
+        .data( dataUSASelected.features )
         .enter().append( "path" )
             .classed( 'selected', true )
             .attr( "d", d3.geoPath()
