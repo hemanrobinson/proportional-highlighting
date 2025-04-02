@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { geoClipPolygon } from 'd3-geo-polygon';
 import Graph from './Graph';
 import './Graph.css';
 import './Graph.css';
@@ -68,22 +69,33 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     
     // Get the minimum and maximum latitudes for each polygon.
     const coordinates = dataUSA.features[ 0 ].geometry.coordinates;
-    let latMin = [], latMax = [];
-    coordinates.forEach(( array, i ) => {
+    let lonMin = [], lonMax = [], latMin = [], latMax = [];
+    coordinates.forEach(( polygon, i ) => {
+        lonMin[ i ] = 180;
+        lonMax[ i ] = -180;
         latMin[ i ] = 90;
         latMax[ i ] = -90;
-        array[ 0 ].forEach( item => {
-            if( latMin[ i ] > item[ 1 ]) {
-                latMin[ i ] = item[ 1 ];
+        polygon[ 0 ].forEach( point => {
+            if( lonMin[ i ] > point[ 0 ]) {
+                lonMin[ i ] = point[ 0 ];
             }
-            if( latMax[ i ] < item[ 1 ]) {
-                latMax[ i ] = item[ 1 ];
+            if( lonMax[ i ] < point[ 0 ]) {
+                lonMax[ i ] = point[ 0 ];
+            }
+            if( latMin[ i ] > point[ 1 ]) {
+                latMin[ i ] = point[ 1 ];
+            }
+            if( latMax[ i ] < point[ 1 ]) {
+                latMax[ i ] = point[ 1 ];
             }
         });
     });
     
     // Get the minimum and maximum latitudes for the USA.
-    const latMinUSA = Math.min( ...latMin ), latMaxUSA = Math.max( ...latMax );
+    const lonMinUSA = Math.min( ...lonMin ),
+        lonMaxUSA = Math.max( ...lonMax ),
+        latMinUSA = Math.min( ...latMin ),
+        latMaxUSA = Math.max( ...latMax );
     
     // Get the proportional latitude for the USA.
     let sum = 0, sumSelected = 0;
@@ -93,27 +105,35 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     });
     const latPropUSA = latMinUSA + ( latMaxUSA - latMinUSA ) * ( sumSelected / sum );
     
-    // Create the proportional USA map.
-    let coordinatesSelected = [];
-    coordinates.forEach(( array, i ) => {
-        if( latMin[ i ] <= latPropUSA ) {
-            coordinatesSelected.push( coordinates[ i ]);
-        } else if( latMax[ i ] < latPropUSA ) {
-            // TODO
-        }
+    // Define the selected projection.
+    const n = 10; // precision
+    const w = lonMaxUSA - lonMinUSA;
+    const h = latMinUSA - latPropUSA;
+    var projectionSelected = d3.geoNaturalEarth1()
+        .scale( 120 )
+        .translate([ 265, 190 ]);
+    let clipCoordinates = [
+        ...Array.from({ length: n }, ( _, t ) => [ lonMaxUSA - w * t / n, latMaxUSA ]),
+        ...Array.from({ length: n }, ( _, t ) => [ lonMinUSA, latPropUSA + h * t / n ]),
+        ...Array.from({ length: n }, ( _, t ) => [ lonMaxUSA - w * ( n - t ) / n, latPropUSA ]),
+        ...Array.from({ length: n }, ( _, t ) => [ lonMaxUSA, latPropUSA + h * ( n - t ) / n ]),
+        [ lonMaxUSA, latPropUSA ]
+    ];
+    const clipPolygon = geoClipPolygon({
+        type: "Polygon",
+        coordinates: [ clipCoordinates.map( d3.geoRotation( projectionSelected.rotate()))]
     });
-    let dataUSASelected = { "type":"FeatureCollection", "features": [
-        { "type":"Feature", "properties": { "name": "USA" }, "geometry": { "type":"MultiPolygon", "coordinates": coordinatesSelected }}]};
-
+    projectionSelected.preclip( clipPolygon );
+    
     // Draw the selected map.
 //    selection.selectAll( ".selected" )
     selection.append( "g" )
         .selectAll( "path" )
-        .data( dataUSASelected.features )
+        .data( dataUSA.features )
         .enter().append( "path" )
             .classed( 'selected', true )
             .attr( "d", d3.geoPath()
-                .projection( projection )
+                .projection( projectionSelected )
             )
 };
 
