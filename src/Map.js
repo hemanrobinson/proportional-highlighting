@@ -66,36 +66,27 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
             .attr( "d", d3.geoPath()
                 .projection( projection )
             )
-    
-    // Get the minimum and maximum latitudes for each polygon.
+            
+    // Get the minimum and maximum latitudes and longitudes for the USA polygons.
     const coordinates = dataUSA.features[ 0 ].geometry.coordinates;
-    let lonMin = [], lonMax = [], latMin = [], latMax = [];
-    coordinates.forEach(( polygon, i ) => {
-        lonMin[ i ] = 180;
-        lonMax[ i ] = -180;
-        latMin[ i ] = 90;
-        latMax[ i ] = -90;
+    let lonMinUSA = 180, lonMaxUSA = -180, latMinUSA = 90, latMaxUSA = -90;
+    coordinates.forEach(polygon => {
         polygon[ 0 ].forEach( point => {
-            if( lonMin[ i ] > point[ 0 ]) {
-                lonMin[ i ] = point[ 0 ];
+            const point0 = point[ 0 ], point1 = point[ 1 ];
+            if( lonMinUSA > point0 ) {
+                lonMinUSA = point0;
             }
-            if( lonMax[ i ] < point[ 0 ]) {
-                lonMax[ i ] = point[ 0 ];
+            if( lonMaxUSA < point0 ) {
+                lonMaxUSA = point0;
             }
-            if( latMin[ i ] > point[ 1 ]) {
-                latMin[ i ] = point[ 1 ];
+            if( latMinUSA > point1 ) {
+                latMinUSA = point1;
             }
-            if( latMax[ i ] < point[ 1 ]) {
-                latMax[ i ] = point[ 1 ];
+            if( latMaxUSA < point1 ) {
+                latMaxUSA = point1;
             }
         });
     });
-    
-    // Get the minimum and maximum latitudes for the USA.
-    const lonMinUSA = Math.min( ...lonMin ),
-        lonMaxUSA = Math.max( ...lonMax ),
-        latMinUSA = Math.min( ...latMin ),
-        latMaxUSA = Math.max( ...latMax );
     
     // Get the proportional latitude for the USA.
     let sum = 0, sumSelected = 0;
