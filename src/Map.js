@@ -57,33 +57,30 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
         .translate([ 265, 190 ])
 
     // Draw the map.
-//    selection.selectAll( ".all" )
-    selection.append( "g" )
-        .selectAll( "path" )
+    selection.selectAll( ".all" )
         .data( data.features )
-        .enter().append( "path" )
-            .classed( 'all', true )
-            .attr( "d", d3.geoPath()
-                .projection( projection )
-            )
+        .enter()
+        .append( "path" )
+        .classed( 'all', true )
+        .attr( "d", d3.geoPath()
+            .projection( projection )
+        )
             
-    // Get the minimum and maximum latitudes and longitudes for the USA polygons.
-    const coordinates = dataUSA.features[ 0 ].geometry.coordinates;
+    // Get the minimum and maximum longitudes and latitudes for the USA.
     let lonMinUSA = 180, lonMaxUSA = -180, latMinUSA = 90, latMaxUSA = -90;
-    coordinates.forEach(polygon => {
+    dataUSA.features[ 0 ].geometry.coordinates.forEach( polygon => {
         polygon[ 0 ].forEach( point => {
-            const point0 = point[ 0 ], point1 = point[ 1 ];
-            if( lonMinUSA > point0 ) {
-                lonMinUSA = point0;
+            if( lonMinUSA > point[ 0 ]) {
+                lonMinUSA = point[ 0 ];
             }
-            if( lonMaxUSA < point0 ) {
-                lonMaxUSA = point0;
+            if( lonMaxUSA < point[ 0 ]) {
+                lonMaxUSA = point[ 0 ];
             }
-            if( latMinUSA > point1 ) {
-                latMinUSA = point1;
+            if( latMinUSA > point[ 1 ]) {
+                latMinUSA = point[ 1 ];
             }
-            if( latMaxUSA < point1 ) {
-                latMaxUSA = point1;
+            if( latMaxUSA < point[ 1 ]) {
+                latMaxUSA = point[ 1 ];
             }
         });
     });
@@ -100,7 +97,7 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     const n = 10; // precision
     const w = lonMaxUSA - lonMinUSA;
     const h = latMinUSA - latPropUSA;
-    var projectionSelected = d3.geoNaturalEarth1()
+    const projectionSelected = d3.geoNaturalEarth1()
         .scale( 120 )
         .translate([ 265, 190 ]);
     let clipCoordinates = [
@@ -117,15 +114,14 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     projectionSelected.preclip( clipPolygon );
     
     // Draw the selected map.
-//    selection.selectAll( ".selected" )
-    selection.append( "g" )
-        .selectAll( "path" )
+    selection.selectAll( ".selected" )
         .data( dataUSA.features )
-        .enter().append( "path" )
-            .classed( 'selected', true )
-            .attr( "d", d3.geoPath()
-                .projection( projectionSelected )
-            )
+        .enter()
+        .append( "path" )
+        .classed( 'selected', true )
+        .attr( "d", d3.geoPath()
+            .projection( projectionSelected )
+        )
 };
 
 export default Map;
