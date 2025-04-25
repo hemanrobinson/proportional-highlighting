@@ -67,15 +67,10 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
         )
             
     // Get the minimum and maximum longitudes and latitudes for the USA.
-    let lonMinUSA = 180, lonMaxUSA = -180, latMinUSA = 90, latMaxUSA = -90;
+    let lonMinUSA = -180, lonMaxUSA = 0,
+        latMinUSA = 90, latMaxUSA = -90;
     dataUSA.features[ 0 ].geometry.coordinates.forEach( polygon => {
         polygon[ 0 ].forEach( point => {
-            if( lonMinUSA > point[ 0 ]) {
-                lonMinUSA = point[ 0 ];
-            }
-            if( lonMaxUSA < point[ 0 ]) {
-                lonMaxUSA = point[ 0 ];
-            }
             if( latMinUSA > point[ 1 ]) {
                 latMinUSA = point[ 1 ];
             }
