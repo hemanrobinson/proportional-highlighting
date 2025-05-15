@@ -13,8 +13,9 @@ svg {
     fill: #99bbdd;
 }
 .selected {
-    stroke: #99bbdd;
+    stroke: #6688bb;
     fill: #6688bb;
+    stroke-width: 2px;
 }
 .strokeAll {
     stroke: #99bbdd;
@@ -23,11 +24,7 @@ svg {
 .strokeSelected {
     stroke: #6688bb;
     fill: none;
-}
-.strokeSelectedThick {
-    stroke: #6688bb;
-    stroke-width: 3px;
-    fill: none;
+    stroke-width: 2px;
 }
 .fillAll {
     stroke: #99bbdd;

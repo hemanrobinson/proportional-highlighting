@@ -101,7 +101,7 @@ Line.draw = ( selection, label, x, y, width, height, values, valuesSelected, isC
                     .x(( d ) => xScale( d[ 0 ]))
                     .y(( d ) => yScale( d[ 1 ]))
                 )
-                .classed( 'strokeSelectedThick', true );
+                .classed( 'strokeSelected', true );
         });
     }
 }
