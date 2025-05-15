@@ -51,10 +51,13 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
         dataUSA.features[ 0 ]
     ]};
     
-    // Define the projection.
-    var projection = d3.geoNaturalEarth1()
-        .scale( 120 )
-        .translate([ 265, 190 ])
+    // Define the projections.
+    const projection = d3.geoNaturalEarth1()
+        .scale( 105 )
+        .translate([ 257, 180 ]);
+    const projectionSelected = d3.geoNaturalEarth1()
+        .scale( 105 )
+        .translate([ 257, 180 ]);
 
     // Draw the map.
     selection.selectAll( ".all" )
@@ -92,9 +95,6 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     const n = 10; // precision
     const w = lonMaxUSA - lonMinUSA;
     const h = latMinUSA - latPropUSA;
-    const projectionSelected = d3.geoNaturalEarth1()
-        .scale( 120 )
-        .translate([ 265, 190 ]);
     let clipCoordinates = [
         ...Array.from({ length: n }, ( _, t ) => [ lonMaxUSA - w * t / n, latMaxUSA ]),
         ...Array.from({ length: n }, ( _, t ) => [ lonMinUSA, latPropUSA + h * t / n ]),

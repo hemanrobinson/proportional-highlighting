@@ -131,31 +131,31 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
                 TreeMap.draw( selection, label, x, y, width, height, values, valuesSelected );
                 break;
             case 4:
-                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0 );
+                Box.draw( selection, label, x, y, width, height, values, valuesSelected );
                 break;
             case 5:
-                Area.draw( selection, label, x, y, width, height, values, valuesSelected );
+                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0 );
                 break;
             case 6:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, false );
-                break;
-            case 7:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, true );
-                break;
-            case 8:
                 Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0.5 );
                 break;
-            case 9:
+            case 7:
+                Area.draw( selection, label, x, y, width, height, values, valuesSelected );
+                break;
+            case 8:
                 Map.draw( selection, label, x, y, width, height, values, valuesSelected );
                 break;
+            case 9:
+                Line.draw( selection, label, x, y, width, height, values, valuesSelected, false );
+                break;
             case 10:
-                Points.draw( selection, label, x, y, width, height, values, valuesSelected, false );
+                Line.draw( selection, label, x, y, width, height, values, valuesSelected, true );
                 break;
             case 11:
-                Points.draw( selection, label, x, y, width, height, values, valuesSelected, true );
+                Points.draw( selection, label, x, y, width, height, values, valuesSelected, false );
                 break;
             case 12:
-                Box.draw( selection, label, x, y, width, height, values, valuesSelected );
+                Points.draw( selection, label, x, y, width, height, values, valuesSelected, true );
                 break;
             default:
                 break;
