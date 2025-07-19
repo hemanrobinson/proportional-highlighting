@@ -109,11 +109,11 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     projectionSelected.preclip( clipPolygon );
     
     // Draw the selected map.
-    selection.selectAll( ".selected" )
+    selection.selectAll( ".fillSelected" )
         .data( dataUSA.features )
         .enter()
         .append( "path" )
-        .classed( 'selected', true )
+        .classed( 'fillSelected', true )
         .attr( "d", d3.geoPath()
             .projection( projectionSelected )
         )
