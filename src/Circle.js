@@ -31,9 +31,7 @@ Circle.draw = ( selection, label, x, y, width, height, values, valuesSelected, r
     Graph.draw( selection, label, x, y, width, height, undefined, false );
     const x0 = Math.floor( width / 2 ) + 0.5,
         y0 = Math.floor( height / 2 ) + 0.5,
-        pie = d3.pie().sort( null );
-        // Default start angle is at 12 o'clock, and positive angles proceed clockwise.
-//        .startAngle( Math.PI / 2 ).endAngle( Math.PI / 2 + 2 * Math.PI );
+        pie = d3.pie().sort( null );    // Default start angle is at 12 o'clock, and positive angles proceed clockwise.
 
     // Get the absolute values.
 //    const absValues = values.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]),
@@ -58,8 +56,8 @@ Circle.draw = ( selection, label, x, y, width, height, values, valuesSelected, r
             .enter()
             .append( 'path' )
             .attr( "transform", "translate( " + x0 + "," + y0 + " )")
-            .classed( "all", ( d, i ) => i % 2 === 0 )
-            .classed( "selected", ( d, i ) => i % 2 === 1 )
+            .classed( "all", ( d, i ) => i % 2 === 1 )
+            .classed( "selected", ( d, i ) => i % 2 === 0 )
             .attr( 'd', d3.arc()
                 .innerRadius( innerRadius )
                 .outerRadius( outerRadius )
