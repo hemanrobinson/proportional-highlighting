@@ -13,9 +13,8 @@ svg {
     fill: #99bbdd;
 }
 .selected {
-    stroke: #6688bb;
+    stroke: #99bbdd;
     fill: #6688bb;
-    stroke-width: 2px;
 }
 .strokeAll {
     stroke: #99bbdd;

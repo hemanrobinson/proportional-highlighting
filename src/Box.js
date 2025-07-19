@@ -145,17 +145,18 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
         .classed( 'fillAll', true );
             
     // Draw the selected box plot.
-    const whiskerWidth = 3;
-    let dataSelected = [[ center - whiskerWidth / 2, q1, whiskerWidth, q1 - p0 * ( q1 - min )],
-        [ center - boxWidth / 2, median, boxWidth, median - p1 * ( median - q1 )],
+    const whiskerWidth = 1;
+    let dataSelected = [[ center - boxWidth / 2, median, boxWidth, median - p1 * ( median - q1 )],
         [ center - boxWidth / 2, median + p2 * ( q3 - median ), boxWidth, median ],
+        [ center - whiskerWidth / 2, q1, whiskerWidth, q1 - p0 * ( q1 - min )],
         [ center - whiskerWidth / 2, q3 + p3 * ( max - q3 ), whiskerWidth, q3 ]
     ];
     selection.selectAll( ".selected" )
         .data( dataSelected )
         .enter()
         .append( "rect" )
-        .classed( 'selected', true )
+        .classed( "selected", ( d, i ) => i <= 1 )
+        .classed( "strokeSelected", ( d, i ) => i > 1 )
         .attr( "x", ( d ) => d[ 0 ])
         .attr( "y", ( d ) => yScale( d[ 1 ]))
         .attr( "width", ( d ) => d[ 2 ])
