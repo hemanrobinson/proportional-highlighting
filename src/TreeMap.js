@@ -25,6 +25,10 @@ TreeMap.draw = ( selection, label, x, y, width, height, values, valuesSelected )
     // Initialization.
     const margin = Graph.margin;
     Graph.draw( selection, label, x, y, width, height, undefined, false );
+
+    // Get the absolute values.
+//    const absValues = values.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]),
+//        absValuesSelected = valuesSelected.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]);
     
     // Merge the values and selected values.
     let valuesMerged = [];

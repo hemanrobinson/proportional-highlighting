@@ -7,5 +7,5 @@ it( "creates a TreeMap element", () => {
 });
 
 it( "draws the treemap", () => {
-    TreeMap.draw( d3.selection(), "", 0, 0, 400, 400, [ 0, 1 ], [ 0, 1 ]);
+    TreeMap.draw( d3.selection(), "", 0, 0, 400, 400, [], []);
 });

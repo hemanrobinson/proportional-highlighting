@@ -42,8 +42,16 @@ Data.selectPercentage = ( percentage ) => {
     // Select the approximate percentage of rows in each group.
     Data.selectedRowIndices = [];
     for( let i = 0; ( i < firstIndices.length ); i++ ) {
-        let n = firstIndices[ i + 1 ] - firstIndices[ i ];
-        for( let j = 0; ( j < Math.floor( n * percentage )); j++ ) {
+    
+        // Vary the percentage.
+        let variedPercentage = percentage;
+        const k = 0.1;
+        if(( k < percentage ) && ( percentage < 1 - k )) {
+            variedPercentage = Math.max( 0, Math.min( 1, percentage * (( i % 2 > 0 ) ? 1 - k : 1 + k )));
+        }
+        
+        // Select the row indices.
+        for( let j = 0; ( j < Math.floor( variedPercentage * ( firstIndices[ i + 1 ] - firstIndices[ i ]))); j++ ) {
             Data.selectedRowIndices.push( firstIndices[ i ] + j );
         }
     }

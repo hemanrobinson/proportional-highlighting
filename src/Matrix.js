@@ -43,7 +43,7 @@ const Matrix = ( props ) => {
         width = 200,
         height = 200,
         nColumns = 4,
-        nRows = 3,
+        nRows = 4,
         totalWidth = nColumns * width,
         totalHeight = nRows * height;
     
@@ -117,7 +117,9 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
             k = 1 + i + nColumns * j,
             svg = d3.select( ref.current.childNodes[ 1 ]),
             selection = d3.select( svg.node().firstChild.childNodes[ k - 1 ]),
-            label = "" + k;
+            label = "" + k,
+            value = [[ 'Total', values.reduce(( v, d ) => v + d[ 1 ], 0 )]],
+            valueSelected = [[ 'Total', valuesSelected.reduce(( v, d ) => v + d[ 1 ], 0 )]];
         
         // Draw the graph.
         switch( k ) {
@@ -134,27 +136,39 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
                 Box.draw( selection, label, x, y, width, height, values, valuesSelected );
                 break;
             case 5:
-                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0 );
+                Circle.draw( selection, label, x, y, width, height, value, valueSelected, 0 );
                 break;
             case 6:
-                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0.5 );
+                Circle.draw( selection, label, x, y, width, height, value, valueSelected, 0, true );
                 break;
             case 7:
-                Area.draw( selection, label, x, y, width, height, values, valuesSelected );
+                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0 );
                 break;
             case 8:
-                Map.draw( selection, label, x, y, width, height, values, valuesSelected );
+                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0, true );
                 break;
             case 9:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, false );
+                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0.5 );
                 break;
             case 10:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, true );
+                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0.5, true );
                 break;
             case 11:
-                Points.draw( selection, label, x, y, width, height, values, valuesSelected, false );
+                Area.draw( selection, label, x, y, width, height, values, valuesSelected );
                 break;
             case 12:
+                Map.draw( selection, label, x, y, width, height, values, valuesSelected );
+                break;
+            case 13:
+                Line.draw( selection, label, x, y, width, height, values, valuesSelected, false );
+                break;
+            case 14:
+                Line.draw( selection, label, x, y, width, height, values, valuesSelected, true );
+                break;
+            case 15:
+                Points.draw( selection, label, x, y, width, height, values, valuesSelected, false );
+                break;
+            case 16:
                 Points.draw( selection, label, x, y, width, height, values, valuesSelected, true );
                 break;
             default:
