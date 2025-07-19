@@ -45,11 +45,11 @@ Bar.draw = ( selection, label, x, y, width, height, values, valuesSelected, isHo
         .attr( isHorz ? "height" : "width", xScale.bandwidth())
         .attr( isHorz ? "width" : "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0,
              ( isHorz ? ( d[ 1 ] <= 0 ) : ( d[ 1 ] >= 0 )) ? ( yScale( 0 ) - yScale( d[ 1 ])) : ( yScale( d[ 1 ]) - yScale( 0 ))) : 0 ));
-    selection.selectAll( ".selected" )
+    selection.selectAll( ".fillSelected" )
         .data( valuesSelected )
         .enter()
         .append( "rect" )
-        .classed( 'selected', true )
+        .classed( 'fillSelected', true )
         .attr( isHorz ? "y" : "x", ( d ) => xScale( d[ 0 ]))
         .attr( isHorz ? "x" : "y", ( d ) => ( isHorz ? ( d[ 1 ] <= 0 ) : ( d[ 1 ] >= 0 )) ? yScale( d[ 1 ]) : yScale( 0 ))
         .attr( isHorz ? "height" : "width", xScale.bandwidth())

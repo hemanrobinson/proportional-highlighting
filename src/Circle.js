@@ -26,7 +26,7 @@ Circle.draw = ( selection, label, x, y, width, height, values, valuesSelected, r
     
     // Initialization.
     const margin = Graph.margin,
-        outerRadius = Math.min( width, height ) * ( 1 - 2 * margin ) / 2,
+        outerRadius = Math.min( width, height ) * ( 1 - 4 * margin ) / 2,
         innerRadius = radiusStart * outerRadius;
     Graph.draw( selection, label, x, y, width, height, undefined, false );
     const x0 = Math.floor( width / 2 ) + 0.5,
@@ -34,17 +34,17 @@ Circle.draw = ( selection, label, x, y, width, height, values, valuesSelected, r
         pie = d3.pie().sort( null );    // Default start angle is at 12 o'clock, and positive angles proceed clockwise.
 
     // Get the absolute values.
-//    const absValues = values.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]),
-//        absValuesSelected = valuesSelected.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]);
+    const absValues = values.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]),
+        absValuesSelected = valuesSelected.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]);
     
     // Draw the slices with highlighting origin at an angle...
     if( isAngle ) {
         
         // Merge the values and selected values.
         let valuesMerged = [];
-        values.forEach(( item, i ) => {
-            valuesMerged.push([ values[ i ][ 0 ], valuesSelected[ i ][ 1 ]]);
-            valuesMerged.push([ values[ i ][ 0 ], values[ i ][ 1 ] - valuesSelected[ i ][ 1 ]]);
+        absValues.forEach(( item, i ) => {
+            valuesMerged.push([ absValues[ i ][ 0 ], absValuesSelected[ i ][ 1 ]]);
+            valuesMerged.push([ absValues[ i ][ 0 ], absValues[ i ][ 1 ] - absValuesSelected[ i ][ 1 ]]);
         });
         
         // Compute the position of each slice.
@@ -68,8 +68,8 @@ Circle.draw = ( selection, label, x, y, width, height, values, valuesSelected, r
     else {
     
         // Compute the position of each slice.
-        let data = pie( d3.map( values, ( x ) => x[ 1 ]));
-        data.forEach(( d, i ) => { d.selectedValue = valuesSelected[ i ][ 1 ]; });
+        let data = pie( d3.map( absValues, ( x ) => x[ 1 ]));
+        data.forEach(( d, i ) => { d.selectedValue = absValuesSelected[ i ][ 1 ]; });
     
         // Draw the deselected slices, then the selected slices.
         selection.selectAll( ".all" )

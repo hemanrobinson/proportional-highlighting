@@ -27,13 +27,13 @@ TreeMap.draw = ( selection, label, x, y, width, height, values, valuesSelected )
     Graph.draw( selection, label, x, y, width, height, undefined, false );
 
     // Get the absolute values.
-//    const absValues = values.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]),
-//        absValuesSelected = valuesSelected.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]);
+    const absValues = values.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]),
+        absValuesSelected = valuesSelected.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]);
     
     // Merge the values and selected values.
     let valuesMerged = [];
-    values.forEach(( item, i ) => {
-        valuesMerged.push([ values[ i ][ 0 ], values[ i ][ 1 ], valuesSelected[ i ][ 1 ]]);
+    absValues.forEach(( item, i ) => {
+        valuesMerged.push([ absValues[ i ][ 0 ], absValues[ i ][ 1 ], absValuesSelected[ i ][ 1 ]]);
     });
     
     // Add a root to the data, and filter only the positive values.
