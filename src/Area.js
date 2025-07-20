@@ -26,7 +26,7 @@ Area.draw = ( selection, label, x, y, width, height, values, valuesSelected ) =>
     const margin = Graph.margin,
         offset = ( 1 - 2 * margin ) / values.length / 2,
         xScale = d3.scaleLinear()
-            .domain([ 0, values.length - 1 ])
+            .domain([ 0, values.length ])
             .range([ width * ( margin + offset ), width * ( 1 - margin + offset )]),
         yScale = d3.scaleLinear()
             .domain([ d3.min( values, d => d[ 1 ]), d3.max( values, d => d[ 1 ])])
