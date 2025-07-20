@@ -34,7 +34,7 @@ Points.draw = ( selection, label, x, y, width, height, values, valuesSelected, i
             .range([ height * ( 1 - margin ), height * margin ]);
     Graph.draw( selection, label, x, y, width, height, yScale, false );
     
-    // Draw the points.
+    // Draw the deselected points.
     selection.selectAll( ".fillAll" )
         .data( values )
         .enter()

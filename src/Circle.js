@@ -34,17 +34,17 @@ Circle.draw = ( selection, label, x, y, width, height, values, valuesSelected, r
         pie = d3.pie().sort( null );    // Default start angle is at 12 o'clock, and positive angles proceed clockwise.
 
     // Get the absolute values.
-    const absValues = values.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]),
-        absValuesSelected = valuesSelected.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]);
+    const myValues = values.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]),
+        myValuesSelected = valuesSelected.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]);
     
     // Draw the slices with highlighting origin at an angle...
     if( isAngle ) {
         
         // Merge the values and selected values.
         let valuesMerged = [];
-        absValues.forEach(( item, i ) => {
-            valuesMerged.push([ absValues[ i ][ 0 ], absValuesSelected[ i ][ 1 ]]);
-            valuesMerged.push([ absValues[ i ][ 0 ], absValues[ i ][ 1 ] - absValuesSelected[ i ][ 1 ]]);
+        myValues.forEach(( item, i ) => {
+            valuesMerged.push([ myValues[ i ][ 0 ], myValuesSelected[ i ][ 1 ]]);
+            valuesMerged.push([ myValues[ i ][ 0 ], myValues[ i ][ 1 ] - myValuesSelected[ i ][ 1 ]]);
         });
         
         // Compute the position of each slice.
@@ -68,8 +68,8 @@ Circle.draw = ( selection, label, x, y, width, height, values, valuesSelected, r
     else {
     
         // Compute the position of each slice.
-        let data = pie( d3.map( absValues, ( x ) => x[ 1 ]));
-        data.forEach(( d, i ) => { d.selectedValue = absValuesSelected[ i ][ 1 ]; });
+        let data = pie( d3.map( myValues, ( x ) => x[ 1 ]));
+        data.forEach(( d, i ) => { d.selectedValue = myValuesSelected[ i ][ 1 ]; });
     
         // Draw the deselected slices, then the selected slices.
         selection.selectAll( ".all" )

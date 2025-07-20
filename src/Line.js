@@ -26,66 +26,86 @@ Line.draw = ( selection, label, x, y, width, height, values, valuesSelected, isC
     // Initialization.
     const margin = Graph.margin,
         offset = ( 1 - 2 * margin ) / values.length / 2,
+        xScale = d3.scaleLinear()
+            .domain([ 0, values.length - 1 ])
+            .range([ width * ( margin + offset ), width * ( 1 - margin + offset )]),
         yScale = d3.scaleLinear()
             .domain([ d3.min( values, d => d[ 1 ]), d3.max( values, d => d[ 1 ])])
             .range([ height * ( 1 - margin ), height * margin ]);
-    let xScale = d3.scaleBand()
-            .domain( values.map( d => d[ 0 ]))
-            .range([ width * ( margin + offset ), width * ( 1 - margin + offset )]),
-        newValues, selected, line;
+    let selected, line;
     Graph.draw( selection, label, x, y, width, height, yScale, false );
     
-    // Draw the line.
+    // Convert the X values to numbers.
+    let myValues = [];
+    values.forEach(( d, i ) => {
+        myValues.push([ i, d[ 1 ]]);
+    });
+    
+    // Draw the deselected line.
     selection
         .append( "path" )
-        .datum( values )
+        .datum( myValues )
         .attr( "d", d3.line()
             .x(( d ) => xScale( d[ 0 ]))
             .y(( d ) => yScale( d[ 1 ]))
         )
         .classed( 'strokeAll', true );
     
-    // Draw the selected line.
+    // Draw the selected line: if separate from the deselected line...
     if( !isColocated ) {
+    
+        // If the deselected line crosses the axis, add that point to the selected line.
+        let myValuesSelected = [];
+        valuesSelected.forEach(( d, i ) => {
+            myValuesSelected.push([ i, d[ 1 ]]);
+            if( i < myValues.length - 1 ) {
+                let e = myValues[ i ];
+                let f = myValues[ i + 1 ];
+                if((( e[ 1 ] < 0 ) && ( f[ 1 ] > 0 )) ||
+                   (( e[ 1 ] > 0 ) && ( f[ 1 ] < 0 ))) {
+                    myValuesSelected.push([ i + e[ 1 ] / ( e[ 1 ] - f[ 1 ]), 0 ]);
+                }
+            }
+        });
+        
+        // Draw the selected line.
         selection
             .append( "path" )
-            .datum( valuesSelected )
+            .datum( myValuesSelected )
             .attr( "d", d3.line()
                 .x(( d ) => xScale( d[ 0 ]))
                 .y(( d ) => yScale( d[ 1 ]))
             )
             .classed( 'strokeSelected', true );
-     } else {
+     }
+     
+     // ...or if colocated.
+     else {
 
-        // Create a new Array that includes two intermediate values.
-        newValues = [];
+        // Create a new Array that includes two intermediate values between adjacent vertices.
+        myValues = [];
         values.forEach(( d, i ) => {
-            newValues.push([ i, d[ 1 ]]);
+            myValues.push([ i, d[ 1 ]]);
             if( i < values.length - 1 ) {
-                newValues.push([ i + 0.5, ( d[ 1 ] + values[ i + 1 ][ 1 ]) / 2 ]);
-                newValues.push([ i + 0.5, ( d[ 1 ] + values[ i + 1 ][ 1 ]) / 2 ]);
+                myValues.push([ i + 0.5, ( d[ 1 ] + values[ i + 1 ][ 1 ]) / 2 ]);
+                myValues.push([ i + 0.5, ( d[ 1 ] + values[ i + 1 ][ 1 ]) / 2 ]);
             }
         });
-        
-        // Create a continuous X scale. (Why does it need one more?)
-        xScale = d3.scaleLinear()
-            .domain([ 0, values.length ])
-            .range([ width * ( margin + offset ), width * ( 1 - margin + offset )]);
 
         // Accumulate the selected line segments.
         selected = [];
         line = [];
         values.forEach(( d, i ) => {
-            const [ x0, y0 ] = newValues[ 3 * i ],
+            const [ x0, y0 ] = myValues[ 3 * i ],
                 f = d[ 1 ] ? valuesSelected[ i ][ 1 ] / d[ 1 ] : 0;
             let x1, y1;
             if( f && ( i > 0 )) {
-                [ x1, y1 ] = newValues[ 3 * i - 1 ];
+                [ x1, y1 ] = myValues[ 3 * i - 1 ];
                 line.push([ x0 + f * ( x1 - x0 ), y0 + f * ( y1 - y0 )]);
             }
-            line.push( newValues[ 3 * i ]);
+            line.push( myValues[ 3 * i ]);
             if( f && ( i < values.length - 1 )) {
-                [ x1, y1 ] = newValues[ 3 * i + 1 ];
+                [ x1, y1 ] = myValues[ 3 * i + 1 ];
                 line.push([ x0 + f * ( x1 - x0 ), y0 + f * ( y1 - y0 )]);
             }
             selected.push( line );

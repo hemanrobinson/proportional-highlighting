@@ -96,7 +96,7 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     });
     let outliersSelected = outliers.filter(( d ) => d[ 1 ]);
     
-    // Draw the box plot.
+    // Draw the deselected box plot.
     const center = width / 2,
         boxWidth = width / 4,
         serifWidth = width / 8;

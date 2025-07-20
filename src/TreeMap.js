@@ -27,13 +27,13 @@ TreeMap.draw = ( selection, label, x, y, width, height, values, valuesSelected )
     Graph.draw( selection, label, x, y, width, height, undefined, false );
 
     // Get the absolute values.
-    const absValues = values.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]),
-        absValuesSelected = valuesSelected.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]);
+    const myValues = values.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]),
+        myValuesSelected = valuesSelected.map( innerArray => [ innerArray[ 0 ], Math.abs( innerArray[ 1 ])]);
     
     // Merge the values and selected values.
     let valuesMerged = [];
-    absValues.forEach(( item, i ) => {
-        valuesMerged.push([ absValues[ i ][ 0 ], absValues[ i ][ 1 ], absValuesSelected[ i ][ 1 ]]);
+    myValues.forEach(( item, i ) => {
+        valuesMerged.push([ myValues[ i ][ 0 ], myValues[ i ][ 1 ], myValuesSelected[ i ][ 1 ]]);
     });
     
     // Add a root to the data, and filter only the positive values.
@@ -46,7 +46,7 @@ TreeMap.draw = ( selection, label, x, y, width, height, values, valuesSelected )
     const root = d3.hierarchy( data ).sum(d => d[ 1 ]);
     treemap( root );
     
-    // Add elements for each node.
+    // Add elements for each deselected node.
     const offset = 1;
     selection.selectAll( ".all" )
         .data( root.descendants())

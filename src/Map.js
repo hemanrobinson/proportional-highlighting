@@ -59,7 +59,7 @@ Map.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
         .scale( 105 )
         .translate([ 257, 180 ]);
 
-    // Draw the map.
+    // Draw the deselected map.
     selection.selectAll( ".all" )
         .data( data.features )
         .enter()
