@@ -23,7 +23,7 @@ const TreeMap = () => {
 TreeMap.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => {
     
     // Initialization.
-    const margin = Graph.margin;
+    const margin = 2 * Graph.margin;
     Graph.draw( selection, label, x, y, width, height, undefined, false );
 
     // Get the absolute values.

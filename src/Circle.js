@@ -25,8 +25,8 @@ const Circle = () => {
 Circle.draw = ( selection, label, x, y, width, height, values, valuesSelected, radiusStart, isAngle ) => {
     
     // Initialization.
-    const margin = Graph.margin,
-        outerRadius = Math.min( width, height ) * ( 1 - 4 * margin ) / 2,
+    const margin = 2 * Graph.margin,
+        outerRadius = Math.min( width, height ) * ( 1 - 2 * margin ) / 2,
         innerRadius = radiusStart * outerRadius;
     Graph.draw( selection, label, x, y, width, height, undefined, false );
     const x0 = Math.floor( width / 2 ) + 0.5,
