@@ -45,10 +45,14 @@ Data.selectPercentage = ( percentage ) => {
     
         // Vary the percentage.
         let variedPercentage = percentage;
-        const k = 0.1;
-        if(( k < percentage ) && ( percentage < 1 - k )) {
-            variedPercentage = Math.max( 0, Math.min( 1, percentage * (( i % 2 > 0 ) ? 1 - k : 1 + k )));
+        const k1 = 0.15,
+            k2 = k1 * 2;
+        if(( k2 < percentage ) && ( percentage < 1 - k2 )) {
+            variedPercentage = percentage * (( i % 2 > 0 ) ? 1 - k2 : 1 + k2 );
+        } else if(( k1 < percentage ) && ( percentage < 1 - k1 )) {
+            variedPercentage = percentage * (( i % 2 > 0 ) ? 1 - k1 : 1 + k1 );
         }
+        variedPercentage = Math.max( 0, Math.min( 1, variedPercentage ));
         
         // Select the row indices.
         for( let j = 0; ( j < Math.floor( variedPercentage * ( firstIndices[ i + 1 ] - firstIndices[ i ]))); j++ ) {
