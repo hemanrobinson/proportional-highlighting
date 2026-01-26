@@ -10,7 +10,15 @@ const App = () => {
     
     // Create state.
     const percentSelectedDefault = 0.5;
-    const [ percentSelected, setPercentSelected ] = useState( percentSelectedDefault );
+    const [ percentSelectedRectangular, setPercentSelectedRectangular ] = useState( percentSelectedDefault );
+    const [ percentSelectedCircular,    setPercentSelectedCircular    ] = useState( percentSelectedDefault );
+    const [ percentSelectedComplex,     setPercentSelectedComplex     ] = useState( percentSelectedDefault );
+    const [ percentSelectedLinear,      setPercentSelectedLinear      ] = useState( percentSelectedDefault );
+    const [ percentSelectedSmall,       setPercentSelectedSmall       ] = useState( percentSelectedDefault );
+    const [ percentSelectedMixed,       setPercentSelectedMixed       ] = useState( percentSelectedDefault );
+    
+    // Format percentage values.
+    const percentFormat = ( value ) => ( Math.round( value * 100 ) + "%" );
     
     // Return the component.
     return (
@@ -18,17 +26,101 @@ const App = () => {
             <div className="Description">
                 <h1>Proportional Highlighting&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/proportional-highlighting/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
                 <p>
-                Proportional highlighting displays linked data in aggregate graphs. Use the slider to adjust the percentage of data rows selected.
+                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
                 </p>
-                <Matrix percentSelected={percentSelected} />
+                <br />
+            </div>
+            
+            <div className="Description">
+                <h2>Rectangular Glyphs</h2>
+                <p>
+                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                </p>
+                <Matrix type="rectangular" percentSelected={percentSelectedRectangular} />
                 <br />
             </div>
             <div className="GridControls">
                 <label>Selected Rows:</label>
                 <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
-                    valueLabelDisplay="auto" valueLabelFormat={( value ) => ( Math.round( value * 100 ) + "%" )}
-                    onChange={( event, value ) => { Matrix.clear(); setPercentSelected( value ); }} />
+                    valueLabelDisplay="auto" valueLabelFormat={percentFormat}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedRectangular( value ); }} />
             </div>
+            
+            <div className="Description">
+                <h2>Circular Glyphs</h2>
+                <p>
+                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                </p>
+                <Matrix type="circular" percentSelected={percentSelectedCircular} />
+                <br />
+            </div>
+            <div className="GridControls">
+                <label>Selected Rows:</label>
+                <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
+                    valueLabelDisplay="auto" valueLabelFormat={percentFormat}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedCircular( value ); }} />
+            </div>
+            
+            <div className="Description">
+                <h2>Complex Glyphs</h2>
+                <p>
+                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                </p>
+                <Matrix type="complex" percentSelected={percentSelectedComplex} />
+                <br />
+            </div>
+            <div className="GridControls">
+                <label>Selected Rows:</label>
+                <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
+                    valueLabelDisplay="auto" valueLabelFormat={percentFormat}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedComplex( value ); }} />
+            </div>
+            
+            <div className="Description">
+                <h2>Linear Glyphs</h2>
+                <p>
+                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                </p>
+                <Matrix type="linear" percentSelected={percentSelectedLinear} />
+                <br />
+            </div>
+            <div className="GridControls">
+                <label>Selected Rows:</label>
+                <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
+                    valueLabelDisplay="auto" valueLabelFormat={percentFormat}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedLinear( value ); }} />
+            </div>
+            
+            <div className="Description">
+                <h2>Small Glyphs</h2>
+                <p>
+                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                </p>
+                <Matrix type="small" percentSelected={percentSelectedSmall} />
+                <br />
+            </div>
+            <div className="GridControls">
+                <label>Selected Rows:</label>
+                <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
+                    valueLabelDisplay="auto" valueLabelFormat={percentFormat}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedSmall( value ); }} />
+            </div>
+            
+            <div className="Description">
+                <h2>Mixed Glyphs</h2>
+                <p>
+                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                </p>
+                <Matrix type="mixed" percentSelected={percentSelectedMixed} />
+                <br />
+            </div>
+            <div className="GridControls">
+                <label>Selected Rows:</label>
+                <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
+                    valueLabelDisplay="auto" valueLabelFormat={percentFormat}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedMixed( value ); }} />
+            </div>
+            
             <div className="Description">
                 <p>
                 <strong><em>Aggregate graphs</em></strong> display data that is aggregated using simple functions such as count, sum, and average. For simplicity, the graphs above display the count of rows in each category.

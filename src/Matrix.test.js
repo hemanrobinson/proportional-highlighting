@@ -10,6 +10,7 @@ let container = null;
 beforeEach(() => {
     container = document.createElement( "div" );
     document.body.appendChild( container );
+    HTMLCanvasElement.prototype.getContext = () => {};  // fixes Jest problem
 });
 
 // Cleans up on exit.
@@ -39,5 +40,5 @@ it( "draws a Matrix", () => {
         render( <div><canvas width="800" height="800" /><svg width="800" height="800" ><g /></svg></div>, container );
     });
     let div = container.firstChild;
-    Matrix.draw({ current: div }, 1, 1, 1, 1, 200, 200, [], true );
+    Matrix.draw({ current: div }, 1, 1, 200, 200, "", [], true );
 });

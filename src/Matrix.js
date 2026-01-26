@@ -39,13 +39,23 @@ const Matrix = ( props ) => {
     
     // Initialization.
     const ref = useRef(),
-        { percentSelected } = props,
+        { type, percentSelected } = props,
         width = 200,
-        height = 200,
-        nColumns = 4,
-        nRows = 4,
-        totalWidth = nColumns * width,
-        totalHeight = nRows * height;
+        height = 200;
+    
+    // Get the numbers of rows and columns.
+    let nColumns = 1, nRows = 1;
+    switch( type ) {
+        case "rectangular": nColumns = 3; nRows = 1; break;
+        case "circular":    nColumns = 3; nRows = 2; break;
+        case "complex":     nColumns = 2; nRows = 1; break;
+        case "linear":      nColumns = 2; nRows = 1; break;
+        case "small":       nColumns = 2; nRows = 1; break;
+        case "mixed":       nColumns = 1; nRows = 1; break;
+        default: break;
+    }
+    const totalWidth = nColumns * width,
+        totalHeight = nRows * height
     
     // Set hook to select and draw on mounting.
     useEffect(() => {
@@ -62,7 +72,7 @@ const Matrix = ( props ) => {
             
         // Select the data and draw the graphs.
         Data.selectPercentage( percentSelected );
-        Matrix.draw( ref, nColumns, nRows, -1, -1, width, height, Data.selectedRowIndices, true );
+        Matrix.draw( ref, nColumns, nRows, width, height, type, Data.selectedRowIndices, true );
     });
     
     // Return the component.
@@ -82,14 +92,13 @@ Matrix.clear = () => {
  * @param  {Object}     ref                 reference to DIV
  * @param  {number}     nColumns            number of columns
  * @param  {number}     nRows               number of rows
- * @param  {number}     i                   column index, or <0 to draw all
- * @param  {number}     j                   row index, or <0 to draw all
  * @param  {number}     width               width in pixels
  * @param  {number}     height              height in pixels
+ * @param  {string}     type                glyph type: "rectangular", "circular", "complex", "linear", "small", or "mixed"
  * @param  {number[]}   selectedRowIndices  indices of selected rows
  * @param  {boolean}    isDrawingGrid       true iff clearing and redrawing the grid
  */
-Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, isDrawingGrid ) => {
+Matrix.draw = ( ref, nColumns, nRows, width, height, type, selectedRowIndices, isDrawingGrid ) => {
     
     // Initialization.  If no context, do nothing.
     if( !ref ) {
@@ -108,75 +117,6 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
         zeroes = values.map(( x ) => [ x[ 0 ], 0, 0 ]),
         valuesSelected = Array.from( d3.rollup( rowsSelected.concat( zeroes ).sort(), v => d3.sum( v, d => d[ 1 ]), d => d[ 0 ]));
     
-    // Draws a graph.
-    const drawGraph = ( ref, width, height, i, j, selectedRowIndices ) => {
-    
-        // Get the position and the selection.
-        const x = i * width,
-            y = j * height,
-            k = 1 + i + nColumns * j,
-            svg = d3.select( ref.current.childNodes[ 1 ]),
-            selection = d3.select( svg.node().firstChild.childNodes[ k - 1 ]),
-            label = "" + k,
-            value = [[ 'Total', values.reduce(( v, d ) => v + d[ 1 ], 0 )]],
-            valueSelected = [[ 'Total', valuesSelected.reduce(( v, d ) => v + d[ 1 ], 0 )]];
-        
-        // Draw the graph.
-        switch( k ) {
-            case 1:
-                Bar.draw( selection, label, x, y, width, height, values, valuesSelected, false );
-                break;
-            case 2:
-                Bar.draw( selection, label, x, y, width, height, values, valuesSelected, true );
-                break;
-            case 3:
-                TreeMap.draw( selection, label, x, y, width, height, values, valuesSelected );
-                break;
-            case 4:
-                Area.draw( selection, label, x, y, width, height, values, valuesSelected );
-                break;
-            case 5:
-                Circle.draw( selection, label, x, y, width, height, value, valueSelected, 0 );
-                break;
-            case 6:
-                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0 );
-                break;
-            case 7:
-                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0.5 );
-                break;
-            case 8:
-                Map.draw( selection, label, x, y, width, height, values, valuesSelected );
-                break;
-            case 9:
-                Circle.draw( selection, label, x, y, width, height, value, valueSelected, 0, true );
-                break;
-            case 10:
-                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0, true );
-                break;
-            case 11:
-                Circle.draw( selection, label, x, y, width, height, values, valuesSelected, 0.5, true );
-                break;
-            case 12:
-                Box.draw( selection, label, x, y, width, height, values, valuesSelected );
-                break;
-            case 13:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, false );
-                break;
-            case 14:
-                Line.draw( selection, label, x, y, width, height, values, valuesSelected, true );
-                break;
-            case 15:
-                Points.draw( selection, label, x, y, width, height, values, valuesSelected, false );
-                break;
-            case 16:
-                Points.draw( selection, label, x, y, width, height, values, valuesSelected, true );
-                break;
-            default:
-                break;
-
-        }
-    };
-    
     // If requested, clear the drawing area and draw the grid.
     if( isDrawingGrid ) {
         g.clearRect( 0, 0, nColumns * width, nRows * height );
@@ -192,15 +132,45 @@ Matrix.draw = ( ref, nColumns, nRows, i, j, width, height, selectedRowIndices, i
         g.stroke();
     }
     
-    // Draw the graphs.
-    if(( i >= 0 ) && ( j >= 0 )) {
-        drawGraph( ref, width, height, i, j, selectedRowIndices );
-    } else {
-        for( let j = 0; ( j < nRows ); j++ ) {
-            for( let i = 0; ( i < nColumns ); i++ ) {
-                drawGraph( ref, width, height, i, j, selectedRowIndices );
-            }
-        }
+    // Get the childNodes and the values.
+    const svg = d3.select( ref.current.childNodes[ 1 ]),
+        childNodes = svg.node().firstChild.childNodes,
+        label = "",
+        value = [[ 'Total', values.reduce(( v, d ) => v + d[ 1 ], 0 )]],
+        valueSelected = [[ 'Total', valuesSelected.reduce(( v, d ) => v + d[ 1 ], 0 )]]
+    
+    // Draw the matrix.
+    switch( type ) {
+        case "rectangular":
+            Bar.draw( d3.select( childNodes[ 0 ]), label,             0, 0, width, height, values, valuesSelected, false );
+            Bar.draw( d3.select( childNodes[ 1 ]), label,         width, 0, width, height, values, valuesSelected, true );
+            TreeMap.draw( d3.select( childNodes[ 2 ]), label, 2 * width, 0, width, height, values, valuesSelected );
+            break;
+        case "circular":
+            Circle.draw( d3.select( childNodes[ 0 ]), label,         0,      0, width, height, value,  valueSelected,  0 );
+            Circle.draw( d3.select( childNodes[ 1 ]), label,     width,      0, width, height, values, valuesSelected, 0 );
+            Circle.draw( d3.select( childNodes[ 2 ]), label, 2 * width,      0, width, height, values, valuesSelected, 0.5 );
+            Circle.draw( d3.select( childNodes[ 3 ]), label,         0, height, width, height, value,  valueSelected,  0,   true );
+            Circle.draw( d3.select( childNodes[ 4 ]), label,     width, height, width, height, values, valuesSelected, 0,   true );
+            Circle.draw( d3.select( childNodes[ 5 ]), label, 2 * width, height, width, height, values, valuesSelected, 0.5, true );
+            break;
+        case "complex":
+            Area.draw( d3.select( childNodes[ 0 ]), label,     0, 0, width, height, values, valuesSelected );
+            Map.draw( d3.select( childNodes[ 1 ]), label, width, 0, width, height, values, valuesSelected );
+            break;
+        case "linear":
+            Line.draw( d3.select( childNodes[ 0 ]), label,     0, 0, width, height, values, valuesSelected, false );
+            Line.draw( d3.select( childNodes[ 1 ]), label, width, 0, width, height, values, valuesSelected, true );
+            break;
+        case "small":
+            Points.draw( d3.select( childNodes[ 0 ]), label,     0, 0, width, height, values, valuesSelected, false );
+            Points.draw( d3.select( childNodes[ 1 ]), label, width, 0, width, height, values, valuesSelected, true );
+            break;
+        case "mixed":
+            Box.draw( d3.select( childNodes[ 0 ]), label, 0, 0, width, height, values, valuesSelected );
+            break;
+        default:
+            break;
     }
 };
 
