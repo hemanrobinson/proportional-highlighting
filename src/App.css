@@ -19,6 +19,21 @@ img.icon {
 p.center {
     text-align: center;
 }
+table {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+th, td {
+    border: 1px solid #939ba1;
+    padding: 3px;
+}
+th {
+    background-color: #ebeeef;
+}
+td {
+    background-color: #ffffff;
+}
 .Description {
     text-align: left;
     max-width: 1000px;

@@ -11,8 +11,10 @@ const App = () => {
     // Create state.
     const percentSelectedDefault = 0.5;
     const [ percentSelectedRectangular, setPercentSelectedRectangular ] = useState( percentSelectedDefault );
-    const [ percentSelectedCircular,    setPercentSelectedCircular    ] = useState( percentSelectedDefault );
-    const [ percentSelectedComplex,     setPercentSelectedComplex     ] = useState( percentSelectedDefault );
+    const [ percentSelectedPie,         setPercentSelectedPie         ] = useState( percentSelectedDefault );
+    const [ percentSelectedBubble,      setPercentSelectedBubble      ] = useState( percentSelectedDefault );
+    const [ percentSelectedArea,        setPercentSelectedArea        ] = useState( percentSelectedDefault );
+    const [ percentSelectedMap,         setPercentSelectedMap         ] = useState( percentSelectedDefault );
     const [ percentSelectedLinear,      setPercentSelectedLinear      ] = useState( percentSelectedDefault );
     const [ percentSelectedSmall,       setPercentSelectedSmall       ] = useState( percentSelectedDefault );
     const [ percentSelectedMixed,       setPercentSelectedMixed       ] = useState( percentSelectedDefault );
@@ -26,18 +28,71 @@ const App = () => {
             <div className="Description">
                 <h1>Proportional Highlighting&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/proportional-highlighting/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
                 <p>
-                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                The technique of highlighting linked views was originally developed in scatter plots in which each point displays one row of data (Newton, 1978; McDonald, 1982; Becker and Cleveland, 1987; Stuetzle, 1987). <strong><em>Proportional highlighting</em></strong> extends this technique to graphs that aggregate multiple rows, using simple functions such as count, sum, and average.
+                </p>
+                <p className="center">
+                    <a href="http://www.perceptualedge.com/"><img title="Stephen Few" alt="Stephen Few" src={few}/></a>
+                </p>
+                <p>
+                <a href="http://www.perceptualedge.com/">Stephen Few</a> wrote one of the best explanations of proportional highlighting <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">("Highlighting Methods", p. 12-23)</a>, suggested design patterns for highlighting proportions, and argued strongly for the technique: “It’s hard to imagine a situation when proportional highlighting isn’t significantly superior”.
+                </p>
+                <p>
+                This study proposes a set of design patterns for proportional highlighting in all commonly used business graphs. This includes the line plot and box plot described by Few (2016) as <a href="https://www.perceptualedge.com/blog/?p=2258">outstanding problems</a>.
                 </p>
                 <br />
             </div>
             
             <div className="Description">
-                <h2>Rectangular Glyphs</h2>
+                <h2>User Interface</h2>
+                <h3>Design Goals and Principles</h3>
+                <h4>A. Highlight All Graphs</h4>
                 <p>
-                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                Many products support proportional highlighting in some graphs but not all. A consistent user interface facilitates learning. When all graphs support highlighting, users can learn the technique in one graph and reuse their knowledge in other graphs.
+                </p>
+                <h4>B. Highlight All Glyphs</h4>
+                <p>
+                Graphs with small glyphs may not have sufficient area to highlight proportionally. These glyphs can be highlighted if any rows they represent are selected. This principle displays useful information — much better than doing nothing — and supports highlighting in all graphs.</p>
+                <h4>C. Provide Multiple Highlighting Modes</h4>
+                <p>
+                There are many ways to highlight graphs. Darkening color can highlight large glyphs. Increasing size can highlight small glyphs. Changing position can be effective if the graph is not too complex. No one mode of highlighting is best for all graphs. It’s best to provide multiple highlighting modes and give the user their choice.</p>
+                <h4>D. Display both Proportions and Statistics</h4>
+                <p>
+                Business graphs commonly display simple univariate statistics, such as frequency, sum, mean, maximum, and quantiles. Examples include employees per department, average sales per region, or total profits per product. When the statistic is a simple frequency count, the highlighted proportion represents the value of that statistic for the selected rows. In general, however, the highlighted proportion does not represent the statistic.
+                </p>
+                <p>
+                For these reasons, the approach of this design is to consistently highlight the proportion of selected rows to all rows, and to display statistics for both selected rows and all rows in a hover tip. This combination of highlighting with hover tips enables users to estimate proportions quickly and see precise statistics when needed.
+                </p>
+                <br />
+                <h3>Detailed Design</h3>
+                <p>
+                Design patterns for proportional highlighting can be classified by the shape of the glyphs in each graph:
+                </p>
+                <table>
+                    <tr>
+                        <th>Glyph Shapes</th><th>Graphs</th>
+                    </tr>
+                        <td>Rectangular Glyphs</td><td>Bar Charts, Histograms, Heatmaps, Treemaps</td>
+                    <tr>
+                        <td>Circular Glyphs</td><td>Pie Charts, Doughnut Charts, Bubble Plots</td>
+                    </tr>
+                    <tr>
+                        <td>Complex Glyphs</td><td>Area Plots, Maps, Radar Charts</td>
+                    </tr>
+                    <tr>
+                        <td>Linear Glyphs</td><td>Line Plots, Graphs with Overlaid Lines</td>
+                    </tr>
+                    <tr>
+                        <td>Small Glyphs</td><td>Scatter Plots, Graphs with Overlaid Points</td>
+                    </tr>
+                    <tr>
+                        <td>Mixed Glyphs</td><td>Box Plots</td>
+                    </tr>
+                </table>
+                <h4>A. Rectangular Glyphs</h4>
+                <p>
+                Rectangular glyphs are familiar in bar charts and histograms. Use the slider to adjust the percentage of data rows selected.
                 </p>
                 <Matrix type="rectangular" percentSelected={percentSelectedRectangular} />
-                <br />
             </div>
             <div className="GridControls">
                 <label>Selected Rows:</label>
@@ -45,41 +100,97 @@ const App = () => {
                     valueLabelDisplay="auto" valueLabelFormat={percentFormat}
                     onChange={( event, value ) => { Matrix.clear(); setPercentSelectedRectangular( value ); }} />
             </div>
-            
             <div className="Description">
-                <h2>Circular Glyphs</h2>
                 <p>
-                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                For non-stacked bars, the origin of the highlighted portion is at zero is on the response axis. The response axis displays the statistic calculated on the dependent variable: frequency, sum, mean, etc. The response axis may be vertical or horizontal.
                 </p>
-                <Matrix type="circular" percentSelected={percentSelectedCircular} />
+                <p>
+                For stacked bars, the origin of the highlighted portion of the first bar is at zero. The origin for all other bars is at the termination of the previous bar, the bars being ordered starting at zero on the response axis, in either a positive or negative direction.
+                </p>
+                <p>
+                Rectangular glyphs also appear in graphs with no response axis, such as heatmaps and treemaps. In such cases, the origin of the highlighted portion is at the bottom of the glyph. This meets the expectations of users, who are familiar with a glass of water and other containers that fill from the bottom.
+                </p>
+                <p>
+                This pattern can be used in any graph with rectangular glyphs, including bar charts, histograms, heatmaps, and treemaps.
+                </p>
+                <p>
+                </p>
+                <br />
+                <h4>B. Circular Glyphs</h4>
+                <p>
+                Because rectangular glyphs have constant width, comparing their areas reduces to simply comparing lengths. So in theory, rectangular glyphs should outperform circular glyphs. For this reason and others, authorities argue that “pie charts should never be used” (Tufte, 1983).</p>
+                <p>
+                Yet pie charts continue to be used, as do doughnut charts and bubble plots. For this reason, this section offers suggestions for proportionally highlighting circular glyphs.
+                </p>
+                <p>
+                It’s reasonable to expect comparing areas to be easier when the areas have similar shapes. Circular glyphs afford two ways to achieve this: highlighting outward, from an origin at the minimum radius; or sweeping around the circle, from an origin at an angle.
+                </p>
+                <p>
+                For pie and doughnut charts, the best highlighting mode may depend on the size of the slices. When slices are thin, their radius is greater than their arc length, so highlighting from the center may facilitate judging proportions. When slices are thick, the reverse is true, so highlighting from an angle may perform better. The figure below shows pie and doughnut charts highlighted from their minimum radius and from an angle.Use the slider to adjust the percentage of data rows selected.
+                </p>
+                <Matrix type="pie" percentSelected={percentSelectedPie} />
                 <br />
             </div>
             <div className="GridControls">
                 <label>Selected Rows:</label>
                 <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
                     valueLabelDisplay="auto" valueLabelFormat={percentFormat}
-                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedCircular( value ); }} />
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedPie( value ); }} />
             </div>
-            
             <div className="Description">
-                <h2>Complex Glyphs</h2>
                 <p>
-                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                For bubble plots, the highlighting is simpler. Figure 6 shows a bubble highlighted from the minimum radius and from an angle. The latter origin transforms the bubble into a simple pie chart of two slices. Estimation is facilitated by an origin at the top, bottom, left, or right (Few, 2007).
                 </p>
-                <Matrix type="complex" percentSelected={percentSelectedComplex} />
+                <Matrix type="bubble" percentSelected={percentSelectedBubble} />
                 <br />
             </div>
             <div className="GridControls">
                 <label>Selected Rows:</label>
                 <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
                     valueLabelDisplay="auto" valueLabelFormat={percentFormat}
-                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedComplex( value ); }} />
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedBubble( value ); }} />
             </div>
-            
             <div className="Description">
-                <h2>Linear Glyphs</h2>
                 <p>
-                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                Because the best highlighting mode depends on the graph, it’s best to support multiple highlighting modes. These patterns can be used in any graph with circular glyphs, including pie charts, doughnut charts, and bubble plots.</p>
+                <h4>C. Complex Glyphs</h4>
+                <p>
+                In rectangles, circles, and other simple geometric shapes, users can reasonably be expected to estimate proportions by comparing areas. In more complex shapes, comparing areas can be difficult, particularly when they are noncontiguous. Comparing positions is a simpler task.</p>
+                <p>
+                In area plots, comparing positions also supports consistency. For non-stacked areas, the origin of the highlighted portion is at zero is on the response axis. For stacked areas, the origin is either at zero or at the termination of the previous area, the areas being stacked starting at zero on the response axis. The figure below shows consistent highlighting by position in area plots and other common business graphs.
+                </p>
+                <Matrix type="area" percentSelected={percentSelectedArea} />
+                <br />
+            </div>
+            <div className="GridControls">
+                <label>Selected Rows:</label>
+                <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
+                    valueLabelDisplay="auto" valueLabelFormat={percentFormat}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedArea( value ); }} />
+            </div>
+            <div className="Description">
+                <p>
+            Maps can similarly highlight by position, using linear interpolation between the minimum and maximum latitude, with origin at the minimum. The figure below shows highlighting by position in a map.
+                </p>
+                <Matrix type="map" percentSelected={percentSelectedMap} />
+                <br />
+            </div>
+            <div className="GridControls">
+                <label>Selected Rows:</label>
+                <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
+                    valueLabelDisplay="auto" valueLabelFormat={percentFormat}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedMap( value ); }} />
+            </div>
+            <div className="Description">
+                <p>
+                This pattern can be used in any graph with complex glyphs, including area plots, maps, and radar charts.
+                </p>
+                <h4>D. Linear Glyphs</h4>
+                <p>
+                Few (2010) suggested highlighting linear glyphs by changing their position, because humans easily perceive motion. As Few noted, this works well for few lines, but does not scale to many lines.</p>
+                <p>
+                An alternative is to highlight a proportion of the line, using vertices as origins, and either vertices or midpoints as terminations. The figure below shows both highlighting modes.</p>
+                <p>
                 </p>
                 <Matrix type="linear" percentSelected={percentSelectedLinear} />
                 <br />
@@ -90,11 +201,18 @@ const App = () => {
                     valueLabelDisplay="auto" valueLabelFormat={percentFormat}
                     onChange={( event, value ) => { Matrix.clear(); setPercentSelectedLinear( value ); }} />
             </div>
-            
             <div className="Description">
-                <h2>Small Glyphs</h2>
                 <p>
-                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                Lines are often overlaid on other glyphs, for example in area plots. In such cases, highlighting modes must be coordinated, so highlighting by position may be preferred. In more complex graphs, highlighting from vertices may perform better.</p>
+                <p>
+                These patterns can be used in any graph with linear glyphs, such as line plots; or in any graph with overlaid lines.
+                </p>
+                <h4>E. Small Glyphs</h4>
+                <p>
+                For a consistent user experience, it’s important to highlight even the smallest glyphs. As with lines, Few (2010) noted that highlighting points by changing their position works well for few points, but does not scale to many points.
+                </p>
+                <p>
+                An alternative is to highlight points <strong><em>if any rows they represent are selected</em></strong>. This is useful information, and as much as we can show in a small area. The figure below shows both highlighting modes.
                 </p>
                 <Matrix type="small" percentSelected={percentSelectedSmall} />
                 <br />
@@ -105,11 +223,28 @@ const App = () => {
                     valueLabelDisplay="auto" valueLabelFormat={percentFormat}
                     onChange={( event, value ) => { Matrix.clear(); setPercentSelectedSmall( value ); }} />
             </div>
-            
             <div className="Description">
-                <h2>Mixed Glyphs</h2>
                 <p>
-                Proportional highlighting displays linked data in aggregate graphs. Use the sliders to adjust the percentage of data rows selected.
+                These patterns can be used in any graph with small glyphs, including scatter plots of aggregated rows and points overlaid on lines or other glyphs. In the latter case, highlighting modes must be coordinated, so it is useful to support both modes.
+                </p>
+                <p>
+                Also, any graph that represents quantities by glyph size may occasionally include glyphs with insufficient area to show proportions. Such glyphs can be treated as small glyphs and highlighted <strong><em>if any rows they represent are selected</em></strong>.
+                </p>
+                <h4>F. Mixed Glyphs</h4>
+                <p>
+            Box plots mix together glyphs of different shapes. Box plots have many variations; this study uses Tukey’s original design of boxes, whiskers, and outliers (Tukey, 1977).
+                </p>
+                <p>
+                By definition, the boxes and whiskers display data — specifically, all the data that are not outliers. Because they display data, a proportion of this data can be highlighted.
+                </p>
+                <p>
+                Naively, one could treat the boxes and whiskers as a single glyph, highlighting a proportion between the minimum and maximum extent of the whiskers. However, we can do better.
+                </p>
+                <p>
+                The boxes and whiskers are displayed as separate glyphs, so users will expect them to be highlighted as separate glyphs. Doing so also gives the user more information than would highlighting the box plot as a single glyph.
+                </p>
+                <p>
+                The median can serve as the origin for boxes, the first and third quartiles for whiskers. With this design, the highlighted portions increase away from the median, as shown in the figure below.
                 </p>
                 <Matrix type="mixed" percentSelected={percentSelectedMixed} />
                 <br />
@@ -120,22 +255,19 @@ const App = () => {
                     valueLabelDisplay="auto" valueLabelFormat={percentFormat}
                     onChange={( event, value ) => { Matrix.clear(); setPercentSelectedMixed( value ); }} />
             </div>
-            
             <div className="Description">
                 <p>
-                <strong><em>Aggregate graphs</em></strong> display data that is aggregated using simple functions such as count, sum, and average. For simplicity, the graphs above display the count of rows in each category.
+                Ties at the quartiles, if any, can be resolved by placing half the tied rows in each quartile, with one extra in the higher quartile when the number of tied rows is odd. In rare cases, the counts may be off by a few rows, but the highlighted proportions will be generally accurate within the user’s ability to judge.
                 </p>
                 <p>
-                In aggregate graphs, each element displays multiple rows, so <strong><em>proportional highlighting</em></strong> displays the proportion of selected rows. <a href="http://www.perceptualedge.com/">Stephen Few</a> has written one of the best explanations of proportional highlighting <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">("Highlighting Methods", p. 12-23)</a>.
+                This pattern can be used for variations on box plots, such as quantile plots that display more quantiles along the whiskers. Consistent with this design, the quantiles can be highlighted as individual glyphs.
                 </p>
-                <p className="center">
-                    <a href="http://www.perceptualedge.com/"><img title="Stephen Few" alt="Stephen Few" src={few}/></a>
+                <h2>Usability Tests</h2>
+                <p>
+                Usability tests verified the learnability of these design patterns. Results are available upon request.
                 </p>
                 <p>
-                Few describes several <a href="https://www.perceptualedge.com/blog/?p=2258">outstanding problems</a> with proportional highlighting, which this study attempts to address.
-                </p>
-                <h2>User Interface</h2>
-                <p>
+                The design principles described herein can potentially be extended to other graphs. In all our graphs, wherever possible, we should support proportional highlighting.
                 </p>
                 <h2>Implementation</h2>
                 <p>
@@ -143,8 +275,15 @@ const App = () => {
                 </p>
                 <h2>Further Reading</h2>
                 <ul>
-                    <li>Few, S. (2010). "Coordinated Highlighting in Context". Perceptual Edge, 12-23. <a href=" https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf</a>.</li><br/>
-                    <li>Few, S. (2016), “Information Visualization Research Projects That Would Benefit Practitioners”. <a href=" https://www.perceptualedge.com/blog/?p=2258">https://www.perceptualedge.com/blog/?p=2258</a>.</li><br/>
+                    <li>Becker, R. and Cleveland, W. (1987), “Brushing Scatterplots”, Technometrics, 29, 2,127-142.</li><br/>
+                    <li>Few, S. (2007), “Save the Pies for Dessert”. Perceptual Edge. <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/save_the_pies_for_dessert.pdf">https://www.perceptualedge.com/articles/visual_business_intelligence/save_the_pies_for_dessert.pdf</a>.</li><br/>
+                    <li>Few, S. (2010). "Coordinated Highlighting in Context". Perceptual Edge. <a href=" https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf">https://www.perceptualedge.com/articles/visual_business_intelligence/coordinated_highlighting_in_context.pdf</a>.</li><br/>
+                    <li>Few, S. (2016), “Information Visualization Research Projects That Would Benefit Practitioners”. Perceptual Edge. <a href=" https://www.perceptualedge.com/blog/?p=2258">https://www.perceptualedge.com/blog/?p=2258</a>.</li><br/>
+                    <li>McDonald, J. (1982), Interactive Graphics for Data Analysis. PhD thesis, Stanford University.</li><br/>
+                    <li>Newton, C. (1978), “Graphics: from alpha to omega in data analysis”, in P. C. C. Wand (Ed.), Graphical Representation of Multivariate Data, New York, NY: Academic Press, 59–92.</li><br/>
+                    <li>Stuetzle, W. (1987), “Plot windows”, Journal of the American Statistical Association, 82, 466-475.</li><br/>
+                    <li>Tukey, J. (1977), Exploratory Data Analysis, Reading, MA: Addison-Wesley, 39-42.</li><br/>
+                    <li>Tufte, E. (1983), The Visual Display of Quantitative Information, Cheshire, CN: Graphics Press, 178.</li><br/>
                 </ul>
             </div>
         </div>

@@ -4,6 +4,8 @@ import './Graph.css';
 
 /**
  * Box plot in an SVG element.
+ *
+ * TODO: Ensure at least a few outliers.
  */
 const Box = () => {
 };

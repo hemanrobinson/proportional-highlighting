@@ -47,8 +47,10 @@ const Matrix = ( props ) => {
     let nColumns = 1, nRows = 1;
     switch( type ) {
         case "rectangular": nColumns = 3; nRows = 1; break;
-        case "circular":    nColumns = 3; nRows = 2; break;
-        case "complex":     nColumns = 2; nRows = 1; break;
+        case "pie":         nColumns = 2; nRows = 2; break;
+        case "bubble":      nColumns = 2; nRows = 1; break;
+        case "area":        nColumns = 2; nRows = 2; break;
+        case "map":         nColumns = 1; nRows = 1; break;
         case "linear":      nColumns = 2; nRows = 1; break;
         case "small":       nColumns = 2; nRows = 1; break;
         case "mixed":       nColumns = 1; nRows = 1; break;
@@ -94,7 +96,7 @@ Matrix.clear = () => {
  * @param  {number}     nRows               number of rows
  * @param  {number}     width               width in pixels
  * @param  {number}     height              height in pixels
- * @param  {string}     type                glyph type: "rectangular", "circular", "complex", "linear", "small", or "mixed"
+ * @param  {string}     type                glyph type: "rectangular", "pie", "bubble", "complex", "linear", "small", or "mixed"
  * @param  {number[]}   selectedRowIndices  indices of selected rows
  * @param  {boolean}    isDrawingGrid       true iff clearing and redrawing the grid
  */
@@ -146,17 +148,24 @@ Matrix.draw = ( ref, nColumns, nRows, width, height, type, selectedRowIndices, i
             Bar.draw( d3.select( childNodes[ 1 ]), label,         width, 0, width, height, values, valuesSelected, true );
             TreeMap.draw( d3.select( childNodes[ 2 ]), label, 2 * width, 0, width, height, values, valuesSelected );
             break;
-        case "circular":
-            Circle.draw( d3.select( childNodes[ 0 ]), label,         0,      0, width, height, value,  valueSelected,  0 );
-            Circle.draw( d3.select( childNodes[ 1 ]), label,     width,      0, width, height, values, valuesSelected, 0 );
-            Circle.draw( d3.select( childNodes[ 2 ]), label, 2 * width,      0, width, height, values, valuesSelected, 0.5 );
-            Circle.draw( d3.select( childNodes[ 3 ]), label,         0, height, width, height, value,  valueSelected,  0,   true );
-            Circle.draw( d3.select( childNodes[ 4 ]), label,     width, height, width, height, values, valuesSelected, 0,   true );
-            Circle.draw( d3.select( childNodes[ 5 ]), label, 2 * width, height, width, height, values, valuesSelected, 0.5, true );
+        case "pie":
+            Circle.draw( d3.select( childNodes[ 0 ]), label,     0,      0, width, height, values, valuesSelected, 0 );
+            Circle.draw( d3.select( childNodes[ 1 ]), label, width,      0, width, height, values, valuesSelected, 0,   true );
+            Circle.draw( d3.select( childNodes[ 2 ]), label,     0, height, width, height, values, valuesSelected, 0.5 );
+            Circle.draw( d3.select( childNodes[ 3 ]), label, width, height, width, height, values, valuesSelected, 0.5, true );
             break;
-        case "complex":
-            Area.draw( d3.select( childNodes[ 0 ]), label,     0, 0, width, height, values, valuesSelected );
-            Map.draw( d3.select( childNodes[ 1 ]), label, width, 0, width, height, values, valuesSelected );
+        case "bubble":
+            Circle.draw( d3.select( childNodes[ 0 ]), label, 0,      0, width, height, value, valueSelected, 0 );
+            Circle.draw( d3.select( childNodes[ 1 ]), label, 0, height, width, height, value, valueSelected, 0, true );
+            break;
+        case "area":
+            Area.draw( d3.select( childNodes[ 0 ]),   label,     0,      0, width, height, values, valuesSelected );
+            Bar.draw( d3.select( childNodes[ 1 ]),    label, width,      0, width, height, values, valuesSelected, false );
+            Line.draw( d3.select( childNodes[ 2 ]),   label,     0, height, width, height, values, valuesSelected, false );
+            Points.draw( d3.select( childNodes[ 3 ]), label, width, height, width, height, values, valuesSelected, false );
+            break;
+        case "map":
+            Map.draw( d3.select( childNodes[ 0 ]), label, width, 0, width, height, values, valuesSelected );
             break;
         case "linear":
             Line.draw( d3.select( childNodes[ 0 ]), label,     0, 0, width, height, values, valuesSelected, false );
