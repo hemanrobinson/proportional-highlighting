@@ -4,8 +4,6 @@ import './Graph.css';
 
 /**
  * Box plot in an SVG element.
- *
- * TODO: Ensure at least a few outliers.
  */
 const Box = () => {
 };
@@ -39,7 +37,7 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
     Graph.draw( selection, label, x, y, width, height, yScale, false );
     
     // Generate normally distributed data to match the specified range.
-    const n = 100;
+    const n = 1000;  // ensures a few outliers
     if( Box.data.length <= 0 ) {
         Box.data = Array.from({ length: n }, d3.randomNormal( ( yMin + yMax ) / 2, 6 )).sort( d3.ascending );
     }
