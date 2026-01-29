@@ -10,14 +10,16 @@ const App = () => {
     
     // Create state.
     const percentSelectedDefault = 0.5;
-    const [ percentSelectedRectangular, setPercentSelectedRectangular ] = useState( percentSelectedDefault );
-    const [ percentSelectedPie,         setPercentSelectedPie         ] = useState( percentSelectedDefault );
-    const [ percentSelectedBubble,      setPercentSelectedBubble      ] = useState( percentSelectedDefault );
-    const [ percentSelectedArea,        setPercentSelectedArea        ] = useState( percentSelectedDefault );
-    const [ percentSelectedMap,         setPercentSelectedMap         ] = useState( percentSelectedDefault );
-    const [ percentSelectedLinear,      setPercentSelectedLinear      ] = useState( percentSelectedDefault );
-    const [ percentSelectedSmall,       setPercentSelectedSmall       ] = useState( percentSelectedDefault );
-    const [ percentSelectedMixed,       setPercentSelectedMixed       ] = useState( percentSelectedDefault );
+    const [ percentSelectedBar,     setPercentSelectedBar       ] = useState( percentSelectedDefault );
+    const [ percentSelectedStacked, setPercentSelectedStacked   ] = useState( percentSelectedDefault );
+    const [ percentSelectedTreemap, setPercentSelectedTreemap   ] = useState( percentSelectedDefault );
+    const [ percentSelectedPie,     setPercentSelectedPie       ] = useState( percentSelectedDefault );
+    const [ percentSelectedBubble,  setPercentSelectedBubble    ] = useState( percentSelectedDefault );
+    const [ percentSelectedArea,    setPercentSelectedArea      ] = useState( percentSelectedDefault );
+    const [ percentSelectedMap,     setPercentSelectedMap       ] = useState( percentSelectedDefault );
+    const [ percentSelectedLinear,  setPercentSelectedLinear    ] = useState( percentSelectedDefault );
+    const [ percentSelectedSmall,   setPercentSelectedSmall     ] = useState( percentSelectedDefault );
+    const [ percentSelectedMixed,   setPercentSelectedMixed     ] = useState( percentSelectedDefault );
     
     // Format percentage values.
     const percentFormat = ( value ) => ( Math.round( value * 100 ) + "%" );
@@ -88,26 +90,44 @@ const App = () => {
                 </table>
                 <h4>A. Rectangular Glyphs</h4>
                 <p>
-                Rectangular glyphs are familiar in bar charts and histograms. Use the slider to adjust the percentage of data rows selected.
+                Rectangular glyphs are familiar in bar charts and histograms. For non-stacked bars, the origin of the highlighted portion is at zero is on the response axis. The <strong><em>response axis</em></strong> displays the statistic calculated on the dependent variable: frequency, sum, mean, etc. The response axis may be vertical or horizontal.
                 </p>
-                <Matrix type="rectangular" percentSelected={percentSelectedRectangular} />
+                <p>
+                Use the sliders to adjust the percentage of data rows selected.
+                </p>
+                <Matrix type="bar" percentSelected={percentSelectedBar} />
             </div>
             <div className="GridControls">
                 <label>Selected Rows:</label>
                 <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
                     valueLabelDisplay="auto" valueLabelFormat={percentFormat}
-                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedRectangular( value ); }} />
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedBar( value ); }} />
             </div>
             <div className="Description">
                 <p>
-                For non-stacked bars, the origin of the highlighted portion is at zero is on the response axis. The <strong><em>response axis</em></strong> displays the statistic calculated on the dependent variable: frequency, sum, mean, etc. The response axis may be vertical or horizontal.
-                </p>
-                <p>
                 For stacked bars, the origin of the highlighted portion of the first bar is at zero. The origin for all other bars is at the termination of the previous bar, the bars being ordered starting at zero on the response axis, in either a positive or negative direction.
                 </p>
+                <Matrix type="stacked" percentSelected={percentSelectedStacked} />
+            </div>
+            <div className="GridControls">
+                <label>Selected Rows:</label>
+                <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
+                    valueLabelDisplay="auto" valueLabelFormat={percentFormat}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedStacked( value ); }} />
+            </div>
+            <div className="Description">
                 <p>
                 Rectangular glyphs also appear in graphs with no response axis, such as heatmaps and treemaps. In such cases, the origin of the highlighted portion is at the bottom of the glyph. This meets the expectations of users, who are familiar with a glass of water and other containers that fill from the bottom.
                 </p>
+                <Matrix type="treemap" percentSelected={percentSelectedTreemap} />
+            </div>
+            <div className="GridControls">
+                <label>Selected Rows:</label>
+                <Slider defaultValue={ percentSelectedDefault } step={ 0.01 } min={ 0 } max={ 1 }
+                    valueLabelDisplay="auto" valueLabelFormat={percentFormat}
+                    onChange={( event, value ) => { Matrix.clear(); setPercentSelectedTreemap( value ); }} />
+            </div>
+            <div className="Description">
                 <p>
                 This pattern can be used in any graph with rectangular glyphs, including bar charts, histograms, heatmaps, and treemaps.
                 </p>
@@ -130,7 +150,7 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                The origin at an angle transforms the bubble into a simple pie chart of two slices. Estimation is facilitated by an origin at the top, bottom, left, or right <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/save_the_pies_for_dessert.pdf">(Few, 2007)</a>.
+                For bubbles, the origin at an angle may perform better, as it only requires the user to estimate one angle, rather than comparing two circular areas. Estimation is facilitated by an origin at the top, bottom, left, or right <a href="https://www.perceptualedge.com/articles/visual_business_intelligence/save_the_pies_for_dessert.pdf">(Few, 2007)</a>.
                 </p>
                 <p>
                 For pie and doughnut charts, the best highlighting mode may depend on the size of the slices. When slices are thin, their radius is greater than their arc length, so highlighting from the center may facilitate judging proportions. When slices are thick, the reverse is true, so highlighting from an angle may perform better. The figure below shows pie and doughnut charts highlighted from their minimum radius and from an angle.

@@ -46,7 +46,9 @@ const Matrix = ( props ) => {
     // Get the numbers of rows and columns.
     let nColumns = 1, nRows = 1;
     switch( type ) {
-        case "rectangular": nColumns = 3; nRows = 1; break;
+        case "bar":         nColumns = 2; nRows = 1; break;
+        case "stacked":     nColumns = 2; nRows = 1; break;
+        case "treemap":     nColumns = 1; nRows = 1; break;
         case "pie":         nColumns = 2; nRows = 2; break;
         case "bubble":      nColumns = 2; nRows = 1; break;
         case "area":        nColumns = 2; nRows = 2; break;
@@ -143,10 +145,15 @@ Matrix.draw = ( ref, nColumns, nRows, width, height, type, selectedRowIndices, i
     
     // Draw the matrix.
     switch( type ) {
-        case "rectangular":
-            Bar.draw( d3.select( childNodes[ 0 ]), label,             0, 0, width, height, values, valuesSelected, false );
-            Bar.draw( d3.select( childNodes[ 1 ]), label,         width, 0, width, height, values, valuesSelected, true );
-            TreeMap.draw( d3.select( childNodes[ 2 ]), label, 2 * width, 0, width, height, values, valuesSelected );
+        case "bar":
+            Bar.draw( d3.select( childNodes[ 0 ]), label,     0, 0, width, height, values, valuesSelected, false );
+            Bar.draw( d3.select( childNodes[ 1 ]), label, width, 0, width, height, values, valuesSelected, true );
+            break;
+        case "stacked":
+            // TODO
+            break;
+        case "treemap":
+            TreeMap.draw( d3.select( childNodes[ 0 ]), label, 0, 0, width, height, values, valuesSelected );
             break;
         case "pie":
             Circle.draw( d3.select( childNodes[ 0 ]), label,     0,      0, width, height, values, valuesSelected, 0 );
