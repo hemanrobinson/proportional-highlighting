@@ -8,7 +8,7 @@ svg {
     fill: black;
     font-size: 14px;
 }
-.all {
+.all, .allStacked {
     stroke: #6688bb;
     fill: #99bbdd;
 }
@@ -29,7 +29,7 @@ svg {
     stroke: #99bbdd;
     fill: #99bbdd;
 }
-.fillSelected {
+.fillSelected, .fillSelectedStacked {
     stroke: #6688bb;
     fill: #6688bb;
 }

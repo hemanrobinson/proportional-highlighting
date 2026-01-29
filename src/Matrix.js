@@ -150,7 +150,8 @@ Matrix.draw = ( ref, nColumns, nRows, width, height, type, selectedRowIndices, i
             Bar.draw( d3.select( childNodes[ 1 ]), label, width, 0, width, height, values, valuesSelected, true );
             break;
         case "stacked":
-            // TODO
+            Bar.draw( d3.select( childNodes[ 0 ]), label,     0, 0, width, height, values, valuesSelected, false, true );
+            Bar.draw( d3.select( childNodes[ 1 ]), label, width, 0, width, height, values, valuesSelected, true,  true );
             break;
         case "treemap":
             TreeMap.draw( d3.select( childNodes[ 0 ]), label, 0, 0, width, height, values, valuesSelected );

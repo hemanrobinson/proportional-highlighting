@@ -68,25 +68,31 @@ const App = () => {
                 Design patterns for proportional highlighting can be classified by the shape of the glyphs in each graph:
                 </p>
                 <table>
-                    <tr>
-                        <th>Glyph Shapes</th><th>Graphs</th>
-                    </tr>
-                        <td>Rectangular Glyphs</td><td>Bar Charts, Histograms, Heatmaps, Treemaps</td>
-                    <tr>
-                        <td>Circular Glyphs</td><td>Pie Charts, Doughnut Charts, Bubble Plots</td>
-                    </tr>
-                    <tr>
-                        <td>Complex Glyphs</td><td>Area Plots, Maps, Radar Charts</td>
-                    </tr>
-                    <tr>
-                        <td>Linear Glyphs</td><td>Line Plots, Graphs with Overlaid Lines</td>
-                    </tr>
-                    <tr>
-                        <td>Small Glyphs</td><td>Scatter Plots, Graphs with Overlaid Points</td>
-                    </tr>
-                    <tr>
-                        <td>Mixed Glyphs</td><td>Box Plots</td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Glyph Shapes</th><th>Graphs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rectangular Glyphs</td><td>Bar Charts, Histograms, Heatmaps, Treemaps</td>
+                        </tr>
+                        <tr>
+                            <td>Circular Glyphs</td><td>Pie Charts, Doughnut Charts, Bubble Plots</td>
+                        </tr>
+                        <tr>
+                            <td>Complex Glyphs</td><td>Area Plots, Maps, Radar Charts</td>
+                        </tr>
+                        <tr>
+                            <td>Linear Glyphs</td><td>Line Plots, Graphs with Overlaid Lines</td>
+                        </tr>
+                        <tr>
+                            <td>Small Glyphs</td><td>Scatter Plots, Graphs with Overlaid Points</td>
+                        </tr>
+                        <tr>
+                            <td>Mixed Glyphs</td><td>Box Plots</td>
+                        </tr>
+                    </tbody>
                 </table>
                 <h4>A. Rectangular Glyphs</h4>
                 <p>
