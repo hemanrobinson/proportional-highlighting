@@ -55,7 +55,7 @@ const Matrix = ( props ) => {
         case "map":         nColumns = 1; nRows = 1; break;
         case "linear":      nColumns = 2; nRows = 1; break;
         case "small":       nColumns = 2; nRows = 1; break;
-        case "mixed":       nColumns = 1; nRows = 1; break;
+        case "mixed":       nColumns = 2; nRows = 1; break;
         default: break;
     }
     const totalWidth = nColumns * width,
@@ -184,7 +184,8 @@ Matrix.draw = ( ref, nColumns, nRows, width, height, type, selectedRowIndices, i
             Points.draw( d3.select( childNodes[ 1 ]), label, width, 0, width, height, values, valuesSelected, true );
             break;
         case "mixed":
-            Box.draw( d3.select( childNodes[ 0 ]), label, 0, 0, width, height, values, valuesSelected );
+            Box.draw( d3.select( childNodes[ 0 ]), label, 0, 0, width, height, values, valuesSelected, true );
+            Box.draw( d3.select( childNodes[ 1 ]), label, 0, 0, width, height, values, valuesSelected );
             break;
         default:
             break;

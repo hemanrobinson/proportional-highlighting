@@ -24,8 +24,9 @@ Box.data = [];
  * @param  {number}  height         height, in pixels
  * @param  {Array}   values         all values
  * @param  {Array}   valuesSelected selected values
+ * @param  {boolean} isMin          true iff highlighting from minimum, otherwise from median
  */
-Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => {
+Box.draw = ( selection, label, x, y, width, height, values, valuesSelected, isMin ) => {
     
     // Initialization.
     const margin = Graph.margin,
@@ -151,6 +152,10 @@ Box.draw = ( selection, label, x, y, width, height, values, valuesSelected ) => 
         [ center - whiskerWidth / 2, q1, whiskerWidth, q1 - p0 * ( q1 - min )],
         [ center - whiskerWidth / 2, q3 + p3 * ( max - q3 ), whiskerWidth, q3 ]
     ];
+    if( isMin ) {
+        dataSelected[ 0 ] = [ center - boxWidth / 2, q1 + p1 * ( median - q1 ), boxWidth, q1 ];
+        dataSelected[ 2 ] = [ center - whiskerWidth / 2, min + p0 * ( q1 - min ), whiskerWidth, min ];
+    }
     selection.selectAll( ".selected" )
         .data( dataSelected )
         .enter()

@@ -255,10 +255,10 @@ const App = () => {
                 By definition, the boxes and whiskers display data — specifically, all the data that are not outliers. Therefore, a proportion of this data can be highlighted.
                 </p>
                 <p>
-                Naively, one could treat the boxes and whiskers as a single glyph, highlighting a proportion between the minimum and maximum extent of the whiskers. But we can do better. The boxes and whiskers are separate glyphs, so users will expect them to be highlighted separately.  This also gives the user more information.
+                Naively, one could treat the boxes and whiskers as a single glyph, highlighting a proportion between the minimum and maximum extent of the whiskers. But we can do better. The boxes and whiskers are separate glyphs, so users will expect them to be highlighted separately.  Separate highlighting also gives the users more information.
                 </p>
                 <p>
-                The median can serve as the origin for boxes, the first and third quartiles for whiskers. With this design, the highlighted portions increase away from the median, as shown in the example below.
+                Users may expect highlighting origins at the lower values, but highlighting away from the the median has aesthetic appeal. The example below shows box plots in both highlighting modes.
                 </p>
                 <Matrix type="mixed" percentSelected={percentSelectedMixed} />
             </div>
