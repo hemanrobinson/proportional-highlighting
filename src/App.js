@@ -178,7 +178,7 @@ const App = () => {
                 We can reasonably expect users to estimate proportions by comparing areas of rectangles, circles, and other simple geometric shapes. In more complex shapes, comparing areas is more difficult; comparing positions is a simpler task.
                 </p>
                 <p>
-                In area plots, comparing positions also supports a consistent user experience. As in bar charts, the highlighting origin is at zero is on the response axis or at the termination of the previous area.  The example below shows consistent highlighting by position in area plots, bar charts, and other graphs.
+                In area plots, comparing positions also supports a consistent user experience. As in bar charts, the highlighting origin can be at zero on the response axis or at the termination of the previous area.  The example below shows consistent highlighting in area plots and bar charts.
                 </p>
                 <Matrix type="area" percentSelected={percentSelectedArea} />
             </div>
@@ -221,7 +221,7 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                Lines are often overlaid on other glyphs, for example in area plots. In such cases, highlighting modes must be coordinated, so highlighting by position may be preferred. In complex graphs with many lines, highlighting from vertices may perform better.</p>
+                Lines are often overlaid on other glyphs, for example in area plots and bar charts. In such cases, highlighting modes must be coordinated, so highlighting by position may be preferred. In complex graphs with many lines, highlighting from vertices may perform better.</p>
                 <p>
                 These patterns can be used in any graph with linear glyphs, such as line plots; or in any graph with overlaid lines.
                 </p>

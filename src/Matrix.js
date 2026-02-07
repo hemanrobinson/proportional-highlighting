@@ -51,7 +51,7 @@ const Matrix = ( props ) => {
         case "treemap":     nColumns = 1; nRows = 1; break;
         case "pie":         nColumns = 2; nRows = 2; break;
         case "bubble":      nColumns = 2; nRows = 1; break;
-        case "area":        nColumns = 2; nRows = 2; break;
+        case "area":        nColumns = 2; nRows = 1; break;
         case "map":         nColumns = 1; nRows = 1; break;
         case "linear":      nColumns = 2; nRows = 1; break;
         case "small":       nColumns = 2; nRows = 1; break;
@@ -169,8 +169,6 @@ Matrix.draw = ( ref, nColumns, nRows, width, height, type, selectedRowIndices, i
         case "area":
             Area.draw( d3.select( childNodes[ 0 ]),   label,     0,      0, width, height, values, valuesSelected );
             Bar.draw( d3.select( childNodes[ 1 ]),    label, width,      0, width, height, values, valuesSelected, false );
-            Line.draw( d3.select( childNodes[ 2 ]),   label,     0, height, width, height, values, valuesSelected, false );
-            Points.draw( d3.select( childNodes[ 3 ]), label, width, height, width, height, values, valuesSelected, false );
             break;
         case "map":
             Map.draw( d3.select( childNodes[ 0 ]), label, width, 0, width, height, values, valuesSelected );
